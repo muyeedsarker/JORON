@@ -1,0 +1,206 @@
+      <label for="gender">লিঙ্গ</label><!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JORON — Biodata</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f8f7;
+      color: #222;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 5px 25px rgba(0,0,0,.08);
+    }
+
+    h1 {
+      text-align: center;
+      color: #176b5b;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #777;
+      margin-bottom: 30px;
+    }
+
+    label {
+      display: block;
+      margin-top: 18px;
+      margin-bottom: 7px;
+      font-weight: bold;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 16px;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #176b5b;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 28px;
+      padding: 15px;
+      border: none;
+      border-radius: 30px;
+      background: #176b5b;
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .back {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #176b5b;
+      text-decoration: none;
+    }
+
+    .note {
+      margin-top: 20px;
+      padding: 12px;
+      background: #eef8f5;
+      border-radius: 10px;
+      color: #176b5b;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h1>JORON | জোড়ন ❤️</h1>
+
+    <p class="subtitle">
+      দুজনের গল্প, এক জোড়ন।
+    </p>
+
+    <form onsubmit="showMessage(event)">
+
+      <label for="name">পূর্ণ নাম</label>
+      <input
+        type="text"
+        id="name"
+        placeholder="আপনার পূর্ণ নাম লিখুন"
+        required
+      >
+
+      <label for="age">বয়স</label>
+      <input
+        type="number"
+        id="age"
+        min="18"
+        placeholder="বয়স"
+        required
+      >
+
+
+      <select id="gender" required>
+        <option value="">নির্বাচন করুন</option>
+        <option value="male">পুরুষ</option>
+        <option value="female">নারী</option>
+      </select>
+
+      <label for="district">জেলা</label>
+      <input
+        type="text"
+        id="district"
+        placeholder="আপনার জেলা"
+        required
+      >
+
+      <label for="profession">পেশা</label>
+      <input
+        type="text"
+        id="profession"
+        placeholder="আপনার পেশা"
+        required
+      >
+
+      <label for="education">শিক্ষাগত যোগ্যতা</label>
+      <input
+        type="text"
+        id="education"
+        placeholder="শিক্ষাগত যোগ্যতা"
+        required
+      >
+
+      <label for="about">নিজের সম্পর্কে</label>
+      <textarea
+        id="about"
+        placeholder="নিজের সম্পর্কে সংক্ষেপে লিখুন"
+        required
+      ></textarea>
+
+      <label for="preference">জীবনসঙ্গীর পছন্দ</label>
+      <textarea
+        id="preference"
+        placeholder="আপনি কেমন জীবনসঙ্গী চান?"
+        required
+      ></textarea>
+
+      <button type="submit">
+        Biodata তৈরি করুন
+      </button>
+
+    </form>
+
+    <div class="note">
+      🔒 আপনার তথ্যের গোপনীয়তা ও নিরাপত্তা JORON-এর গুরুত্বপূর্ণ অঙ্গ।
+    </div>
+
+    <a class="back" href="index.html">
+      ← JORON হোমে ফিরে যান
+    </a>
+
+  </div>
+
+  <script>
+    function showMessage(event) {
+      event.preventDefault();
+
+      alert(
+        "আপনার Biodata তথ্য গ্রহণ করা হয়েছে।\n\n" +
+        "পরবর্তী ধাপে এটিকে সুন্দর Profile Card-এ রূপান্তর করা হবে।"
+      );
+    }
+  </script>
+
+</body>
+</html>

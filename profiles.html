@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JORON — Profiles</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f8f7;
+      color: #222;
+    }
+
+    header {
+      background: white;
+      padding: 18px 6%;
+      box-shadow: 0 2px 10px rgba(0,0,0,.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: bold;
+      color: #176b5b;
+    }
+
+    header a {
+      text-decoration: none;
+      color: #176b5b;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 45px 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #176b5b;
+      margin-bottom: 10px;
+    }
+
+    .intro {
+      text-align: center;
+      color: #777;
+      margin-bottom: 35px;
+    }
+
+    .profiles {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 22px;
+    }
+
+    .profile-card {
+      background: white;
+      border-radius: 18px;
+      padding: 25px;
+      box-shadow: 0 5px 20px rgba(0,0,0,.08);
+      transition: transform .2s;
+    }
+
+    .profile-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .avatar {
+      width: 85px;
+      height: 85px;
+      border-radius: 50%;
+      background: #e8f7f2;
+      color: #176b5b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 15px;
+      font-size: 34px;
+      font-weight: bold;
+    }
+
+    .profile-card h2 {
+      text-align: center;
+      color: #176b5b;
+      margin-bottom: 8px;
+      font-size: 22px;
+    }
+
+    .basic {
+      text-align: center;
+      color: #666;
+      margin-bottom: 18px;
+    }
+
+    .info {
+      border-top: 1px solid #eee;
+      padding-top: 15px;
+    }
+
+    .info p {
+      margin: 8px 0;
+    }
+
+    .label {
+      font-weight: bold;
+      color: #176b5b;
+    }
+
+    .view-btn {
+      display: block;
+      text-align: center;
+      margin-top: 18px;
+      padding: 11px;
+      border-radius: 25px;
+      background: #176b5b;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    footer {
+      margin-top: 40px;
+      background: #176b5b;
+      color: white;
+      text-align: center;
+      padding: 25px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="logo">JORON</div>
+    <a href="index.html">হোম</a>
+  </header>
+
+  <div class="container">
+
+    <h1>পাত্র / পাত্রী খুঁজুন ❤️</h1>
+
+    <p class="intro">
+      আপনার পছন্দের মানুষের সঙ্গে একটি অর্থবহ সংযোগের শুরু হোক।
+    </p>
+
+    <div class="profiles">
+
+      <div class="profile-card">
+
+        <div class="avatar">আ</div>
+
+        <h2>আরিফ</h2>
+
+        <p class="basic">
+          ২৮ বছর • পুরুষ • ঢাকা
+        </p>
+
+        <div class="info">
+          <p>
+            <span class="label">পেশা:</span>
+            সফটওয়্যার ইঞ্জিনিয়ার
+          </p>
+
+          <p>
+            <span class="label">শিক্ষা:</span>
+            কম্পিউটার সায়েন্স
+          </p>
+
+          <p>
+            <span class="label">সম্পর্কে:</span>
+            দায়িত্বশীল ও পরিবারমুখী
+          </p>
+        </div>
+
+        <a class="view-btn" href="profile.html">
+          প্রোফাইল দেখুন
+        </a>
+
+      </div>
+
+
+      <div class="profile-card">
+
+        <div class="avatar">স</div>
+
+        <h2>সুমাইয়া</h2>
+
+        <p class="basic">
+          ২৫ বছর • নারী • গাজীপুর
+        </p>
+
+        <div class="info">
+          <p>
+            <span class="label">পেশা:</span>
+            শিক্ষকতা
+          </p>
+
+          <p>
+            <span class="label">শিক্ষা:</span>
+            মাস্টার্স
+          </p>
+
+          <p>
+            <span class="label">সম্পর্কে:</span>
+            শান্ত ও পরিবারপ্রিয়
+          </p>
+        </div>
+
+        <a class="view-btn" href="profile.html">
+          প্রোফাইল দেখুন
+        </a>
+
+      </div>
+
+
+      <div class="profile-card">
+
+        <div class="avatar">র</div>
+
+        <h2>রাকিব</h2>
+
+        <p class="basic">
+          ৩০ বছর • পুরুষ • চট্টগ্রাম
+        </p>
+
+        <div class="info">
+          <p>
+            <span class="label">পেশা:</span>
+            ব্যবসায়ী
+          </p>
+
+          <p>
+            <span class="label">শিক্ষা:</span>
+            বিবিএ
+          </p>
+
+          <p>
+            <span class="label">সম্পর্কে:</span>
+            সৎ ও পরিশ্রমী
+          </p>
+        </div>
+
+        <a class="view-btn" href="profile.html">
+          প্রোফাইল দেখুন
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <footer>
+    <p>© 2026 JORON — জোড়ন | দুজনের গল্প, এক জোড়ন। ❤️</p>
+  </footer>
+
+</body>
+</html>

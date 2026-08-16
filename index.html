@@ -1,1 +1,237 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JORON — জোড়ন</title>
+  <meta name="description" content="JORON — দুজনের গল্প, এক জোড়ন। একটি আধুনিক ও বিশ্বস্ত matrimonial platform.">
 
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f8fc;
+      color: #222;
+      line-height: 1.6;
+    }
+
+    header {
+      background: #ffffff;
+      padding: 18px 6%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,.08);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: bold;
+      color: #176b5b;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #333;
+      margin-left: 18px;
+      font-weight: 600;
+    }
+
+    .hero {
+      min-height: 75vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 50px 20px;
+      background: linear-gradient(135deg, #e8f7f2, #ffffff);
+    }
+
+    .hero h1 {
+      font-size: 45px;
+      color: #176b5b;
+      margin-bottom: 12px;
+    }
+
+    .hero h2 {
+      font-size: 25px;
+      margin-bottom: 15px;
+    }
+
+    .hero p {
+      max-width: 650px;
+      margin: auto;
+      color: #666;
+      font-size: 17px;
+    }
+
+    .buttons {
+      margin-top: 28px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 13px 25px;
+      margin: 6px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .primary {
+      background: #176b5b;
+      color: white;
+    }
+
+    .secondary {
+      border: 2px solid #176b5b;
+      color: #176b5b;
+      background: white;
+    }
+
+    .section {
+      padding: 60px 6%;
+      text-align: center;
+    }
+
+    .section h2 {
+      color: #176b5b;
+      margin-bottom: 30px;
+      font-size: 30px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .card {
+      background: white;
+      padding: 28px 20px;
+      border-radius: 18px;
+      box-shadow: 0 5px 20px rgba(0,0,0,.08);
+    }
+
+    .card h3 {
+      color: #176b5b;
+      margin-bottom: 10px;
+    }
+
+    footer {
+      background: #176b5b;
+      color: white;
+      text-align: center;
+      padding: 25px;
+    }
+
+    @media (max-width: 600px) {
+      .hero h1 {
+        font-size: 36px;
+      }
+
+      nav a {
+        margin-left: 8px;
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="logo">JORON</div>
+
+    <nav>
+      <a href="#home">হোম</a>
+      <a href="#about">আমাদের সম্পর্কে</a>
+      <a href="#features">বৈশিষ্ট্য</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <section class="hero" id="home">
+      <div>
+        <h1>JORON | জোড়ন ❤️</h1>
+
+        <h2>দুজনের গল্প, এক জোড়ন।</h2>
+
+        <p>
+          একটি আধুনিক, নিরাপদ ও বিশ্বস্ত matrimonial platform —
+          যেখানে meaningful connection শুরু হয় বিশ্বাস, সম্মান ও গোপনীয়তার মাধ্যমে।
+        </p>
+
+        <div class="buttons">
+          <a class="btn primary" href="#features">শুরু করুন</a>
+          <a class="btn secondary" href="#about">আরও জানুন</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <h2>JORON সম্পর্কে</h2>
+
+      <p>
+        JORON শুধু একটি সাধারণ বিয়ের বায়োডাটা ওয়েবসাইট নয়।
+        আমাদের লক্ষ্য হলো পরিচয়, পছন্দ ও মূল্যবোধের ভিত্তিতে
+        মানুষের মধ্যে একটি অর্থবহ সংযোগ তৈরি করা।
+      </p>
+    </section>
+
+    <section class="section" id="features">
+      <h2>আমাদের বৈশিষ্ট্য</h2>
+
+      <div class="cards">
+
+        <div class="card">
+          <h3>📝 Biodata</h3>
+          <p>
+            সহজভাবে নিজের বায়োডাটা তৈরি ও জমা দেওয়ার সুবিধা।
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>💚 Attractive Profile</h3>
+          <p>
+            তথ্যগুলো সুন্দর ও আকর্ষণীয় Profile Card আকারে প্রদর্শন।
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>🔒 Privacy</h3>
+          <p>
+            ব্যক্তিগত তথ্যের গোপনীয়তা ও নিরাপত্তাকে গুরুত্ব দেওয়া।
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>🤝 Connection</h3>
+          <p>
+            পছন্দের মানুষের সঙ্গে meaningful connection তৈরির সুযোগ।
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>© 2026 JORON — জোড়ন | দুজনের গল্প, এক জোড়ন। ❤️</p>
+  </footer>
+
+</body>
+</html>

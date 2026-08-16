@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JORON — Sign Up</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #e8f7f2, #f5f8f7);
+      min-height: 100vh;
+      padding: 25px 15px;
+    }
+
+    .signup-box {
+      width: 100%;
+      max-width: 520px;
+      margin: auto;
+      background: white;
+      padding: 32px 26px;
+      border-radius: 22px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.10);
+    }
+
+    .logo {
+      text-align: center;
+      color: #176b5b;
+      font-size: 34px;
+      font-weight: bold;
+    }
+
+    .tagline {
+      text-align: center;
+      color: #777;
+      margin: 8px 0 28px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 25px;
+      font-size: 25px;
+    }
+
+    label {
+      display: block;
+      margin: 15px 0 7px;
+      font-weight: bold;
+      color: #444;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 16px;
+      background: white;
+      outline: none;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: #176b5b;
+    }
+
+    .terms {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-top: 18px;
+      color: #666;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .terms input {
+      width: auto;
+      margin-top: 3px;
+    }
+
+    .terms a {
+      color: #176b5b;
+      text-decoration: none;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 22px;
+      padding: 14px;
+      border: none;
+      border-radius: 28px;
+      background: #176b5b;
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .login {
+      text-align: center;
+      margin-top: 22px;
+      color: #666;
+    }
+
+    .login a {
+      color: #176b5b;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .back {
+      display: block;
+      text-align: center;
+      margin-top: 18px;
+      color: #555;
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="signup-box">
+
+    <div class="logo">JORON</div>
+
+    <p class="tagline">
+      দুজনের গল্প, এক জোড়ন। ❤️
+    </p>
+
+    <h1>নতুন অ্যাকাউন্ট তৈরি করুন</h1>
+
+    <form onsubmit="signupUser(event)">
+
+      <label for="name">পূর্ণ নাম</label>
+      <input
+        type="text"
+        id="name"
+        placeholder="আপনার পূর্ণ নাম"
+        required
+      >
+
+      <label for="email">ইমেইল</label>
+      <input
+        type="email"
+        id="email"
+        placeholder="আপনার ইমেইল"
+        required
+      >
+
+      <label for="phone">মোবাইল নম্বর</label>
+      <input
+        type="tel"
+        id="phone"
+        placeholder="01XXXXXXXXX"
+        required
+      >
+
+      <label for="gender">লিঙ্গ</label>
+      <select id="gender" required>
+        <option value="">নির্বাচন করুন</option>
+        <option value="male">পুরুষ</option>
+        <option value="female">নারী</option>
+      </select>
+
+      <label for="password">পাসওয়ার্ড</label>
+      <input
+        type="password"
+        id="password"
+        placeholder="কমপক্ষে ৬ অক্ষর"
+        minlength="6"
+        required
+      >
+
+      <label for="confirmPassword">পাসওয়ার্ড নিশ্চিত করুন</label>
+      <input
+        type="password"
+        id="confirmPassword"
+        placeholder="পাসওয়ার্ড আবার লিখুন"
+        minlength="6"
+        required
+      >
+
+      <label class="terms">
+        <input type="checkbox" id="terms" required>
+        <span>
+          আমি JORON-এর
+          <a href="#">শর্তাবলি</a>
+          ও
+          <a href="#">গোপনীয়তা নীতি</a>
+          মেনে নিচ্ছি।
+        </span>
+      </label>
+
+      <button type="submit">
+        অ্যাকাউন্ট তৈরি করুন
+      </button>
+
+    </form>
+
+    <div class="login">
+      ইতিমধ্যে অ্যাকাউন্ট আছে?
+      <a href="login.html">লগইন করুন</a>
+    </div>
+
+    <a href="index.html" class="back">
+      ← হোমে ফিরে যান
+    </a>
+
+  </div>
+
+  <script>
+    function signupUser(event) {
+      event.preventDefault();
+
+      const password = document.getElementById("password").value;
+      const confirmPassword =
+        document.getElementById("confirmPassword").value;
+
+      if (password !== confirmPassword) {
+        alert("দুটি পাসওয়ার্ড একই নয়।");
+        return;
+      }
+
+      alert("JORON Registration System শীঘ্রই চালু হবে।");
+
+      return false;
+    }
+  </script>
+
+</body>
+</html>

@@ -42,7 +42,7 @@
     .container {
       max-width: 1100px;
       margin: auto;
-      padding: 45px 20px;
+      padding: 40px 20px;
     }
 
     h1 {
@@ -54,8 +54,49 @@
     .intro {
       text-align: center;
       color: #777;
-      margin-bottom: 35px;
+      margin-bottom: 25px;
     }
+
+    /* Search & Filter */
+
+    .filters {
+      background: white;
+      padding: 20px;
+      border-radius: 18px;
+      box-shadow: 0 5px 20px rgba(0,0,0,.07);
+      margin-bottom: 30px;
+    }
+
+    .filter-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 12px;
+    }
+
+    .filters input,
+    .filters select {
+      width: 100%;
+      padding: 13px 15px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 15px;
+      outline: none;
+      background: white;
+    }
+
+    .filters input:focus,
+    .filters select:focus {
+      border-color: #176b5b;
+    }
+
+    .result-count {
+      margin-top: 15px;
+      color: #176b5b;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    /* Profiles */
 
     .profiles {
       display: grid;
@@ -68,7 +109,7 @@
       border-radius: 18px;
       padding: 25px;
       box-shadow: 0 5px 20px rgba(0,0,0,.08);
-      transition: transform .2s;
+      transition: .2s;
     }
 
     .profile-card:hover {
@@ -108,7 +149,7 @@
     }
 
     .info p {
-      margin: 8px 0;
+      margin: 9px 0;
     }
 
     .label {
@@ -128,6 +169,19 @@
       font-weight: bold;
     }
 
+    .view-btn:hover {
+      background: #0f5145;
+    }
+
+    .no-result {
+      display: none;
+      text-align: center;
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      color: #777;
+    }
+
     footer {
       margin-top: 40px;
       background: #176b5b;
@@ -135,134 +189,299 @@
       text-align: center;
       padding: 25px;
     }
+
+    /* Mobile */
+
+    @media (max-width: 650px) {
+      header {
+        padding: 15px 20px;
+      }
+
+      .logo {
+        font-size: 24px;
+      }
+
+      .container {
+        padding: 30px 15px;
+      }
+
+      .filter-grid {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 27px;
+      }
+    }
   </style>
 </head>
 
 <body>
 
-  <header>
-    <div class="logo">JORON</div>
-    <a href="index.html">হোম</a>
-  </header>
+<header>
+  <div class="logo">JORON</div>
+  <a href="index.html">হোম</a>
+</header>
 
-  <div class="container">
+<div class="container">
 
-    <h1>পাত্র / পাত্রী খুঁজুন ❤️</h1>
+  <h1>পাত্র / পাত্রী খুঁজুন ❤️</h1>
 
-    <p class="intro">
-      আপনার পছন্দের মানুষের সঙ্গে একটি অর্থবহ সংযোগের শুরু হোক।
-    </p>
+  <p class="intro">
+    আপনার পছন্দের মানুষের সঙ্গে একটি অর্থবহ সংযোগের শুরু হোক।
+  </p>
 
-    <div class="profiles">
+  <!-- Search & Filter -->
 
-      <div class="profile-card">
+  <div class="filters">
 
-        <div class="avatar">আ</div>
+    <div class="filter-grid">
 
-        <h2>আরিফ</h2>
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="নাম বা পেশা দিয়ে খুঁজুন..."
+        onkeyup="filterProfiles()"
+      >
 
-        <p class="basic">
-          ২৮ বছর • পুরুষ • ঢাকা
+      <select id="genderFilter" onchange="filterProfiles()">
+        <option value="">সবাই</option>
+        <option value="পুরুষ">পুরুষ</option>
+        <option value="নারী">নারী</option>
+      </select>
+
+      <select id="locationFilter" onchange="filterProfiles()">
+        <option value="">সব জেলা</option>
+        <option value="ঢাকা">ঢাকা</option>
+        <option value="গাজীপুর">গাজীপুর</option>
+        <option value="চট্টগ্রাম">চট্টগ্রাম</option>
+      </select>
+
+    </div>
+
+    <div class="result-count" id="resultCount">
+      ৩টি প্রোফাইল পাওয়া গেছে
+    </div>
+
+  </div>
+
+  <!-- Profiles -->
+
+  <div class="profiles" id="profiles">
+
+    <!-- Arif -->
+
+    <div class="profile-card"
+         data-name="আরিফ"
+         data-gender="পুরুষ"
+         data-location="ঢাকা"
+         data-job="সফটওয়্যার ইঞ্জিনিয়ার">
+
+      <div class="avatar">আ</div>
+
+      <h2>আরিফ</h2>
+
+      <p class="basic">
+        ২৮ বছর • পুরুষ • ঢাকা
+      </p>
+
+      <div class="info">
+
+        <p>
+          <span class="label">পেশা:</span>
+          সফটওয়্যার ইঞ্জিনিয়ার
         </p>
 
-        <div class="info">
-          <p>
-            <span class="label">পেশা:</span>
-            সফটওয়্যার ইঞ্জিনিয়ার
-          </p>
+        <p>
+          <span class="label">শিক্ষা:</span>
+          কম্পিউটার সায়েন্স
+        </p>
 
-          <p>
-            <span class="label">শিক্ষা:</span>
-            কম্পিউটার সায়েন্স
-          </p>
-
-          <p>
-            <span class="label">সম্পর্কে:</span>
-            দায়িত্বশীল ও পরিবারমুখী
-          </p>
-        </div>
-
-        <a class="view-btn" href="profile.html">
-          প্রোফাইল দেখুন
-        </a>
+        <p>
+          <span class="label">সম্পর্কে:</span>
+          দায়িত্বশীল ও পরিবারমুখী
+        </p>
 
       </div>
 
+      <a class="view-btn" href="profile.html">
+        প্রোফাইল দেখুন
+      </a>
 
-      <div class="profile-card">
+    </div>
 
-        <div class="avatar">স</div>
 
-        <h2>সুমাইয়া</h2>
+    <!-- Sumaiya -->
 
-        <p class="basic">
-          ২৫ বছর • নারী • গাজীপুর
+    <div class="profile-card"
+         data-name="সুমাইয়া"
+         data-gender="নারী"
+         data-location="গাজীপুর"
+         data-job="শিক্ষকতা">
+
+      <div class="avatar">স</div>
+
+      <h2>সুমাইয়া</h2>
+
+      <p class="basic">
+        ২৫ বছর • নারী • গাজীপুর
+      </p>
+
+      <div class="info">
+
+        <p>
+          <span class="label">পেশা:</span>
+          শিক্ষকতা
         </p>
 
-        <div class="info">
-          <p>
-            <span class="label">পেশা:</span>
-            শিক্ষকতা
-          </p>
+        <p>
+          <span class="label">শিক্ষা:</span>
+          মাস্টার্স
+        </p>
 
-          <p>
-            <span class="label">শিক্ষা:</span>
-            মাস্টার্স
-          </p>
-
-          <p>
-            <span class="label">সম্পর্কে:</span>
-            শান্ত ও পরিবারপ্রিয়
-          </p>
-        </div>
-
-        <a class="view-btn" href="profile.html">
-          প্রোফাইল দেখুন
-        </a>
+        <p>
+          <span class="label">সম্পর্কে:</span>
+          শান্ত ও পরিবারপ্রিয়
+        </p>
 
       </div>
 
+      <a class="view-btn" href="profile.html">
+        প্রোফাইল দেখুন
+      </a>
 
-      <div class="profile-card">
+    </div>
 
-        <div class="avatar">র</div>
 
-        <h2>রাকিব</h2>
+    <!-- Rakib -->
 
-        <p class="basic">
-          ৩০ বছর • পুরুষ • চট্টগ্রাম
+    <div class="profile-card"
+         data-name="রাকিব"
+         data-gender="পুরুষ"
+         data-location="চট্টগ্রাম"
+         data-job="ব্যবসায়ী">
+
+      <div class="avatar">র</div>
+
+      <h2>রাকিব</h2>
+
+      <p class="basic">
+        ৩০ বছর • পুরুষ • চট্টগ্রাম
+      </p>
+
+      <div class="info">
+
+        <p>
+          <span class="label">পেশা:</span>
+          ব্যবসায়ী
         </p>
 
-        <div class="info">
-          <p>
-            <span class="label">পেশা:</span>
-            ব্যবসায়ী
-          </p>
+        <p>
+          <span class="label">শিক্ষা:</span>
+          বিবিএ
+        </p>
 
-          <p>
-            <span class="label">শিক্ষা:</span>
-            বিবিএ
-          </p>
-
-          <p>
-            <span class="label">সম্পর্কে:</span>
-            সৎ ও পরিশ্রমী
-          </p>
-        </div>
-
-        <a class="view-btn" href="profile.html">
-          প্রোফাইল দেখুন
-        </a>
+        <p>
+          <span class="label">সম্পর্কে:</span>
+          সৎ ও পরিশ্রমী
+        </p>
 
       </div>
+
+      <a class="view-btn" href="profile.html">
+        প্রোফাইল দেখুন
+      </a>
 
     </div>
 
   </div>
 
-  <footer>
-    <p>© 2026 JORON — জোড়ন | দুজনের গল্প, এক জোড়ন। ❤️</p>
-  </footer>
+  <div class="no-result" id="noResult">
+    😔 কোনো প্রোফাইল পাওয়া যায়নি।<br>
+    অন্যভাবে অনুসন্ধান করুন।
+  </div>
+
+</div>
+
+<footer>
+  <p>© 2026 JORON — জোড়ন | দুজনের গল্প, এক জোড়ন। ❤️</p>
+</footer>
+
+
+<script>
+
+function filterProfiles() {
+
+  const search =
+    document.getElementById("searchInput")
+      .value
+      .toLowerCase();
+
+  const gender =
+    document.getElementById("genderFilter")
+      .value;
+
+  const location =
+    document.getElementById("locationFilter")
+      .value;
+
+  const cards =
+    document.querySelectorAll(".profile-card");
+
+  let count = 0;
+
+  cards.forEach(function(card) {
+
+    const name =
+      card.dataset.name.toLowerCase();
+
+    const job =
+      card.dataset.job.toLowerCase();
+
+    const cardGender =
+      card.dataset.gender;
+
+    const cardLocation =
+      card.dataset.location;
+
+    const searchMatch =
+      name.includes(search) ||
+      job.includes(search);
+
+    const genderMatch =
+      gender === "" ||
+      cardGender === gender;
+
+    const locationMatch =
+      location === "" ||
+      cardLocation === location;
+
+    if (
+      searchMatch &&
+      genderMatch &&
+      locationMatch
+    ) {
+
+      card.style.display = "block";
+      count++;
+
+    } else {
+
+      card.style.display = "none";
+
+    }
+
+  });
+
+  document.getElementById("resultCount").innerText =
+    count + "টি প্রোফাইল পাওয়া গেছে";
+
+  document.getElementById("noResult").style.display =
+    count === 0 ? "block" : "none";
+
+}
+
+</script>
 
 </body>
 </html>

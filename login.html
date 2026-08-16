@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JORON — Login</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #e8f7f2, #f5f8f7);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .login-box {
+      width: 100%;
+      max-width: 430px;
+      background: white;
+      padding: 35px 28px;
+      border-radius: 22px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.10);
+    }
+
+    .logo {
+      text-align: center;
+      color: #176b5b;
+      font-size: 34px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .tagline {
+      text-align: center;
+      color: #777;
+      margin-bottom: 30px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 25px;
+      font-size: 24px;
+    }
+
+    label {
+      display: block;
+      margin: 14px 0 7px;
+      font-weight: bold;
+      color: #444;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 16px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #176b5b;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 22px;
+      padding: 14px;
+      border: none;
+      border-radius: 28px;
+      background: #176b5b;
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .forgot {
+      display: block;
+      text-align: right;
+      margin-top: 12px;
+      color: #176b5b;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .register {
+      text-align: center;
+      margin-top: 25px;
+      color: #666;
+    }
+
+    .register a {
+      color: #176b5b;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .back {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #555;
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="login-box">
+
+    <div class="logo">JORON</div>
+
+    <p class="tagline">
+      দুজনের গল্প, এক জোড়ন। ❤️
+    </p>
+
+    <h1>লগইন করুন</h1>
+
+    <form onsubmit="loginUser(event)">
+
+      <label for="email">ইমেইল</label>
+      <input
+        type="email"
+        id="email"
+        placeholder="আপনার ইমেইল লিখুন"
+        required
+      >
+
+      <label for="password">পাসওয়ার্ড</label>
+      <input
+        type="password"
+        id="password"
+        placeholder="আপনার পাসওয়ার্ড লিখুন"
+        required
+      >
+
+      <a href="#" class="forgot">
+        পাসওয়ার্ড ভুলে গেছেন?
+      </a>
+
+      <button type="submit">
+        লগইন
+      </button>
+
+    </form>
+
+    <div class="register">
+      JORON-এ নতুন?
+      <a href="biodata.html">প্রোফাইল তৈরি করুন</a>
+    </div>
+
+    <a href="index.html" class="back">
+      ← হোমে ফিরে যান
+    </a>
+
+  </div>
+
+  <script>
+    function loginUser(event) {
+      event.preventDefault();
+
+      alert("JORON লগইন সিস্টেম শীঘ্রই চালু হবে।");
+
+      return false;
+    }
+  </script>
+
+</body>
+</html>

@@ -26,6 +26,22 @@
       border-radius: 22px;
       overflow: hidden;
       box-shadow: 0 8px 30px rgba(0,0,0,.10);
+      border: 1px solid #dcefe9;
+      position: relative;
+    }
+
+    .watermark {
+      position: absolute;
+      top: 45%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-25deg);
+      font-size: 90px;
+      font-weight: bold;
+      color: rgba(23,107,91,.035);
+      pointer-events: none;
+      user-select: none;
+      white-space: nowrap;
+      z-index: 0;
     }
 
     .top {
@@ -33,6 +49,8 @@
       color: white;
       text-align: center;
       padding: 45px 20px;
+      position: relative;
+      z-index: 1;
     }
 
     .avatar {
@@ -69,6 +87,8 @@
 
     .content {
       padding: 30px;
+      position: relative;
+      z-index: 1;
     }
 
     .section {
@@ -93,6 +113,7 @@
       background: #f7faf9;
       padding: 14px;
       border-radius: 12px;
+      border: 1px solid #edf3f1;
     }
 
     .item strong {
@@ -108,6 +129,7 @@
       border-radius: 12px;
       line-height: 1.8;
       color: #555;
+      border: 1px solid #edf3f1;
     }
 
     .buttons {
@@ -157,6 +179,10 @@
       .content {
         padding: 22px;
       }
+
+      .watermark {
+        font-size: 60px;
+      }
     }
   </style>
 </head>
@@ -165,17 +191,27 @@
 
   <div class="profile">
 
+    <div class="watermark">
+      JORON
+    </div>
+
     <div id="loading" class="loading">
       Profile লোড হচ্ছে...
     </div>
 
     <div id="profileContent" style="display:none;">
 
+      <!-- Profile Header -->
+
       <div class="top">
 
-        <div class="avatar" id="avatar">আ</div>
+        <div class="avatar" id="avatar">
+          আ
+        </div>
 
-        <h1 id="profileName">নাম</h1>
+        <h1 id="profileName">
+          নাম
+        </h1>
 
         <p id="profileSummary">
           বয়স • লিঙ্গ • জেলা
@@ -187,11 +223,16 @@
 
       </div>
 
+
       <div class="content">
+
+        <!-- ব্যক্তিগত তথ্য -->
 
         <div class="section">
 
-          <h2>ব্যক্তিগত তথ্য</h2>
+          <h2>
+            ব্যক্তিগত তথ্য
+          </h2>
 
           <div class="info">
 
@@ -220,42 +261,142 @@
               <span id="profession">—</span>
             </div>
 
+          </div>
+
+        </div>
+
+
+        <!-- শিক্ষাগত তথ্য -->
+
+        <div class="section">
+
+          <h2>
+            🎓 শিক্ষাগত তথ্য
+          </h2>
+
+          <div class="info">
+
             <div class="item">
-              <strong>শিক্ষাগত যোগ্যতা</strong>
-              <span id="education">—</span>
+
+              <strong>
+                শিক্ষাব্যবস্থা
+              </strong>
+
+              <span id="educationSystem">
+                —
+              </span>
+
+            </div>
+
+
+            <div class="item">
+
+              <strong>
+                শিক্ষাগত যোগ্যতা
+              </strong>
+
+              <span id="education">
+                —
+              </span>
+
+            </div>
+
+
+            <div class="item">
+
+              <strong>
+                প্রতিষ্ঠান
+              </strong>
+
+              <span id="institution">
+                —
+              </span>
+
+            </div>
+
+
+            <div class="item">
+
+              <strong>
+                বিভাগ / বিষয়
+              </strong>
+
+              <span id="subject">
+                —
+              </span>
+
+            </div>
+
+
+            <div class="item">
+
+              <strong>
+                পাশের সন
+              </strong>
+
+              <span id="passingYear">
+                —
+              </span>
+
             </div>
 
           </div>
 
         </div>
 
+
+        <!-- নিজের সম্পর্কে -->
+
         <div class="section">
 
-          <h2>নিজের সম্পর্কে</h2>
+          <h2>
+            নিজের সম্পর্কে
+          </h2>
 
-          <div class="text" id="about">
+          <div
+            class="text"
+            id="about"
+          >
             —
           </div>
 
         </div>
 
+
+        <!-- জীবনসঙ্গীর পছন্দ -->
+
         <div class="section">
 
-          <h2>জীবনসঙ্গীর পছন্দ</h2>
+          <h2>
+            জীবনসঙ্গীর পছন্দ
+          </h2>
 
-          <div class="text" id="partner">
+          <div
+            class="text"
+            id="partner"
+          >
             —
           </div>
 
         </div>
+
+
+        <!-- Buttons -->
 
         <div class="buttons">
 
-          <a class="btn primary" href="#">
+          <a
+            class="btn primary"
+            href="#"
+            id="interestButton"
+          >
             ❤️ পছন্দ করুন
           </a>
 
-          <a class="btn secondary" href="profiles.html">
+          <a
+            class="btn secondary"
+            href="profiles.html"
+          >
             ← প্রোফাইল তালিকায় ফিরে যান
           </a>
 
@@ -265,12 +406,23 @@
 
     </div>
 
-    <div id="errorMessage" class="error" style="display:none;">
+
+    <!-- Error -->
+
+    <div
+      id="errorMessage"
+      class="error"
+      style="display:none;"
+    >
+
       Profile পাওয়া যায়নি।
+
       <br><br>
+
       <a href="profiles.html">
         ← প্রোফাইল তালিকায় ফিরে যান
       </a>
+
     </div>
 
   </div>
@@ -278,14 +430,18 @@
 
   <script type="module">
 
-    import { initializeApp }
-      from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+    import {
+      initializeApp
+    }
+    from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+
 
     import {
       getFirestore,
       doc,
       getDoc
-    } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+    }
+    from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
 
     // ==========================================
@@ -293,35 +449,66 @@
     // ==========================================
 
     const firebaseConfig = {
-      apiKey: "AIzaSyDWxxu3zwThJp1fuWMhXiRig3Fswt0QARA",
-      authDomain: "joron-d7742.firebaseapp.com",
-      projectId: "joron-d7742",
-      storageBucket: "joron-d7742.firebasestorage.app",
-      messagingSenderId: "907727989078",
-      appId: "1:907727989078:web:4fdd266e3517a862fa0ef7",
-      measurementId: "G-Q8PXH6C5NC"
+
+      apiKey:
+        "AIzaSyDWxxu3zwThJp1fuWMhXiRig3Fswt0QARA",
+
+      authDomain:
+        "joron-d7742.firebaseapp.com",
+
+      projectId:
+        "joron-d7742",
+
+      storageBucket:
+        "joron-d7742.firebasestorage.app",
+
+      messagingSenderId:
+        "907727989078",
+
+      appId:
+        "1:907727989078:web:4fdd266e3517a862fa0ef7",
+
+      measurementId:
+        "G-Q8PXH6C5NC"
+
     };
 
 
     // Firebase চালু
 
-    const app = initializeApp(firebaseConfig);
+    const app =
+      initializeApp(
+        firebaseConfig
+      );
 
-    const db = getFirestore(app);
+
+    const db =
+      getFirestore(app);
 
 
+    // ==========================================
     // URL থেকে Profile UID নেওয়া
+    // ==========================================
 
     const urlParams =
-      new URLSearchParams(window.location.search);
+      new URLSearchParams(
+        window.location.search
+      );
+
 
     const profileId =
       urlParams.get("id");
 
 
+    // ==========================================
+    // Profile Load
+    // ==========================================
+
     async function loadProfile() {
 
       try {
+
+        // Profile ID নেই
 
         if (!profileId) {
 
@@ -330,17 +517,27 @@
           );
 
           return;
+
         }
 
 
-        // Firestore থেকে Biodata নেওয়া
+        // Firestore document
 
         const profileRef =
-          doc(db, "biodata", profileId);
+          doc(
+            db,
+            "biodata",
+            profileId
+          );
+
 
         const profileSnap =
-          await getDoc(profileRef);
+          await getDoc(
+            profileRef
+          );
 
+
+        // Profile নেই
 
         if (!profileSnap.exists()) {
 
@@ -349,115 +546,238 @@
           );
 
           return;
+
         }
 
+
+        // Data
 
         const data =
           profileSnap.data();
 
 
-        // Profile-এর নাম
+        // =====================================
+        // ব্যক্তিগত তথ্য
+        // =====================================
 
         const name =
-          data.name || "JORON User";
+          data.name ||
+          "JORON User";
 
 
-        document.getElementById("profileName")
-          .textContent = name;
-
-        document.getElementById("name")
-          .textContent = name;
+        const age =
+          data.age ||
+          "—";
 
 
-        // Avatar-এর প্রথম অক্ষর
+        const gender =
+          data.gender ||
+          "—";
+
+
+        const district =
+          data.district ||
+          "—";
+
+
+        const profession =
+          data.profession ||
+          "—";
+
+
+        // =====================================
+        // Header
+        // =====================================
+
+        document
+          .getElementById(
+            "profileName"
+          )
+          .textContent =
+          name;
+
+
+        document
+          .getElementById(
+            "name"
+          )
+          .textContent =
+          name;
+
+
+        // Avatar
 
         const firstLetter =
           name.charAt(0);
 
 
-        document.getElementById("avatar")
-          .textContent = firstLetter;
-
-
-        // বয়স
-
-        const age =
-          data.age || "—";
-
-
-        document.getElementById("age")
-          .textContent = age + " বছর";
-
-
-        // লিঙ্গ
-
-        const gender =
-          data.gender || "—";
-
-
-        document.getElementById("gender")
-          .textContent = gender;
-
-
-        // জেলা
-
-        const district =
-          data.district || "—";
-
-
-        document.getElementById("district")
-          .textContent = district;
-
-
-        // উপরের Summary
-
-        document.getElementById("profileSummary")
+        document
+          .getElementById(
+            "avatar"
+          )
           .textContent =
-          age + " বছর • " +
-          gender + " • " +
+          firstLetter;
+
+
+        // Age
+
+        document
+          .getElementById(
+            "age"
+          )
+          .textContent =
+          age + " বছর";
+
+
+        // Gender
+
+        document
+          .getElementById(
+            "gender"
+          )
+          .textContent =
+          gender;
+
+
+        // District
+
+        document
+          .getElementById(
+            "district"
+          )
+          .textContent =
           district;
 
 
-        // পেশা
+        // Profession
 
-        document.getElementById("profession")
+        document
+          .getElementById(
+            "profession"
+          )
           .textContent =
-          data.profession || "—";
+          profession;
 
 
-        // শিক্ষা
+        // Summary
 
-        document.getElementById("education")
+        document
+          .getElementById(
+            "profileSummary"
+          )
           .textContent =
-          data.education || "—";
+
+          age +
+          " বছর • " +
+          gender +
+          " • " +
+          district;
 
 
-        // নিজের সম্পর্কে
+        // =====================================
+        // Education
+        // =====================================
 
-        document.getElementById("about")
+        document
+          .getElementById(
+            "educationSystem"
+          )
           .textContent =
+
+          data.educationSystem ||
+          "—";
+
+
+        document
+          .getElementById(
+            "education"
+          )
+          .textContent =
+
+          data.education ||
+          "—";
+
+
+        document
+          .getElementById(
+            "institution"
+          )
+          .textContent =
+
+          data.institution ||
+          "—";
+
+
+        document
+          .getElementById(
+            "subject"
+          )
+          .textContent =
+
+          data.subject ||
+          "—";
+
+
+        document
+          .getElementById(
+            "passingYear"
+          )
+          .textContent =
+
+          data.passingYear ||
+          "—";
+
+
+        // =====================================
+        // About
+        // =====================================
+
+        document
+          .getElementById(
+            "about"
+          )
+          .textContent =
+
           data.about ||
-          "এই ব্যক্তি নিজের সম্পর্কে কিছু লেখেননি।";
+
+          "এই ব্যক্তি নিজের সম্পর্কে কিছু লেখেননি.";
 
 
-        // জীবনসঙ্গীর পছন্দ
+        // =====================================
+        // Partner Preference
+        // =====================================
 
-        document.getElementById("partner")
+        document
+          .getElementById(
+            "partner"
+          )
           .textContent =
+
           data.partner ||
-          "জীবনসঙ্গীর পছন্দ উল্লেখ করা হয়নি।";
+
+          "জীবনসঙ্গীর পছন্দ উল্লেখ করা হয়নি.";
 
 
+        // =====================================
         // Loading বন্ধ
+        // =====================================
 
-        document.getElementById("loading")
-          .style.display = "none";
+        document
+          .getElementById(
+            "loading"
+          )
+          .style.display =
+          "none";
 
 
         // Profile দেখানো
 
-        document.getElementById("profileContent")
-          .style.display = "block";
+        document
+          .getElementById(
+            "profileContent"
+          )
+          .style.display =
+          "block";
 
 
       } catch (error) {
@@ -477,24 +797,52 @@
     }
 
 
-    function showError(message) {
+    // ==========================================
+    // Error Function
+    // ==========================================
 
-      document.getElementById("loading")
-        .style.display = "none";
+    function showError(
+      message
+    ) {
 
-      document.getElementById("profileContent")
-        .style.display = "none";
+      document
+        .getElementById(
+          "loading"
+        )
+        .style.display =
+        "none";
 
-      document.getElementById("errorMessage")
-        .style.display = "block";
 
-      document.getElementById("errorMessage")
-        .firstChild.textContent = message;
+      document
+        .getElementById(
+          "profileContent"
+        )
+        .style.display =
+        "none";
+
+
+      document
+        .getElementById(
+          "errorMessage"
+        )
+        .style.display =
+        "block";
+
+
+      document
+        .getElementById(
+          "errorMessage"
+        )
+        .firstChild
+        .textContent =
+        message;
 
     }
 
 
-    // Profile লোড
+    // ==========================================
+    // Profile Load শুরু
+    // ==========================================
 
     loadProfile();
 

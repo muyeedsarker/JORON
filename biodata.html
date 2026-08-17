@@ -1,8 +1,9 @@
-      <label for="gender">লিঙ্গ</label><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="bn">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>JORON — Biodata</title>
 
   <style>
@@ -14,37 +15,48 @@
 
     body {
       font-family: Arial, sans-serif;
-      background: #f5f8f7;
-      color: #222;
-      padding: 20px;
+      background: linear-gradient(135deg, #e8f7f2, #f5f8f7);
+      min-height: 100vh;
+      padding: 25px 15px;
     }
 
-    .container {
-      max-width: 700px;
+    .biodata-box {
+      width: 100%;
+      max-width: 600px;
       margin: auto;
       background: white;
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 5px 25px rgba(0,0,0,.08);
+      padding: 32px 26px;
+      border-radius: 22px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.10);
+    }
+
+    .logo {
+      text-align: center;
+      color: #176b5b;
+      font-size: 34px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .tagline {
+      text-align: center;
+      color: #777;
+      margin-bottom: 28px;
+      font-size: 16px;
     }
 
     h1 {
       text-align: center;
-      color: #176b5b;
-      margin-bottom: 8px;
-    }
-
-    .subtitle {
-      text-align: center;
-      color: #777;
-      margin-bottom: 30px;
+      color: #333;
+      margin-bottom: 25px;
+      font-size: 25px;
     }
 
     label {
       display: block;
-      margin-top: 18px;
-      margin-bottom: 7px;
+      margin: 16px 0 7px;
       font-weight: bold;
+      color: #444;
     }
 
     input,
@@ -55,12 +67,9 @@
       border: 1px solid #ddd;
       border-radius: 10px;
       font-size: 16px;
+      background: white;
       outline: none;
-    }
-
-    textarea {
-      min-height: 110px;
-      resize: vertical;
+      font-family: Arial, sans-serif;
     }
 
     input:focus,
@@ -69,12 +78,23 @@
       border-color: #176b5b;
     }
 
+    textarea {
+      min-height: 130px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    textarea::placeholder {
+      color: #888;
+      opacity: 1;
+    }
+
     button {
       width: 100%;
-      margin-top: 28px;
+      margin-top: 25px;
       padding: 15px;
       border: none;
-      border-radius: 30px;
+      border-radius: 28px;
       background: #176b5b;
       color: white;
       font-size: 17px;
@@ -82,61 +102,81 @@
       cursor: pointer;
     }
 
+    button:hover {
+      background: #125748;
+    }
+
+    .privacy {
+      margin-top: 25px;
+      padding: 15px;
+      background: #eef9f5;
+      border-radius: 15px;
+      color: #176b5b;
+      text-align: center;
+      line-height: 1.6;
+    }
+
     .back {
       display: block;
       text-align: center;
-      margin-top: 20px;
+      margin-top: 22px;
       color: #176b5b;
       text-decoration: none;
+      font-weight: bold;
     }
 
     .note {
-      margin-top: 20px;
-      padding: 12px;
-      background: #eef8f5;
-      border-radius: 10px;
-      color: #176b5b;
-      font-size: 14px;
+      margin-top: 8px;
+      font-size: 13px;
+      color: #888;
+      font-weight: normal;
     }
   </style>
 </head>
 
 <body>
 
-  <div class="container">
+  <div class="biodata-box">
 
-    <h1>JORON | জোড়ন ❤️</h1>
+    <div class="logo">JORON</div>
 
-    <p class="subtitle">
-      দুজনের গল্প, এক জোড়ন।
+    <p class="tagline">
+      দুজনের গল্প, এক জোড়ন। ❤️
     </p>
 
-    <form onsubmit="showMessage(event)">
+    <h1>আপনার বায়োডাটা তৈরি করুন</h1>
 
+    <form onsubmit="createBiodata(event)">
+
+      <!-- পূর্ণ নাম -->
       <label for="name">পূর্ণ নাম</label>
       <input
         type="text"
         id="name"
-        placeholder="আপনার পূর্ণ নাম লিখুন"
+        placeholder="আপনার পূর্ণ নাম"
         required
       >
 
+      <!-- বয়স -->
       <label for="age">বয়স</label>
       <input
         type="number"
         id="age"
+        placeholder="আপনার বয়স"
         min="18"
-        placeholder="বয়স"
+        max="100"
         required
       >
 
-
+      <!-- লিঙ্গ -->
+      <label for="gender">লিঙ্গ</label>
       <select id="gender" required>
         <option value="">নির্বাচন করুন</option>
-        <option value="male">পুরুষ</option>
-        <option value="female">নারী</option>
+        <option value="পুরুষ">পুরুষ</option>
+        <option value="নারী">নারী</option>
       </select>
 
+      <!-- জেলা -->
       <label for="district">জেলা</label>
       <input
         type="text"
@@ -145,6 +185,18 @@
         required
       >
 
+      <!-- পাশের সন -->
+      <label for="passingYear">পাশের সন</label>
+      <input
+        type="number"
+        id="passingYear"
+        placeholder="যেমন: ২০০৩"
+        min="1950"
+        max="2030"
+        required
+      >
+
+      <!-- পেশা -->
       <label for="profession">পেশা</label>
       <input
         type="text"
@@ -153,53 +205,125 @@
         required
       >
 
+      <!-- শিক্ষাগত যোগ্যতা -->
       <label for="education">শিক্ষাগত যোগ্যতা</label>
       <input
         type="text"
         id="education"
-        placeholder="শিক্ষাগত যোগ্যতা"
+        placeholder="যেমন: এসএসসি, এইচএসসি, স্নাতক"
         required
       >
 
+      <!-- নিজের সম্পর্কে -->
       <label for="about">নিজের সম্পর্কে</label>
+
       <textarea
         id="about"
-        placeholder="নিজের সম্পর্কে সংক্ষেপে লিখুন"
-        required
+        placeholder="উদাহরণ: আমি একজন সহজ-সরল, দায়িত্বশীল ও পরিবারপ্রিয় মানুষ। পারস্পরিক সম্মান, বিশ্বাস ও বোঝাপড়াকে গুরুত্ব দিই। সুখে-দুঃখে একে অপরের পাশে থেকে সুন্দরভাবে জীবন কাটাতে চাই।"
       ></textarea>
 
-      <label for="preference">জীবনসঙ্গীর পছন্দ</label>
+      <div class="note">
+        💡 উপরের লেখাটি শুধু নমুনা। এখানে আপনার নিজের সম্পর্কে লিখুন।
+      </div>
+
+
+      <!-- জীবনসঙ্গীর পছন্দ -->
+      <label for="partner">জীবনসঙ্গীর পছন্দ</label>
+
       <textarea
-        id="preference"
-        placeholder="আপনি কেমন জীবনসঙ্গী চান?"
-        required
+        id="partner"
+        placeholder="উদাহরণ: সৎ, ভদ্র, দায়িত্বশীল ও পরিবারকে সম্মান করেন—এমন একজন জীবনসঙ্গী চাই। পারস্পরিক বিশ্বাস, সম্মান ও বোঝাপড়ার মাধ্যমে সুন্দর সংসার করতে চাই।"
       ></textarea>
 
+      <div class="note">
+        💡 উপরের লেখাটি শুধু নমুনা। এখানে আপনি কেমন জীবনসঙ্গী চান তা লিখুন।
+      </div>
+
+
+      <!-- বায়োডাটা তৈরি -->
       <button type="submit">
         Biodata তৈরি করুন
       </button>
 
     </form>
 
-    <div class="note">
-      🔒 আপনার তথ্যের গোপনীয়তা ও নিরাপত্তা JORON-এর গুরুত্বপূর্ণ অঙ্গ।
+
+    <!-- গোপনীয়তা -->
+    <div class="privacy">
+      🔒 আপনার তথ্যের গোপনীয়তা ও নিরাপত্তা
+      <br>
+      JORON-এর গুরুত্বপূর্ণ অংশ।
     </div>
 
-    <a class="back" href="index.html">
+
+    <!-- হোমে ফিরে যান -->
+    <a href="index.html" class="back">
       ← JORON হোমে ফিরে যান
     </a>
 
   </div>
 
+
   <script>
-    function showMessage(event) {
+
+    function createBiodata(event) {
+
       event.preventDefault();
 
+      const name =
+        document.getElementById("name").value.trim();
+
+      const age =
+        document.getElementById("age").value.trim();
+
+      const gender =
+        document.getElementById("gender").value;
+
+      const district =
+        document.getElementById("district").value.trim();
+
+      const passingYear =
+        document.getElementById("passingYear").value.trim();
+
+      const profession =
+        document.getElementById("profession").value.trim();
+
+      const education =
+        document.getElementById("education").value.trim();
+
+      const about =
+        document.getElementById("about").value.trim();
+
+      const partner =
+        document.getElementById("partner").value.trim();
+
+
+      /*
+       * ব্যবহারকারী নিজের সম্পর্কে কিছু না লিখলে
+       * নমুনা লেখাটি ব্যবহার করা হবে না।
+       */
+
+      if (!name || !age || !gender || !district ||
+          !passingYear || !profession || !education) {
+
+        alert("দয়া করে প্রয়োজনীয় সব তথ্য পূরণ করুন।");
+        return;
+      }
+
+
+      /*
+       * বর্তমানে শুধু সফলভাবে তথ্য নেওয়া হচ্ছে।
+       * পরে Firebase-এর সাথে যুক্ত করে
+       * এই তথ্য সংরক্ষণ করা যাবে।
+       */
+
       alert(
-        "আপনার Biodata তথ্য গ্রহণ করা হয়েছে।\n\n" +
-        "পরবর্তী ধাপে এটিকে সুন্দর Profile Card-এ রূপান্তর করা হবে।"
+        "আপনার Biodata সফলভাবে প্রস্তুত হয়েছে। ❤️\n\n" +
+        "JORON-এ আপনাকে স্বাগতম!"
       );
+
     }
+
   </script>
 
 </body>

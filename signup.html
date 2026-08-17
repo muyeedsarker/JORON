@@ -225,7 +225,7 @@
 
   <script type="module">
 
-    import { initializeApp } 
+    import { initializeApp }
       from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
 
     import {
@@ -235,23 +235,33 @@
     } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 
 
-    // ==========================================
-    // আপনার Firebase Console-এর CONFIG এখানে বসান
-    // ==========================================
+    // JORON Firebase Configuration
 
-    const firebaseConfig = YOUR_FIREBASE_CONFIG_HERE;
+    const firebaseConfig = {
+      apiKey: "AIzaSyDWxxu3zwThJp1fuWMhXiRig3Fswt0QARA",
+      authDomain: "joron-d7742.firebaseapp.com",
+      projectId: "joron-d7742",
+      storageBucket: "joron-d7742.firebasestorage.app",
+      messagingSenderId: "907727989078",
+      appId: "1:907727989078:web:4fdd266e3517a862fa0ef7",
+      measurementId: "G-Q8PXH6C5NC"
+    };
 
 
     // Firebase চালু করা
+
     const app = initializeApp(firebaseConfig);
 
-    // Authentication চালু করা
     const auth = getAuth(app);
 
 
     // Signup form
-    const signupForm = document.getElementById("signupForm");
-    const signupButton = document.getElementById("signupButton");
+
+    const signupForm =
+      document.getElementById("signupForm");
+
+    const signupButton =
+      document.getElementById("signupButton");
 
 
     signupForm.addEventListener("submit", async function(event) {
@@ -259,31 +269,47 @@
       event.preventDefault();
 
 
-      const name = document.getElementById("name").value.trim();
-      const email = document.getElementById("email").value.trim();
-      const phone = document.getElementById("phone").value.trim();
-      const gender = document.getElementById("gender").value;
+      const name =
+        document.getElementById("name").value.trim();
 
-      const password = document.getElementById("password").value;
+      const email =
+        document.getElementById("email").value.trim();
+
+      const phone =
+        document.getElementById("phone").value.trim();
+
+      const gender =
+        document.getElementById("gender").value;
+
+      const password =
+        document.getElementById("password").value;
+
       const confirmPassword =
         document.getElementById("confirmPassword").value;
 
 
       // Password মিলছে কি না
+
       if (password !== confirmPassword) {
+
         alert("দুটি পাসওয়ার্ড একই নয়।");
+
         return;
       }
 
 
-      // Loading অবস্থায় button বন্ধ
+      // Button বন্ধ
+
       signupButton.disabled = true;
-      signupButton.textContent = "অ্যাকাউন্ট তৈরি হচ্ছে...";
+
+      signupButton.textContent =
+        "অ্যাকাউন্ট তৈরি হচ্ছে...";
 
 
       try {
 
         // Firebase account তৈরি
+
         const userCredential =
           await createUserWithEmailAndPassword(
             auth,
@@ -292,10 +318,12 @@
           );
 
 
-        const user = userCredential.user;
+        const user =
+          userCredential.user;
 
 
-        // Firebase Auth profile-এ নাম সংরক্ষণ
+        // Firebase profile-এ নাম সংরক্ষণ
+
         await updateProfile(user, {
           displayName: name
         });
@@ -306,8 +334,10 @@
         );
 
 
-        // পরবর্তী ধাপ
-        window.location.href = "biodata.html";
+        // Biodata page
+
+        window.location.href =
+          "biodata.html";
 
 
       } catch (error) {
@@ -316,27 +346,47 @@
 
 
         let message =
-          "অ্যাকাউন্ট তৈরি করা যায়নি। আবার চেষ্টা করুন।";
+          "অ্যাকাউন্ট তৈরি করা যায়নি। আবার চেষ্টা করুন.";
 
 
-        if (error.code === "auth/email-already-in-use") {
+        if (
+          error.code ===
+          "auth/email-already-in-use"
+        ) {
+
           message =
             "এই ইমেইল দিয়ে ইতিমধ্যে একটি অ্যাকাউন্ট আছে।";
+
         }
 
-        else if (error.code === "auth/invalid-email") {
+        else if (
+          error.code ===
+          "auth/invalid-email"
+        ) {
+
           message =
             "দয়া করে সঠিক ইমেইল ঠিকানা দিন।";
+
         }
 
-        else if (error.code === "auth/weak-password") {
+        else if (
+          error.code ===
+          "auth/weak-password"
+        ) {
+
           message =
             "পাসওয়ার্ড আরও শক্তিশালী দিন।";
+
         }
 
-        else if (error.code === "auth/operation-not-allowed") {
+        else if (
+          error.code ===
+          "auth/operation-not-allowed"
+        ) {
+
           message =
             "Firebase-এ Email/Password Authentication চালু নেই।";
+
         }
 
 
@@ -344,8 +394,10 @@
 
 
         signupButton.disabled = false;
+
         signupButton.textContent =
           "অ্যাকাউন্ট তৈরি করুন";
+
       }
 
     });

@@ -106,6 +106,11 @@
       background: #125748;
     }
 
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
     .privacy {
       margin-top: 25px;
       padding: 15px;
@@ -146,9 +151,8 @@
 
     <h1>আপনার বায়োডাটা তৈরি করুন</h1>
 
-    <form onsubmit="createBiodata(event)">
+    <form id="biodataForm">
 
-      <!-- পূর্ণ নাম -->
       <label for="name">পূর্ণ নাম</label>
       <input
         type="text"
@@ -157,7 +161,6 @@
         required
       >
 
-      <!-- বয়স -->
       <label for="age">বয়স</label>
       <input
         type="number"
@@ -168,7 +171,6 @@
         required
       >
 
-      <!-- লিঙ্গ -->
       <label for="gender">লিঙ্গ</label>
       <select id="gender" required>
         <option value="">নির্বাচন করুন</option>
@@ -176,7 +178,6 @@
         <option value="নারী">নারী</option>
       </select>
 
-      <!-- জেলা -->
       <label for="district">জেলা</label>
       <input
         type="text"
@@ -185,7 +186,6 @@
         required
       >
 
-      <!-- পাশের সন -->
       <label for="passingYear">পাশের সন</label>
       <input
         type="number"
@@ -196,7 +196,6 @@
         required
       >
 
-      <!-- পেশা -->
       <label for="profession">পেশা</label>
       <input
         type="text"
@@ -205,7 +204,6 @@
         required
       >
 
-      <!-- শিক্ষাগত যোগ্যতা -->
       <label for="education">শিক্ষাগত যোগ্যতা</label>
       <input
         type="text"
@@ -214,7 +212,6 @@
         required
       >
 
-      <!-- নিজের সম্পর্কে -->
       <label for="about">নিজের সম্পর্কে</label>
 
       <textarea
@@ -226,8 +223,6 @@
         💡 উপরের লেখাটি শুধু নমুনা। এখানে আপনার নিজের সম্পর্কে লিখুন।
       </div>
 
-
-      <!-- জীবনসঙ্গীর পছন্দ -->
       <label for="partner">জীবনসঙ্গীর পছন্দ</label>
 
       <textarea
@@ -239,24 +234,18 @@
         💡 উপরের লেখাটি শুধু নমুনা। এখানে আপনি কেমন জীবনসঙ্গী চান তা লিখুন।
       </div>
 
-
-      <!-- বায়োডাটা তৈরি -->
-      <button type="submit">
+      <button type="submit" id="saveButton">
         Biodata তৈরি করুন
       </button>
 
     </form>
 
-
-    <!-- গোপনীয়তা -->
     <div class="privacy">
       🔒 আপনার তথ্যের গোপনীয়তা ও নিরাপত্তা
       <br>
       JORON-এর গুরুত্বপূর্ণ অংশ।
     </div>
 
-
-    <!-- হোমে ফিরে যান -->
     <a href="index.html" class="back">
       ← JORON হোমে ফিরে যান
     </a>
@@ -264,65 +253,238 @@
   </div>
 
 
-  <script>
+  <script type="module">
 
-    function createBiodata(event) {
+    import { initializeApp }
+      from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
 
-      event.preventDefault();
+    import {
+      getAuth,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 
-      const name =
-        document.getElementById("name").value.trim();
-
-      const age =
-        document.getElementById("age").value.trim();
-
-      const gender =
-        document.getElementById("gender").value;
-
-      const district =
-        document.getElementById("district").value.trim();
-
-      const passingYear =
-        document.getElementById("passingYear").value.trim();
-
-      const profession =
-        document.getElementById("profession").value.trim();
-
-      const education =
-        document.getElementById("education").value.trim();
-
-      const about =
-        document.getElementById("about").value.trim();
-
-      const partner =
-        document.getElementById("partner").value.trim();
+    import {
+      getFirestore,
+      doc,
+      setDoc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
 
-      /*
-       * ব্যবহারকারী নিজের সম্পর্কে কিছু না লিখলে
-       * নমুনা লেখাটি ব্যবহার করা হবে না।
-       */
+    // ==========================================
+    // JORON Firebase Configuration
+    // ==========================================
 
-      if (!name || !age || !gender || !district ||
-          !passingYear || !profession || !education) {
+    const firebaseConfig = {
+      apiKey: "AIzaSyDWxxu3zwThJp1fuWMhXiRig3Fswt0QARA",
+      authDomain: "joron-d7742.firebaseapp.com",
+      projectId: "joron-d7742",
+      storageBucket: "joron-d7742.firebasestorage.app",
+      messagingSenderId: "907727989078",
+      appId: "1:907727989078:web:4fdd266e3517a862fa0ef7",
+      measurementId: "G-Q8PXH6C5NC"
+    };
 
-        alert("দয়া করে প্রয়োজনীয় সব তথ্য পূরণ করুন।");
-        return;
+
+    // Firebase চালু করা
+
+    const app = initializeApp(firebaseConfig);
+
+    const auth = getAuth(app);
+
+    const db = getFirestore(app);
+
+
+    // বর্তমানে লগইন করা user
+
+    let currentUser = null;
+
+
+    onAuthStateChanged(auth, function(user) {
+
+      if (user) {
+
+        currentUser = user;
+
+      } else {
+
+        currentUser = null;
+
+        alert("Biodata তৈরি করতে আগে Login করুন।");
+
+        window.location.href = "login.html";
+
       }
 
+    });
 
-      /*
-       * বর্তমানে শুধু সফলভাবে তথ্য নেওয়া হচ্ছে।
-       * পরে Firebase-এর সাথে যুক্ত করে
-       * এই তথ্য সংরক্ষণ করা যাবে।
-       */
 
-      alert(
-        "আপনার Biodata সফলভাবে প্রস্তুত হয়েছে। ❤️\n\n" +
-        "JORON-এ আপনাকে স্বাগতম!"
-      );
+    // Biodata form
 
-    }
+    const biodataForm =
+      document.getElementById("biodataForm");
+
+    const saveButton =
+      document.getElementById("saveButton");
+
+
+    biodataForm.addEventListener(
+      "submit",
+      async function(event) {
+
+        event.preventDefault();
+
+
+        // Login করা আছে কি না
+
+        if (!currentUser) {
+
+          alert("আপনি Login করা নেই। আগে Login করুন।");
+
+          window.location.href = "login.html";
+
+          return;
+        }
+
+
+        // Form-এর তথ্য নেওয়া
+
+        const name =
+          document.getElementById("name").value.trim();
+
+        const age =
+          document.getElementById("age").value.trim();
+
+        const gender =
+          document.getElementById("gender").value;
+
+        const district =
+          document.getElementById("district").value.trim();
+
+        const passingYear =
+          document.getElementById("passingYear").value.trim();
+
+        const profession =
+          document.getElementById("profession").value.trim();
+
+        const education =
+          document.getElementById("education").value.trim();
+
+        const about =
+          document.getElementById("about").value.trim();
+
+        const partner =
+          document.getElementById("partner").value.trim();
+
+
+        // প্রয়োজনীয় তথ্য যাচাই
+
+        if (
+          !name ||
+          !age ||
+          !gender ||
+          !district ||
+          !passingYear ||
+          !profession ||
+          !education
+        ) {
+
+          alert(
+            "দয়া করে প্রয়োজনীয় সব তথ্য পূরণ করুন।"
+          );
+
+          return;
+        }
+
+
+        // Save button বন্ধ
+
+        saveButton.disabled = true;
+
+        saveButton.textContent =
+          "Biodata সংরক্ষণ হচ্ছে...";
+
+
+        try {
+
+          // Firestore-এ user-এর UID দিয়ে document তৈরি
+
+          await setDoc(
+            doc(db, "biodata", currentUser.uid),
+            {
+
+              uid: currentUser.uid,
+
+              name: name,
+
+              email:
+                currentUser.email || "",
+
+              age: Number(age),
+
+              gender: gender,
+
+              district: district,
+
+              passingYear: Number(passingYear),
+
+              profession: profession,
+
+              education: education,
+
+              about: about,
+
+              partner: partner,
+
+              createdAt: serverTimestamp(),
+
+              updatedAt: serverTimestamp()
+
+            },
+            {
+              merge: true
+            }
+          );
+
+
+          alert(
+            "আপনার Biodata সফলভাবে সংরক্ষণ হয়েছে। ❤️"
+          );
+
+
+          // আপাতত Biodata পেজেই থাকবে
+
+          saveButton.disabled = false;
+
+          saveButton.textContent =
+            "Biodata তৈরি করুন";
+
+
+        } catch (error) {
+
+          console.error(
+            "Firestore error:",
+            error
+          );
+
+
+          alert(
+            "Biodata সংরক্ষণ করা যায়নি।\n\n" +
+            "Error: " +
+            error.message
+          );
+
+
+          saveButton.disabled = false;
+
+          saveButton.textContent =
+            "Biodata তৈরি করুন";
+
+        }
+
+      }
+
+    );
 
   </script>
 

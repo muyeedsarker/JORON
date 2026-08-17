@@ -25,7 +25,7 @@
 
     .signup-box {
       width: 100%;
-      max-width: 560px;
+      max-width: 600px;
       margin: auto;
       background: white;
       padding: 32px 25px;
@@ -92,17 +92,18 @@
 
     .membership-info {
       background: #eef9f5;
-      padding: 12px;
+      padding: 13px;
       border-radius: 12px;
       color: #52605c;
       font-size: 13px;
+      line-height: 1.6;
       margin-bottom: 15px;
     }
 
     .membership-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
     }
 
     .membership-option {
@@ -118,6 +119,7 @@
 
     .membership-card {
       height: 100%;
+      min-height: 150px;
       border: 2px solid #e1e6e4;
       border-radius: 16px;
       padding: 18px 10px;
@@ -128,22 +130,23 @@
 
     .membership-card:hover {
       border-color: #76b9aa;
+      transform: translateY(-2px);
     }
 
     .membership-option input:checked + .membership-card {
       border-color: #126b5b;
       background: #effaf6;
-      box-shadow: 0 5px 18px rgba(18,107,91,.12);
+      box-shadow: 0 6px 20px rgba(18,107,91,.14);
     }
 
     .membership-card h3 {
       color: #126b5b;
-      font-size: 17px;
-      margin-bottom: 6px;
+      font-size: 18px;
+      margin-bottom: 7px;
     }
 
     .membership-price {
-      font-size: 24px;
+      font-size: 26px;
       font-weight: 800;
       color: #222;
     }
@@ -151,21 +154,34 @@
     .membership-duration {
       font-size: 11px;
       color: #777;
+      margin-top: 4px;
     }
 
     .popular {
       display: inline-block;
       background: #126b5b;
       color: white;
-      padding: 3px 8px;
+      padding: 4px 9px;
       border-radius: 20px;
-      font-size: 9px;
-      margin-bottom: 5px;
+      font-size: 10px;
+      margin-bottom: 7px;
+    }
+
+    .premium-plus {
+      background: linear-gradient(
+        135deg,
+        #fff8df,
+        #fffdf4
+      );
+    }
+
+    .premium-plus h3 {
+      color: #a47700;
     }
 
     .selected-plan {
       margin-top: 13px;
-      padding: 11px;
+      padding: 12px;
       border-radius: 10px;
       background: #f5f7f6;
       text-align: center;
@@ -259,16 +275,23 @@
       }
 
       .membership-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 1fr;
+        gap: 9px;
       }
 
       .membership-card {
-        padding: 16px;
+        min-height: 145px;
+        padding: 15px 7px;
       }
 
-      .membership-option input:checked + .membership-card {
-        transform: none;
+      .membership-card h3 {
+        font-size: 16px;
       }
+
+      .membership-price {
+        font-size: 23px;
+      }
+
     }
   </style>
 </head>
@@ -277,19 +300,25 @@
 
   <div class="signup-box">
 
-    <div class="logo">JORON</div>
+    <div class="logo">
+      JORON
+    </div>
 
     <p class="tagline">
       দুজনের গল্প, এক জোড়ন। ❤️
     </p>
 
-    <h1>নতুন অ্যাকাউন্ট তৈরি করুন</h1>
+    <h1>
+      নতুন অ্যাকাউন্ট তৈরি করুন
+    </h1>
 
 
     <form id="signupForm">
 
 
-      <!-- BASIC INFORMATION -->
+      <!-- =========================
+           PERSONAL INFORMATION
+      ========================== -->
 
       <div class="step-title">
         👤 আপনার তথ্য
@@ -354,7 +383,9 @@
       </select>
 
 
-      <!-- PASSWORD -->
+      <!-- =========================
+           PASSWORD
+      ========================== -->
 
       <div class="step-title">
         🔐 নিরাপত্তা
@@ -387,7 +418,9 @@
       >
 
 
-      <!-- MEMBERSHIP -->
+      <!-- =========================
+           MEMBERSHIP
+      ========================== -->
 
       <div class="step-title">
         💎 Membership নির্বাচন করুন
@@ -396,10 +429,13 @@
 
       <div class="membership-info">
 
-        Membership আপনার প্রয়োজন অনুযায়ী
-        সুবিধা নির্ধারণ করবে।
-        <strong>কোনো ব্যবহারকারীর আয় বা আর্থিক অবস্থাকে
-        প্রকাশ্যে শ্রেণিবদ্ধ করা হবে না।</strong>
+        আপনার প্রয়োজন অনুযায়ী একটি Membership নির্বাচন করুন।
+
+        <br>
+
+        <strong>
+          Membership কোনো ব্যক্তির আয় বা আর্থিক অবস্থার প্রকাশ্য পরিচয় নয়।
+        </strong>
 
       </div>
 
@@ -421,14 +457,16 @@
 
           <div class="membership-card">
 
-            <h3>Basic</h3>
+            <h3>
+              Basic
+            </h3>
 
             <div class="membership-price">
               ৳99
             </div>
 
             <div class="membership-duration">
-              Membership
+              Membership Plan
             </div>
 
           </div>
@@ -453,14 +491,16 @@
               ⭐ জনপ্রিয়
             </div>
 
-            <h3>Standard</h3>
+            <h3>
+              Standard
+            </h3>
 
             <div class="membership-price">
               ৳199
             </div>
 
             <div class="membership-duration">
-              Membership
+              Membership Plan
             </div>
 
           </div>
@@ -481,14 +521,50 @@
 
           <div class="membership-card">
 
-            <h3>Premium</h3>
+            <h3>
+              Premium
+            </h3>
 
             <div class="membership-price">
               ৳399
             </div>
 
             <div class="membership-duration">
-              Membership
+              Membership Plan
+            </div>
+
+          </div>
+
+        </label>
+
+
+        <!-- PREMIUM PLUS -->
+
+        <label class="membership-option">
+
+          <input
+            type="radio"
+            name="membership"
+            value="Premium Plus"
+            data-price="599"
+          >
+
+          <div class="membership-card premium-plus">
+
+            <div class="popular">
+              👑 সর্বোচ্চ
+            </div>
+
+            <h3>
+              Premium Plus
+            </h3>
+
+            <div class="membership-price">
+              ৳599
+            </div>
+
+            <div class="membership-duration">
+              Membership Plan
             </div>
 
           </div>
@@ -498,14 +574,21 @@
       </div>
 
 
-      <div class="selected-plan" id="selectedPlan">
+      <!-- SELECTED PLAN -->
+
+      <div
+        class="selected-plan"
+        id="selectedPlan"
+      >
 
         কোনো Membership নির্বাচন করা হয়নি।
 
       </div>
 
 
-      <!-- TERMS -->
+      <!-- =========================
+           TERMS
+      ========================== -->
 
       <label class="terms">
 
@@ -518,13 +601,17 @@
         <span>
 
           আমি JORON-এর
+
           <a href="#">
             শর্তাবলি
           </a>
+
           ও
+
           <a href="#">
             গোপনীয়তা নীতি
           </a>
+
           মেনে নিচ্ছি।
 
         </span>
@@ -569,17 +656,27 @@
   </div>
 
 
+  <!-- =========================
+       FIREBASE
+  ========================== -->
+
   <script type="module">
 
-    import { initializeApp }
-      from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+    import {
+      initializeApp
+    }
+    from
+    "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+
 
     import {
       getAuth,
       createUserWithEmailAndPassword,
       updateProfile
     }
-      from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+    from
+    "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+
 
     import {
       getFirestore,
@@ -587,12 +684,13 @@
       setDoc,
       serverTimestamp
     }
-      from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+    from
+    "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
 
     /* =========================
-       JORON FIREBASE
-    ========================= */
+       FIREBASE CONFIG
+    ========================== */
 
     const firebaseConfig = {
 
@@ -620,11 +718,19 @@
     };
 
 
+    /* =========================
+       FIREBASE START
+    ========================== */
+
     const app =
-      initializeApp(firebaseConfig);
+      initializeApp(
+        firebaseConfig
+      );
+
 
     const auth =
       getAuth(app);
+
 
     const db =
       getFirestore(app);
@@ -632,21 +738,29 @@
 
     /* =========================
        ELEMENTS
-    ========================= */
+    ========================== */
 
     const signupForm =
-      document.getElementById("signupForm");
+      document.getElementById(
+        "signupForm"
+      );
+
 
     const signupButton =
-      document.getElementById("signupButton");
+      document.getElementById(
+        "signupButton"
+      );
+
 
     const selectedPlan =
-      document.getElementById("selectedPlan");
+      document.getElementById(
+        "selectedPlan"
+      );
 
 
     /* =========================
        MEMBERSHIP PREVIEW
-    ========================= */
+    ========================== */
 
     const membershipInputs =
       document.querySelectorAll(
@@ -654,32 +768,45 @@
       );
 
 
-    membershipInputs.forEach(function(input) {
+    membershipInputs.forEach(
+      function(input) {
 
-      input.addEventListener("change", function() {
+        input.addEventListener(
+          "change",
+          function() {
 
-        const plan =
-          this.value;
+            const plan =
+              this.value;
 
-        const price =
-          this.dataset.price;
 
-        selectedPlan.innerHTML =
-          "নির্বাচিত Membership: " +
-          "<strong>" +
-          plan +
-          " — ৳" +
-          price +
-          "</strong>";
+            const price =
+              this.dataset.price;
 
-      });
 
-    });
+            selectedPlan.innerHTML =
+
+              "নির্বাচিত Membership: " +
+
+              "<strong>" +
+
+              plan +
+
+              " — ৳" +
+
+              price +
+
+              "</strong>";
+
+          }
+        );
+
+      }
+    );
 
 
     /* =========================
        SIGNUP
-    ========================= */
+    ========================== */
 
     signupForm.addEventListener(
       "submit",
@@ -687,6 +814,8 @@
 
         event.preventDefault();
 
+
+        /* Get form values */
 
         const name =
           document
@@ -733,7 +862,9 @@
           );
 
 
-        /* Password check */
+        /* =========================
+           PASSWORD CHECK
+        ========================== */
 
         if (
           password !==
@@ -749,9 +880,13 @@
         }
 
 
-        /* Membership check */
+        /* =========================
+           MEMBERSHIP CHECK
+        ========================== */
 
-        if (!selectedMembership) {
+        if (
+          !selectedMembership
+        ) {
 
           alert(
             "দয়া করে একটি Membership নির্বাচন করুন।"
@@ -762,7 +897,9 @@
         }
 
 
-        /* Phone check */
+        /* =========================
+           PHONE CHECK
+        ========================== */
 
         const phonePattern =
           /^01[0-9]{9}$/;
@@ -781,7 +918,9 @@
         }
 
 
-        /* Selected plan */
+        /* =========================
+           MEMBERSHIP DATA
+        ========================== */
 
         const membership =
           selectedMembership.value;
@@ -791,8 +930,13 @@
           selectedMembership.dataset.price;
 
 
+        /* =========================
+           BUTTON
+        ========================== */
+
         signupButton.disabled =
           true;
+
 
         signupButton.textContent =
           "অ্যাকাউন্ট তৈরি হচ্ছে...";
@@ -800,7 +944,10 @@
 
         try {
 
-          /* Firebase Authentication */
+
+          /* =========================
+             CREATE FIREBASE ACCOUNT
+          ========================== */
 
           const userCredential =
             await createUserWithEmailAndPassword(
@@ -814,24 +961,31 @@
             userCredential.user;
 
 
-          /* Firebase name */
+          /* =========================
+             SAVE DISPLAY NAME
+          ========================== */
 
           await updateProfile(
             user,
             {
-              displayName: name
+              displayName:
+                name
             }
           );
 
 
-          /* User information */
+          /* =========================
+             SAVE USER DATA
+          ========================== */
 
           await setDoc(
+
             doc(
               db,
               "users",
               user.uid
             ),
+
             {
 
               uid:
@@ -853,22 +1007,33 @@
                 membership,
 
               membershipPrice:
-                Number(membershipPrice),
+                Number(
+                  membershipPrice
+                ),
 
               membershipStatus:
                 "pending",
+
+              paymentStatus:
+                "unpaid",
 
               profileCompleted:
                 false,
 
               createdAt:
+                serverTimestamp(),
+
+              updatedAt:
                 serverTimestamp()
 
             }
+
           );
 
 
-          /* Local backup */
+          /* =========================
+             LOCAL STORAGE
+          ========================== */
 
           localStorage.setItem(
             "joronMembership",
@@ -888,12 +1053,18 @@
           );
 
 
+          /* =========================
+             SUCCESS
+          ========================== */
+
           alert(
             "অভিনন্দন! আপনার JORON অ্যাকাউন্ট তৈরি হয়েছে।"
           );
 
 
-          /* Next step */
+          /* =========================
+             NEXT PAGE
+          ========================== */
 
           window.location.href =
             "biodata.html";
@@ -939,7 +1110,7 @@
           ) {
 
             message =
-              "পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের এবং শক্তিশালী হওয়া উচিত।";
+              "পাসওয়ার্ড আরও শক্তিশালী দিন।";
 
           }
 
@@ -964,11 +1135,14 @@
           }
 
 
-          alert(message);
+          alert(
+            message
+          );
 
 
           signupButton.disabled =
             false;
+
 
           signupButton.textContent =
             "অ্যাকাউন্ট তৈরি করুন";

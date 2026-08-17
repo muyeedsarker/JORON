@@ -144,6 +144,9 @@
       text-decoration: none;
       font-weight: bold;
       margin: 5px;
+      border: 0;
+      cursor: pointer;
+      font-size: 15px;
     }
 
     .primary {
@@ -155,6 +158,19 @@
       border: 2px solid #176b5b;
       color: #176b5b;
       background: white;
+    }
+
+    .primary:disabled {
+      opacity: .65;
+      cursor: not-allowed;
+    }
+
+    .status {
+      text-align: center;
+      min-height: 24px;
+      margin-top: 8px;
+      font-size: 14px;
+      color: #176b5b;
     }
 
     .loading {
@@ -201,8 +217,6 @@
 
     <div id="profileContent" style="display:none;">
 
-      <!-- Profile Header -->
-
       <div class="top">
 
         <div class="avatar" id="avatar">
@@ -225,8 +239,6 @@
 
 
       <div class="content">
-
-        <!-- ব্যক্তিগত তথ্য -->
 
         <div class="section">
 
@@ -266,8 +278,6 @@
         </div>
 
 
-        <!-- শিক্ষাগত তথ্য -->
-
         <div class="section">
 
           <h2>
@@ -277,75 +287,34 @@
           <div class="info">
 
             <div class="item">
-
-              <strong>
-                শিক্ষাব্যবস্থা
-              </strong>
-
-              <span id="educationSystem">
-                —
-              </span>
-
+              <strong>শিক্ষাব্যবস্থা</strong>
+              <span id="educationSystem">—</span>
             </div>
 
-
             <div class="item">
-
-              <strong>
-                শিক্ষাগত যোগ্যতা
-              </strong>
-
-              <span id="education">
-                —
-              </span>
-
+              <strong>শিক্ষাগত যোগ্যতা</strong>
+              <span id="education">—</span>
             </div>
 
-
             <div class="item">
-
-              <strong>
-                প্রতিষ্ঠান
-              </strong>
-
-              <span id="institution">
-                —
-              </span>
-
+              <strong>প্রতিষ্ঠান</strong>
+              <span id="institution">—</span>
             </div>
 
-
             <div class="item">
-
-              <strong>
-                বিভাগ / বিষয়
-              </strong>
-
-              <span id="subject">
-                —
-              </span>
-
+              <strong>বিভাগ / বিষয়</strong>
+              <span id="subject">—</span>
             </div>
 
-
             <div class="item">
-
-              <strong>
-                পাশের সন
-              </strong>
-
-              <span id="passingYear">
-                —
-              </span>
-
+              <strong>পাশের সন</strong>
+              <span id="passingYear">—</span>
             </div>
 
           </div>
 
         </div>
 
-
-        <!-- নিজের সম্পর্কে -->
 
         <div class="section">
 
@@ -353,17 +322,12 @@
             নিজের সম্পর্কে
           </h2>
 
-          <div
-            class="text"
-            id="about"
-          >
+          <div class="text" id="about">
             —
           </div>
 
         </div>
 
-
-        <!-- জীবনসঙ্গীর পছন্দ -->
 
         <div class="section">
 
@@ -371,27 +335,22 @@
             জীবনসঙ্গীর পছন্দ
           </h2>
 
-          <div
-            class="text"
-            id="partner"
-          >
+          <div class="text" id="partner">
             —
           </div>
 
         </div>
 
 
-        <!-- Buttons -->
-
         <div class="buttons">
 
-          <a
+          <button
             class="btn primary"
-            href="#"
             id="interestButton"
+            type="button"
           >
             ❤️ পছন্দ করুন
-          </a>
+          </button>
 
           <a
             class="btn secondary"
@@ -400,6 +359,11 @@
             ← প্রোফাইল তালিকায় ফিরে যান
           </a>
 
+          <div
+            id="interestStatus"
+            class="status"
+          ></div>
+
         </div>
 
       </div>
@@ -407,15 +371,15 @@
     </div>
 
 
-    <!-- Error -->
-
     <div
       id="errorMessage"
       class="error"
       style="display:none;"
     >
 
-      Profile পাওয়া যায়নি।
+      <span id="errorText">
+        Profile পাওয়া যায়নি।
+      </span>
 
       <br><br>
 
@@ -439,14 +403,21 @@
     import {
       getFirestore,
       doc,
-      getDoc
+      getDoc,
+      setDoc,
+      deleteDoc,
+      serverTimestamp
     }
     from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
 
-    // ==========================================
-    // JORON Firebase Configuration
-    // ==========================================
+    import {
+      getAuth,
+      signInAnonymously,
+      onAuthStateChanged
+    }
+    from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+
 
     const firebaseConfig = {
 
@@ -474,8 +445,6 @@
     };
 
 
-    // Firebase চালু
-
     const app =
       initializeApp(
         firebaseConfig
@@ -486,9 +455,9 @@
       getFirestore(app);
 
 
-    // ==========================================
-    // URL থেকে Profile UID নেওয়া
-    // ==========================================
+    const auth =
+      getAuth(app);
+
 
     const urlParams =
       new URLSearchParams(
@@ -500,15 +469,209 @@
       urlParams.get("id");
 
 
-    // ==========================================
-    // Profile Load
-    // ==========================================
+    const interestButton =
+      document.getElementById(
+        "interestButton"
+      );
+
+
+    const interestStatus =
+      document.getElementById(
+        "interestStatus"
+      );
+
+
+    let currentUser = null;
+
+    let isInterested = false;
+
+
+    function showError(message) {
+
+      document
+        .getElementById("loading")
+        .style.display =
+        "none";
+
+
+      document
+        .getElementById("profileContent")
+        .style.display =
+        "none";
+
+
+      document
+        .getElementById("errorText")
+        .textContent =
+        message;
+
+
+      document
+        .getElementById("errorMessage")
+        .style.display =
+        "block";
+
+    }
+
+
+    function updateInterestButton() {
+
+      if (isInterested) {
+
+        interestButton.textContent =
+          "❤️ পছন্দ করা হয়েছে";
+
+      } else {
+
+        interestButton.textContent =
+          "❤️ পছন্দ করুন";
+
+      }
+
+      interestButton.disabled = false;
+
+    }
+
+
+    async function loadInterestState() {
+
+      if (!currentUser || !profileId) {
+        return;
+      }
+
+
+      const interestRef =
+        doc(
+          db,
+          "interests",
+          currentUser.uid +
+          "_" +
+          profileId
+        );
+
+
+      const interestSnap =
+        await getDoc(
+          interestRef
+        );
+
+
+      isInterested =
+        interestSnap.exists();
+
+
+      updateInterestButton();
+
+    }
+
+
+    async function toggleInterest() {
+
+      if (!currentUser) {
+
+        interestStatus.textContent =
+          "একটু অপেক্ষা করুন...";
+
+        return;
+
+      }
+
+
+      if (!profileId) {
+        return;
+      }
+
+
+      interestButton.disabled = true;
+
+      interestStatus.textContent =
+        "সেভ হচ্ছে...";
+
+
+      try {
+
+        const interestRef =
+          doc(
+            db,
+            "interests",
+            currentUser.uid +
+            "_" +
+            profileId
+          );
+
+
+        if (isInterested) {
+
+          await deleteDoc(
+            interestRef
+          );
+
+
+          isInterested = false;
+
+
+          interestStatus.textContent =
+            "পছন্দ বাতিল করা হয়েছে।";
+
+        } else {
+
+          await setDoc(
+            interestRef,
+            {
+              fromUserId:
+                currentUser.uid,
+
+              profileId:
+                profileId,
+
+              createdAt:
+                serverTimestamp()
+            }
+          );
+
+
+          isInterested = true;
+
+
+          interestStatus.textContent =
+            "❤️ আপনার পছন্দটি সেভ হয়েছে।";
+
+        }
+
+
+        updateInterestButton();
+
+
+        setTimeout(
+          () => {
+            interestStatus.textContent = "";
+          },
+          2500
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          error
+        );
+
+
+        interestStatus.textContent =
+          "পছন্দ সেভ করা যায়নি। Firebase সেটিংস পরীক্ষা করুন।";
+
+
+        interestButton.disabled =
+          false;
+
+      }
+
+    }
+
 
     async function loadProfile() {
 
       try {
-
-        // Profile ID নেই
 
         if (!profileId) {
 
@@ -520,8 +683,6 @@
 
         }
 
-
-        // Firestore document
 
         const profileRef =
           doc(
@@ -537,8 +698,6 @@
           );
 
 
-        // Profile নেই
-
         if (!profileSnap.exists()) {
 
           showError(
@@ -550,15 +709,9 @@
         }
 
 
-        // Data
-
         const data =
           profileSnap.data();
 
-
-        // =====================================
-        // ব্যক্তিগত তথ্য
-        // =====================================
 
         const name =
           data.name ||
@@ -566,7 +719,7 @@
 
 
         const age =
-          data.age ||
+          data.age ??
           "—";
 
 
@@ -579,15 +732,6 @@
           data.district ||
           "—";
 
-
-        const profession =
-          data.profession ||
-          "—";
-
-
-        // =====================================
-        // Header
-        // =====================================
 
         document
           .getElementById(
@@ -605,31 +749,23 @@
           name;
 
 
-        // Avatar
-
-        const firstLetter =
-          name.charAt(0);
-
-
         document
           .getElementById(
             "avatar"
           )
           .textContent =
-          firstLetter;
+          name.charAt(0);
 
-
-        // Age
 
         document
           .getElementById(
             "age"
           )
           .textContent =
-          age + " বছর";
+          age === "—"
+            ? "—"
+            : age + " বছর";
 
-
-        // Gender
 
         document
           .getElementById(
@@ -639,8 +775,6 @@
           gender;
 
 
-        // District
-
         document
           .getElementById(
             "district"
@@ -649,17 +783,14 @@
           district;
 
 
-        // Profession
-
         document
           .getElementById(
             "profession"
           )
           .textContent =
-          profession;
+          data.profession ||
+          "—";
 
-
-        // Summary
 
         document
           .getElementById(
@@ -673,10 +804,6 @@
           " • " +
           district;
 
-
-        // =====================================
-        // Education
-        // =====================================
 
         document
           .getElementById(
@@ -728,10 +855,6 @@
           "—";
 
 
-        // =====================================
-        // About
-        // =====================================
-
         document
           .getElementById(
             "about"
@@ -740,12 +863,8 @@
 
           data.about ||
 
-          "এই ব্যক্তি নিজের সম্পর্কে কিছু লেখেননি.";
+          "এই ব্যক্তি নিজের সম্পর্কে কিছু লেখেননি।";
 
-
-        // =====================================
-        // Partner Preference
-        // =====================================
 
         document
           .getElementById(
@@ -755,12 +874,8 @@
 
           data.partner ||
 
-          "জীবনসঙ্গীর পছন্দ উল্লেখ করা হয়নি.";
+          "জীবনসঙ্গীর পছন্দ উল্লেখ করা হয়নি।";
 
-
-        // =====================================
-        // Loading বন্ধ
-        // =====================================
 
         document
           .getElementById(
@@ -770,14 +885,19 @@
           "none";
 
 
-        // Profile দেখানো
-
         document
           .getElementById(
             "profileContent"
           )
           .style.display =
           "block";
+
+
+        if (currentUser) {
+
+          await loadInterestState();
+
+        }
 
 
       } catch (error) {
@@ -797,52 +917,62 @@
     }
 
 
-    // ==========================================
-    // Error Function
-    // ==========================================
-
-    function showError(
-      message
-    ) {
-
-      document
-        .getElementById(
-          "loading"
-        )
-        .style.display =
-        "none";
+    interestButton
+      .addEventListener(
+        "click",
+        toggleInterest
+      );
 
 
-      document
-        .getElementById(
-          "profileContent"
-        )
-        .style.display =
-        "none";
+    onAuthStateChanged(
+      auth,
+      async (user) => {
+
+        currentUser =
+          user;
 
 
-      document
-        .getElementById(
-          "errorMessage"
-        )
-        .style.display =
-        "block";
+        if (
+          user &&
+          profileId
+        ) {
+
+          try {
+
+            await loadInterestState();
+
+          } catch (error) {
+
+            console.error(
+              error
+            );
+
+          }
+
+        }
+
+      }
+    );
 
 
-      document
-        .getElementById(
-          "errorMessage"
-        )
-        .firstChild
-        .textContent =
-        message;
+    try {
+
+      await signInAnonymously(
+        auth
+      );
+
+    } catch (error) {
+
+      console.error(
+        "Anonymous Auth error:",
+        error
+      );
+
+      interestStatus.textContent =
+        "পছন্দ ফিচারের জন্য Firebase Anonymous Authentication চালু করতে হবে।";
 
     }
 
-
-    // ==========================================
-    // Profile Load শুরু
-    // ==========================================
 
     loadProfile();
 

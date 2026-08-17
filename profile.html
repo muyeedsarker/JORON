@@ -135,6 +135,20 @@
       background: white;
     }
 
+    .loading {
+      text-align: center;
+      padding: 50px 20px;
+      color: #176b5b;
+      font-size: 18px;
+    }
+
+    .error {
+      text-align: center;
+      padding: 40px 20px;
+      color: #b00020;
+      line-height: 1.7;
+    }
+
     @media (max-width: 600px) {
       .info {
         grid-template-columns: 1fr;
@@ -151,100 +165,340 @@
 
   <div class="profile">
 
-    <div class="top">
+    <div id="loading" class="loading">
+      Profile লোড হচ্ছে...
+    </div>
 
-      <div class="avatar">আ</div>
+    <div id="profileContent" style="display:none;">
 
-      <h1>আরিফ হাসান</h1>
+      <div class="top">
 
-      <p>২৮ বছর • পুরুষ • ঢাকা</p>
+        <div class="avatar" id="avatar">আ</div>
 
-      <div class="verified">
-        ✓ JORON Profile
+        <h1 id="profileName">নাম</h1>
+
+        <p id="profileSummary">
+          বয়স • লিঙ্গ • জেলা
+        </p>
+
+        <div class="verified">
+          ✓ JORON Profile
+        </div>
+
+      </div>
+
+      <div class="content">
+
+        <div class="section">
+
+          <h2>ব্যক্তিগত তথ্য</h2>
+
+          <div class="info">
+
+            <div class="item">
+              <strong>নাম</strong>
+              <span id="name">—</span>
+            </div>
+
+            <div class="item">
+              <strong>বয়স</strong>
+              <span id="age">—</span>
+            </div>
+
+            <div class="item">
+              <strong>লিঙ্গ</strong>
+              <span id="gender">—</span>
+            </div>
+
+            <div class="item">
+              <strong>জেলা</strong>
+              <span id="district">—</span>
+            </div>
+
+            <div class="item">
+              <strong>পেশা</strong>
+              <span id="profession">—</span>
+            </div>
+
+            <div class="item">
+              <strong>শিক্ষাগত যোগ্যতা</strong>
+              <span id="education">—</span>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="section">
+
+          <h2>নিজের সম্পর্কে</h2>
+
+          <div class="text" id="about">
+            —
+          </div>
+
+        </div>
+
+        <div class="section">
+
+          <h2>জীবনসঙ্গীর পছন্দ</h2>
+
+          <div class="text" id="partner">
+            —
+          </div>
+
+        </div>
+
+        <div class="buttons">
+
+          <a class="btn primary" href="#">
+            ❤️ পছন্দ করুন
+          </a>
+
+          <a class="btn secondary" href="profiles.html">
+            ← প্রোফাইল তালিকায় ফিরে যান
+          </a>
+
+        </div>
+
       </div>
 
     </div>
 
-    <div class="content">
-
-      <div class="section">
-
-        <h2>ব্যক্তিগত তথ্য</h2>
-
-        <div class="info">
-
-          <div class="item">
-            <strong>নাম</strong>
-            <span>আরিফ হাসান</span>
-          </div>
-
-          <div class="item">
-            <strong>বয়স</strong>
-            <span>২৮ বছর</span>
-          </div>
-
-          <div class="item">
-            <strong>লিঙ্গ</strong>
-            <span>পুরুষ</span>
-          </div>
-
-          <div class="item">
-            <strong>জেলা</strong>
-            <span>ঢাকা</span>
-          </div>
-
-          <div class="item">
-            <strong>পেশা</strong>
-            <span>সফটওয়্যার ইঞ্জিনিয়ার</span>
-          </div>
-
-          <div class="item">
-            <strong>শিক্ষাগত যোগ্যতা</strong>
-            <span>কম্পিউটার সায়েন্স</span>
-          </div>
-
-        </div>
-
-      </div>
-
-      <div class="section">
-
-        <h2>নিজের সম্পর্কে</h2>
-
-        <div class="text">
-          আমি দায়িত্বশীল, পরিবারমুখী ও সৎ একজন মানুষ।
-          জীবনে পারস্পরিক সম্মান, বিশ্বাস ও বোঝাপড়াকে
-          সবচেয়ে বেশি গুরুত্ব দিই।
-        </div>
-
-      </div>
-
-      <div class="section">
-
-        <h2>জীবনসঙ্গীর পছন্দ</h2>
-
-        <div class="text">
-          একজন শিক্ষিত, ভদ্র, পরিবারকে সম্মান করেন এবং
-          পারস্পরিক বোঝাপড়ায় বিশ্বাসী জীবনসঙ্গী প্রত্যাশা করি।
-        </div>
-
-      </div>
-
-      <div class="buttons">
-
-        <a class="btn primary" href="#">
-          ❤️ পছন্দ করুন
-        </a>
-
-        <a class="btn secondary" href="profiles.html">
-          ← প্রোফাইল তালিকায় ফিরে যান
-        </a>
-
-      </div>
-
+    <div id="errorMessage" class="error" style="display:none;">
+      Profile পাওয়া যায়নি।
+      <br><br>
+      <a href="profiles.html">
+        ← প্রোফাইল তালিকায় ফিরে যান
+      </a>
     </div>
 
   </div>
+
+
+  <script type="module">
+
+    import { initializeApp }
+      from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+
+    import {
+      getFirestore,
+      doc,
+      getDoc
+    } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+
+    // ==========================================
+    // JORON Firebase Configuration
+    // ==========================================
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDWxxu3zwThJp1fuWMhXiRig3Fswt0QARA",
+      authDomain: "joron-d7742.firebaseapp.com",
+      projectId: "joron-d7742",
+      storageBucket: "joron-d7742.firebasestorage.app",
+      messagingSenderId: "907727989078",
+      appId: "1:907727989078:web:4fdd266e3517a862fa0ef7",
+      measurementId: "G-Q8PXH6C5NC"
+    };
+
+
+    // Firebase চালু
+
+    const app = initializeApp(firebaseConfig);
+
+    const db = getFirestore(app);
+
+
+    // URL থেকে Profile UID নেওয়া
+
+    const urlParams =
+      new URLSearchParams(window.location.search);
+
+    const profileId =
+      urlParams.get("id");
+
+
+    async function loadProfile() {
+
+      try {
+
+        if (!profileId) {
+
+          showError(
+            "Profile ID পাওয়া যায়নি।"
+          );
+
+          return;
+        }
+
+
+        // Firestore থেকে Biodata নেওয়া
+
+        const profileRef =
+          doc(db, "biodata", profileId);
+
+        const profileSnap =
+          await getDoc(profileRef);
+
+
+        if (!profileSnap.exists()) {
+
+          showError(
+            "এই Profile-এর Biodata পাওয়া যায়নি।"
+          );
+
+          return;
+        }
+
+
+        const data =
+          profileSnap.data();
+
+
+        // Profile-এর নাম
+
+        const name =
+          data.name || "JORON User";
+
+
+        document.getElementById("profileName")
+          .textContent = name;
+
+        document.getElementById("name")
+          .textContent = name;
+
+
+        // Avatar-এর প্রথম অক্ষর
+
+        const firstLetter =
+          name.charAt(0);
+
+
+        document.getElementById("avatar")
+          .textContent = firstLetter;
+
+
+        // বয়স
+
+        const age =
+          data.age || "—";
+
+
+        document.getElementById("age")
+          .textContent = age + " বছর";
+
+
+        // লিঙ্গ
+
+        const gender =
+          data.gender || "—";
+
+
+        document.getElementById("gender")
+          .textContent = gender;
+
+
+        // জেলা
+
+        const district =
+          data.district || "—";
+
+
+        document.getElementById("district")
+          .textContent = district;
+
+
+        // উপরের Summary
+
+        document.getElementById("profileSummary")
+          .textContent =
+          age + " বছর • " +
+          gender + " • " +
+          district;
+
+
+        // পেশা
+
+        document.getElementById("profession")
+          .textContent =
+          data.profession || "—";
+
+
+        // শিক্ষা
+
+        document.getElementById("education")
+          .textContent =
+          data.education || "—";
+
+
+        // নিজের সম্পর্কে
+
+        document.getElementById("about")
+          .textContent =
+          data.about ||
+          "এই ব্যক্তি নিজের সম্পর্কে কিছু লেখেননি।";
+
+
+        // জীবনসঙ্গীর পছন্দ
+
+        document.getElementById("partner")
+          .textContent =
+          data.partner ||
+          "জীবনসঙ্গীর পছন্দ উল্লেখ করা হয়নি।";
+
+
+        // Loading বন্ধ
+
+        document.getElementById("loading")
+          .style.display = "none";
+
+
+        // Profile দেখানো
+
+        document.getElementById("profileContent")
+          .style.display = "block";
+
+
+      } catch (error) {
+
+        console.error(
+          "Profile loading error:",
+          error
+        );
+
+
+        showError(
+          "Profile লোড করা যায়নি।"
+        );
+
+      }
+
+    }
+
+
+    function showError(message) {
+
+      document.getElementById("loading")
+        .style.display = "none";
+
+      document.getElementById("profileContent")
+        .style.display = "none";
+
+      document.getElementById("errorMessage")
+        .style.display = "block";
+
+      document.getElementById("errorMessage")
+        .firstChild.textContent = message;
+
+    }
+
+
+    // Profile লোড
+
+    loadProfile();
+
+  </script>
 
 </body>
 </html>

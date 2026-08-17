@@ -105,6 +105,11 @@
       cursor: pointer;
     }
 
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
     .login {
       text-align: center;
       margin-top: 22px;
@@ -139,7 +144,7 @@
 
     <h1>নতুন অ্যাকাউন্ট তৈরি করুন</h1>
 
-    <form onsubmit="signupUser(event)">
+    <form id="signupForm">
 
       <label for="name">পূর্ণ নাম</label>
       <input
@@ -201,7 +206,7 @@
         </span>
       </label>
 
-      <button type="submit">
+      <button type="submit" id="signupButton">
         অ্যাকাউন্ট তৈরি করুন
       </button>
 
@@ -218,23 +223,133 @@
 
   </div>
 
-  <script>
-    function signupUser(event) {
+  <script type="module">
+
+    import { initializeApp } 
+      from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      updateProfile
+    } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+
+
+    // ==========================================
+    // আপনার Firebase Console-এর CONFIG এখানে বসান
+    // ==========================================
+
+    const firebaseConfig = YOUR_FIREBASE_CONFIG_HERE;
+
+
+    // Firebase চালু করা
+    const app = initializeApp(firebaseConfig);
+
+    // Authentication চালু করা
+    const auth = getAuth(app);
+
+
+    // Signup form
+    const signupForm = document.getElementById("signupForm");
+    const signupButton = document.getElementById("signupButton");
+
+
+    signupForm.addEventListener("submit", async function(event) {
+
       event.preventDefault();
+
+
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const gender = document.getElementById("gender").value;
 
       const password = document.getElementById("password").value;
       const confirmPassword =
         document.getElementById("confirmPassword").value;
 
+
+      // Password মিলছে কি না
       if (password !== confirmPassword) {
         alert("দুটি পাসওয়ার্ড একই নয়।");
         return;
       }
 
-      alert("JORON Registration System শীঘ্রই চালু হবে।");
 
-      return false;
-    }
+      // Loading অবস্থায় button বন্ধ
+      signupButton.disabled = true;
+      signupButton.textContent = "অ্যাকাউন্ট তৈরি হচ্ছে...";
+
+
+      try {
+
+        // Firebase account তৈরি
+        const userCredential =
+          await createUserWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+
+
+        const user = userCredential.user;
+
+
+        // Firebase Auth profile-এ নাম সংরক্ষণ
+        await updateProfile(user, {
+          displayName: name
+        });
+
+
+        alert(
+          "অভিনন্দন! আপনার JORON অ্যাকাউন্ট তৈরি হয়েছে।"
+        );
+
+
+        // পরবর্তী ধাপ
+        window.location.href = "biodata.html";
+
+
+      } catch (error) {
+
+        console.error(error);
+
+
+        let message =
+          "অ্যাকাউন্ট তৈরি করা যায়নি। আবার চেষ্টা করুন।";
+
+
+        if (error.code === "auth/email-already-in-use") {
+          message =
+            "এই ইমেইল দিয়ে ইতিমধ্যে একটি অ্যাকাউন্ট আছে।";
+        }
+
+        else if (error.code === "auth/invalid-email") {
+          message =
+            "দয়া করে সঠিক ইমেইল ঠিকানা দিন।";
+        }
+
+        else if (error.code === "auth/weak-password") {
+          message =
+            "পাসওয়ার্ড আরও শক্তিশালী দিন।";
+        }
+
+        else if (error.code === "auth/operation-not-allowed") {
+          message =
+            "Firebase-এ Email/Password Authentication চালু নেই।";
+        }
+
+
+        alert(message);
+
+
+        signupButton.disabled = false;
+        signupButton.textContent =
+          "অ্যাকাউন্ট তৈরি করুন";
+      }
+
+    });
+
   </script>
 
 </body>

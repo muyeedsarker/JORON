@@ -158,7 +158,7 @@
 
     <div class="register">
       JORON-এ নতুন?
-      <a href="biodata.html">প্রোফাইল তৈরি করুন</a>
+      <a href="signup.html">প্রোফাইল তৈরি করুন</a>
     </div>
 
     <a href="index.html" class="back">
@@ -167,14 +167,60 @@
 
   </div>
 
-  <script>
-    function loginUser(event) {
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword
+    } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDWxxu3zwThJp1fuWMhXiRig3Fswt0QARA",
+      authDomain: "joron-d7742.firebaseapp.com",
+      projectId: "joron-d7742",
+      storageBucket: "joron-d7742.firebasestorage.app",
+      messagingSenderId: "907727989078",
+      appId: "1:907727989078:web:4fdd266e3517a862fa0ef7",
+      measurementId: "G-Q8PXH6C5NC"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    window.loginUser = async function(event) {
       event.preventDefault();
 
-      alert("JORON লগইন সিস্টেম শীঘ্রই চালু হবে।");
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
 
-      return false;
-    }
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+
+        alert("লগইন সফল হয়েছে।");
+
+        window.location.href = "biodata.html";
+
+      } catch (error) {
+        console.error(error);
+
+        let message = "লগইন করা সম্ভব হয়নি। আবার চেষ্টা করুন।";
+
+        if (
+          error.code === "auth/invalid-credential" ||
+          error.code === "auth/wrong-password" ||
+          error.code === "auth/user-not-found"
+        ) {
+          message = "ইমেইল অথবা পাসওয়ার্ড সঠিক নয়।";
+        } else if (error.code === "auth/invalid-email") {
+          message = "সঠিক ইমেইল ঠিকানা দিন।";
+        } else if (error.code === "auth/too-many-requests") {
+          message = "অনেকবার চেষ্টা করা হয়েছে। কিছুক্ষণ পরে আবার চেষ্টা করুন।";
+        }
+
+        alert(message);
+      }
+    };
   </script>
 
 </body>

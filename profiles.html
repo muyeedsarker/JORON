@@ -1,487 +1,1915 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
   <title>JORON — Profiles</title>
 
+
   <style>
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
 
+
     body {
+
       font-family: Arial, sans-serif;
-      background: #f5f8f7;
+
+      background:
+        linear-gradient(
+          135deg,
+          #eef8f5,
+          #f7faf9
+        );
+
       color: #222;
+
+      min-height: 100vh;
     }
+
+
+    /* ==============================
+       HEADER
+    ============================== */
 
     header {
+
       background: white;
+
       padding: 18px 6%;
-      box-shadow: 0 2px 10px rgba(0,0,0,.08);
+
+      box-shadow:
+        0 2px 12px rgba(0,0,0,.08);
+
       display: flex;
-      justify-content: space-between;
+
+      justify-content:
+        space-between;
+
       align-items: center;
+
+      border-bottom:
+        1px solid #dceee8;
     }
+
 
     .logo {
+
       font-size: 28px;
+
       font-weight: bold;
+
       color: #176b5b;
+
+      letter-spacing: 1px;
     }
+
 
     header a {
+
       text-decoration: none;
+
       color: #176b5b;
+
       font-weight: bold;
     }
 
-    .container {
-      max-width: 1100px;
-      margin: auto;
-      padding: 40px 20px;
+
+    /* ==============================
+       WATERMARK
+    ============================== */
+
+    .watermark {
+
+      position: fixed;
+
+      top: 50%;
+
+      left: 50%;
+
+      transform:
+        translate(-50%, -50%)
+        rotate(-25deg);
+
+      font-size: 100px;
+
+      font-weight: bold;
+
+      color:
+        rgba(23,107,91,.035);
+
+      pointer-events: none;
+
+      user-select: none;
+
+      z-index: 0;
     }
+
+
+    /* ==============================
+       CONTAINER
+    ============================== */
+
+    .container {
+
+      max-width: 1100px;
+
+      margin: auto;
+
+      padding: 40px 20px;
+
+      position: relative;
+    }
+
 
     h1 {
+
       text-align: center;
+
       color: #176b5b;
+
       margin-bottom: 10px;
+
+      position: relative;
+
+      z-index: 1;
     }
+
 
     .intro {
+
       text-align: center;
+
       color: #777;
+
       margin-bottom: 25px;
+
+      line-height: 1.7;
+
+      position: relative;
+
+      z-index: 1;
     }
 
-    /* Search & Filter */
+
+    /* ==============================
+       SEARCH & FILTER
+    ============================== */
 
     .filters {
+
       background: white;
+
       padding: 20px;
+
       border-radius: 18px;
-      box-shadow: 0 5px 20px rgba(0,0,0,.07);
+
+      box-shadow:
+        0 5px 20px rgba(0,0,0,.07);
+
       margin-bottom: 30px;
+
+      border:
+        1px solid #dcefe9;
+
+      position: relative;
+
+      z-index: 1;
     }
 
+
     .filter-grid {
+
       display: grid;
-      grid-template-columns: 2fr 1fr 1fr;
+
+      grid-template-columns:
+        2fr 1fr 1fr;
+
       gap: 12px;
     }
 
+
     .filters input,
     .filters select {
+
       width: 100%;
+
       padding: 13px 15px;
-      border: 1px solid #ddd;
+
+      border:
+        1px solid #ddd;
+
       border-radius: 10px;
+
       font-size: 15px;
+
       outline: none;
+
       background: white;
     }
+
 
     .filters input:focus,
     .filters select:focus {
-      border-color: #176b5b;
+
+      border-color:
+        #176b5b;
     }
+
 
     .result-count {
+
       margin-top: 15px;
+
       color: #176b5b;
+
       font-weight: bold;
+
       text-align: center;
     }
 
-    /* Profiles */
+
+    /* ==============================
+       LOADING
+    ============================== */
+
+    .loading {
+
+      text-align: center;
+
+      background: white;
+
+      padding: 40px 20px;
+
+      border-radius: 18px;
+
+      color: #176b5b;
+
+      font-size: 18px;
+
+      border:
+        1px solid #dcefe9;
+
+      position: relative;
+
+      z-index: 1;
+    }
+
+
+    /* ==============================
+       PROFILES GRID
+    ============================== */
 
     .profiles {
+
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+
+      grid-template-columns:
+        repeat(
+          auto-fit,
+          minmax(260px, 1fr)
+        );
+
       gap: 22px;
+
+      position: relative;
+
+      z-index: 1;
     }
+
+
+    /* ==============================
+       PROFILE CARD
+    ============================== */
 
     .profile-card {
+
       background: white;
+
       border-radius: 18px;
+
       padding: 25px;
-      box-shadow: 0 5px 20px rgba(0,0,0,.08);
-      transition: .2s;
+
+      box-shadow:
+        0 5px 20px rgba(0,0,0,.08);
+
+      transition:
+        .25s;
+
+      border:
+        1px solid #dcefe9;
+
+      position: relative;
+
+      overflow: hidden;
     }
+
 
     .profile-card:hover {
-      transform: translateY(-4px);
+
+      transform:
+        translateY(-5px);
+
+      box-shadow:
+        0 10px 28px rgba(0,0,0,.12);
     }
 
-    .avatar {
-      width: 85px;
-      height: 85px;
-      border-radius: 50%;
-      background: #e8f7f2;
-      color: #176b5b;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 15px;
-      font-size: 34px;
+
+    /* ==============================
+       MEMBERSHIP BADGE
+    ============================== */
+
+    .membership {
+
+      position: absolute;
+
+      top: 12px;
+
+      right: 12px;
+
+      padding:
+        5px 10px;
+
+      border-radius: 20px;
+
+      font-size: 12px;
+
       font-weight: bold;
     }
 
+
+    .basic-badge {
+
+      background:
+        #eaf7f2;
+
+      color:
+        #176b5b;
+    }
+
+
+    .standard-badge {
+
+      background:
+        #fff5d9;
+
+      color:
+        #a06a00;
+    }
+
+
+    .premium-badge {
+
+      background:
+        #f5edff;
+
+      color:
+        #6c3bb3;
+    }
+
+
+    .plus-badge {
+
+      background:
+        #e9f7ff;
+
+      color:
+        #08769f;
+    }
+
+
+    /* ==============================
+       AVATAR
+    ============================== */
+
+    .avatar {
+
+      width: 85px;
+
+      height: 85px;
+
+      border-radius: 50%;
+
+      background:
+        #e8f7f2;
+
+      color:
+        #176b5b;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      margin:
+        0 auto 15px;
+
+      font-size: 34px;
+
+      font-weight: bold;
+
+      border:
+        4px solid white;
+
+      box-shadow:
+        0 3px 12px rgba(0,0,0,.08);
+    }
+
+
     .profile-card h2 {
+
       text-align: center;
-      color: #176b5b;
+
+      color:
+        #176b5b;
+
       margin-bottom: 8px;
+
       font-size: 22px;
     }
 
+
     .basic {
+
       text-align: center;
+
       color: #666;
+
       margin-bottom: 18px;
+
+      line-height: 1.6;
     }
 
+
+    /* ==============================
+       PROFILE INFO
+    ============================== */
+
     .info {
-      border-top: 1px solid #eee;
+
+      border-top:
+        1px solid #eee;
+
       padding-top: 15px;
     }
 
+
     .info p {
-      margin: 9px 0;
+
+      margin:
+        9px 0;
+
+      line-height: 1.5;
     }
+
 
     .label {
+
       font-weight: bold;
-      color: #176b5b;
+
+      color:
+        #176b5b;
     }
+
+
+    /* ==============================
+       PRIVACY
+    ============================== */
+
+    .privacy {
+
+      margin-top: 12px;
+
+      padding: 9px;
+
+      background:
+        #f7faf9;
+
+      border-radius: 9px;
+
+      text-align: center;
+
+      color: #777;
+
+      font-size: 12px;
+
+      border:
+        1px solid #edf3f1;
+    }
+
+
+    /* ==============================
+       VIEW BUTTON
+    ============================== */
 
     .view-btn {
+
       display: block;
+
       text-align: center;
+
       margin-top: 18px;
+
       padding: 11px;
+
       border-radius: 25px;
-      background: #176b5b;
+
+      background:
+        #176b5b;
+
       color: white;
+
       text-decoration: none;
+
       font-weight: bold;
     }
 
+
     .view-btn:hover {
-      background: #0f5145;
+
+      background:
+        #0f5145;
     }
+
+
+    /* ==============================
+       NO RESULT
+    ============================== */
 
     .no-result {
+
       display: none;
+
       text-align: center;
+
       background: white;
+
       padding: 30px;
+
       border-radius: 15px;
+
       color: #777;
+
+      border:
+        1px solid #dcefe9;
+
+      position: relative;
+
+      z-index: 1;
     }
+
+
+    /* ==============================
+       ERROR
+    ============================== */
+
+    .error {
+
+      display: none;
+
+      text-align: center;
+
+      background: white;
+
+      padding: 30px;
+
+      border-radius: 15px;
+
+      color: #b00020;
+
+      line-height: 1.7;
+
+      border:
+        1px solid #f0d5d5;
+    }
+
+
+    /* ==============================
+       FOOTER
+    ============================== */
 
     footer {
+
       margin-top: 40px;
-      background: #176b5b;
+
+      background:
+        #176b5b;
+
       color: white;
+
       text-align: center;
+
       padding: 25px;
+
+      line-height: 1.7;
     }
 
-    /* Mobile */
+
+    /* ==============================
+       MOBILE
+    ============================== */
 
     @media (max-width: 650px) {
+
       header {
-        padding: 15px 20px;
+
+        padding:
+          15px 20px;
       }
 
+
       .logo {
+
         font-size: 24px;
       }
 
+
       .container {
-        padding: 30px 15px;
+
+        padding:
+          30px 15px;
       }
+
 
       .filter-grid {
-        grid-template-columns: 1fr;
+
+        grid-template-columns:
+          1fr;
       }
 
+
       h1 {
+
         font-size: 27px;
       }
+
+
+      .watermark {
+
+        font-size: 60px;
+      }
+
     }
+
   </style>
+
 </head>
+
 
 <body>
 
-<header>
-  <div class="logo">JORON</div>
-  <a href="index.html">হোম</a>
-</header>
 
-<div class="container">
+  <!-- JORON WATERMARK -->
 
-  <h1>পাত্র / পাত্রী খুঁজুন ❤️</h1>
+  <div class="watermark">
+    JORON
+  </div>
 
-  <p class="intro">
-    আপনার পছন্দের মানুষের সঙ্গে একটি অর্থবহ সংযোগের শুরু হোক।
-  </p>
 
-  <!-- Search & Filter -->
+  <!-- HEADER -->
 
-  <div class="filters">
+  <header>
 
-    <div class="filter-grid">
+    <div class="logo">
+      JORON
+    </div>
 
-      <input
-        type="text"
-        id="searchInput"
-        placeholder="নাম বা পেশা দিয়ে খুঁজুন..."
-        onkeyup="filterProfiles()"
+    <a href="index.html">
+      হোম
+    </a>
+
+  </header>
+
+
+  <!-- MAIN -->
+
+  <div class="container">
+
+
+    <h1>
+      পাত্র / পাত্রী খুঁজুন ❤️
+    </h1>
+
+
+    <p class="intro">
+
+      আপনার পছন্দের মানুষের সঙ্গে
+      একটি অর্থবহ সংযোগের শুরু হোক।
+
+    </p>
+
+
+    <!-- SEARCH & FILTER -->
+
+    <div class="filters">
+
+
+      <div class="filter-grid">
+
+
+        <!-- SEARCH -->
+
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="নাম বা পেশা দিয়ে খুঁজুন..."
+        >
+
+
+        <!-- GENDER -->
+
+        <select id="genderFilter">
+
+          <option value="">
+            সব লিঙ্গ
+          </option>
+
+          <option value="পুরুষ">
+            পুরুষ
+          </option>
+
+          <option value="নারী">
+            নারী
+          </option>
+
+        </select>
+
+
+        <!-- DISTRICT -->
+
+        <select id="locationFilter">
+
+          <option value="">
+            সব জেলা
+          </option>
+
+
+          <!-- =========================
+               ঢাকা বিভাগ
+          ========================== -->
+
+          <option value="ঢাকা">
+            ঢাকা
+          </option>
+
+          <option value="গাজীপুর">
+            গাজীপুর
+          </option>
+
+          <option value="নারায়ণগঞ্জ">
+            নারায়ণগঞ্জ
+          </option>
+
+          <option value="নরসিংদী">
+            নরসিংদী
+          </option>
+
+          <option value="মুন্সিগঞ্জ">
+            মুন্সিগঞ্জ
+          </option>
+
+          <option value="মানিকগঞ্জ">
+            মানিকগঞ্জ
+          </option>
+
+          <option value="টাঙ্গাইল">
+            টাঙ্গাইল
+          </option>
+
+          <option value="কিশোরগঞ্জ">
+            কিশোরগঞ্জ
+          </option>
+
+          <option value="ফরিদপুর">
+            ফরিদপুর
+          </option>
+
+          <option value="গোপালগঞ্জ">
+            গোপালগঞ্জ
+          </option>
+
+          <option value="মাদারীপুর">
+            মাদারীপুর
+          </option>
+
+          <option value="রাজবাড়ী">
+            রাজবাড়ী
+          </option>
+
+          <option value="শরীয়তপুর">
+            শরীয়তপুর
+          </option>
+
+
+          <!-- =========================
+               চট্টগ্রাম বিভাগ
+          ========================== -->
+
+          <option value="চট্টগ্রাম">
+            চট্টগ্রাম
+          </option>
+
+          <option value="কুমিল্লা">
+            কুমিল্লা
+          </option>
+
+          <option value="ফেনী">
+            ফেনী
+          </option>
+
+          <option value="ব্রাহ্মণবাড়িয়া">
+            ব্রাহ্মণবাড়িয়া
+          </option>
+
+          <option value="রাঙ্গামাটি">
+            রাঙ্গামাটি
+          </option>
+
+          <option value="নোয়াখালী">
+            নোয়াখালী
+          </option>
+
+          <option value="চাঁদপুর">
+            চাঁদপুর
+          </option>
+
+          <option value="লক্ষ্মীপুর">
+            লক্ষ্মীপুর
+          </option>
+
+          <option value="কক্সবাজার">
+            কক্সবাজার
+          </option>
+
+          <option value="খাগড়াছড়ি">
+            খাগড়াছড়ি
+          </option>
+
+          <option value="বান্দরবান">
+            বান্দরবান
+          </option>
+
+
+          <!-- =========================
+               রাজশাহী বিভাগ
+          ========================== -->
+
+          <option value="রাজশাহী">
+            রাজশাহী
+          </option>
+
+          <option value="বগুড়া">
+            বগুড়া
+          </option>
+
+          <option value="পাবনা">
+            পাবনা
+          </option>
+
+          <option value="সিরাজগঞ্জ">
+            সিরাজগঞ্জ
+          </option>
+
+          <option value="নাটোর">
+            নাটোর
+          </option>
+
+          <option value="জয়পুরহাট">
+            জয়পুরহাট
+          </option>
+
+          <option value="চাঁপাইনবাবগঞ্জ">
+            চাঁপাইনবাবগঞ্জ
+          </option>
+
+          <option value="নওগাঁ">
+            নওগাঁ
+          </option>
+
+
+          <!-- =========================
+               খুলনা বিভাগ
+          ========================== -->
+
+          <option value="খুলনা">
+            খুলনা
+          </option>
+
+          <option value="বাগেরহাট">
+            বাগেরহাট
+          </option>
+
+          <option value="সাতক্ষীরা">
+            সাতক্ষীরা
+          </option>
+
+          <option value="যশোর">
+            যশোর
+          </option>
+
+          <option value="ঝিনাইদহ">
+            ঝিনাইদহ
+          </option>
+
+          <option value="মাগুরা">
+            মাগুরা
+          </option>
+
+          <option value="নড়াইল">
+            নড়াইল
+          </option>
+
+          <option value="কুষ্টিয়া">
+            কুষ্টিয়া
+          </option>
+
+          <option value="চুয়াডাঙ্গা">
+            চুয়াডাঙ্গা
+          </option>
+
+          <option value="মেহেরপুর">
+            মেহেরপুর
+          </option>
+
+
+          <!-- =========================
+               বরিশাল বিভাগ
+          ========================== -->
+
+          <option value="বরিশাল">
+            বরিশাল
+          </option>
+
+          <option value="ভোলা">
+            ভোলা
+          </option>
+
+          <option value="পটুয়াখালী">
+            পটুয়াখালী
+          </option>
+
+          <option value="পিরোজপুর">
+            পিরোজপুর
+          </option>
+
+          <option value="ঝালকাঠি">
+            ঝালকাঠি
+          </option>
+
+          <option value="বরগুনা">
+            বরগুনা
+          </option>
+
+
+          <!-- =========================
+               সিলেট বিভাগ
+          ========================== -->
+
+          <option value="সিলেট">
+            সিলেট
+          </option>
+
+          <option value="মৌলভীবাজার">
+            মৌলভীবাজার
+          </option>
+
+          <option value="হবিগঞ্জ">
+            হবিগঞ্জ
+          </option>
+
+          <option value="সুনামগঞ্জ">
+            সুনামগঞ্জ
+          </option>
+
+
+          <!-- =========================
+               রংপুর বিভাগ
+          ========================== -->
+
+          <option value="রংপুর">
+            রংপুর
+          </option>
+
+          <option value="দিনাজপুর">
+            দিনাজপুর
+          </option>
+
+          <option value="কুড়িগ্রাম">
+            কুড়িগ্রাম
+          </option>
+
+          <option value="গাইবান্ধা">
+            গাইবান্ধা
+          </option>
+
+          <option value="নীলফামারী">
+            নীলফামারী
+          </option>
+
+          <option value="লালমনিরহাট">
+            লালমনিরহাট
+          </option>
+
+          <option value="পঞ্চগড়">
+            পঞ্চগড়
+          </option>
+
+          <option value="ঠাকুরগাঁও">
+            ঠাকুরগাঁও
+          </option>
+
+
+          <!-- =========================
+               ময়মনসিংহ বিভাগ
+          ========================== -->
+
+          <option value="ময়মনসিংহ">
+            ময়মনসিংহ
+          </option>
+
+          <option value="জামালপুর">
+            জামালপুর
+          </option>
+
+          <option value="নেত্রকোণা">
+            নেত্রকোণা
+          </option>
+
+          <option value="শেরপুর">
+            শেরপুর
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div
+        class="result-count"
+        id="resultCount"
       >
-
-      <select id="genderFilter" onchange="filterProfiles()">
-        <option value="">সবাই</option>
-        <option value="পুরুষ">পুরুষ</option>
-        <option value="নারী">নারী</option>
-      </select>
-
-      <select id="locationFilter" onchange="filterProfiles()">
-        <option value="">সব জেলা</option>
-        <option value="ঢাকা">ঢাকা</option>
-        <option value="গাজীপুর">গাজীপুর</option>
-        <option value="চট্টগ্রাম">চট্টগ্রাম</option>
-      </select>
+        Profile লোড হচ্ছে...
+      </div>
 
     </div>
 
-    <div class="result-count" id="resultCount">
-      ৩টি প্রোফাইল পাওয়া গেছে
+
+    <!-- LOADING -->
+
+    <div
+      id="loading"
+      class="loading"
+    >
+
+      ⏳ JORON-এর Profile
+      লোড হচ্ছে...
+
     </div>
+
+
+    <!-- PROFILES -->
+
+    <div
+      class="profiles"
+      id="profiles"
+    >
+    </div>
+
+
+    <!-- NO RESULT -->
+
+    <div
+      class="no-result"
+      id="noResult"
+    >
+
+      😔 কোনো Profile পাওয়া যায়নি।
+
+      <br><br>
+
+      অন্যভাবে অনুসন্ধান করুন।
+
+    </div>
+
+
+    <!-- ERROR -->
+
+    <div
+      class="error"
+      id="errorMessage"
+    >
+
+      Profile লোড করা যায়নি।
+
+      <br><br>
+
+      কিছুক্ষণ পর আবার চেষ্টা করুন।
+
+    </div>
+
 
   </div>
 
-  <!-- Profiles -->
 
-  <div class="profiles" id="profiles">
+  <!-- FOOTER -->
 
-    <!-- Arif -->
+  <footer>
 
-    <div class="profile-card"
-         data-name="আরিফ"
-         data-gender="পুরুষ"
-         data-location="ঢাকা"
-         data-job="সফটওয়্যার ইঞ্জিনিয়ার">
+    <p>
+      © 2026 JORON — জোড়ন
+    </p>
 
-      <div class="avatar">আ</div>
+    <p>
+      দুজনের গল্প, এক জোড়ন। ❤️
+    </p>
 
-      <h2>আরিফ</h2>
-
-      <p class="basic">
-        ২৮ বছর • পুরুষ • ঢাকা
-      </p>
-
-      <div class="info">
-
-        <p>
-          <span class="label">পেশা:</span>
-          সফটওয়্যার ইঞ্জিনিয়ার
-        </p>
-
-        <p>
-          <span class="label">শিক্ষা:</span>
-          কম্পিউটার সায়েন্স
-        </p>
-
-        <p>
-          <span class="label">সম্পর্কে:</span>
-          দায়িত্বশীল ও পরিবারমুখী
-        </p>
-
-      </div>
-
-      <a class="view-btn" href="profile.html">
-        প্রোফাইল দেখুন
-      </a>
-
-    </div>
+  </footer>
 
 
-    <!-- Sumaiya -->
 
-    <div class="profile-card"
-         data-name="সুমাইয়া"
-         data-gender="নারী"
-         data-location="গাজীপুর"
-         data-job="শিক্ষকতা">
+  <!-- ==============================
+       FIREBASE SCRIPT
+  =============================== -->
 
-      <div class="avatar">স</div>
-
-      <h2>সুমাইয়া</h2>
-
-      <p class="basic">
-        ২৫ বছর • নারী • গাজীপুর
-      </p>
-
-      <div class="info">
-
-        <p>
-          <span class="label">পেশা:</span>
-          শিক্ষকতা
-        </p>
-
-        <p>
-          <span class="label">শিক্ষা:</span>
-          মাস্টার্স
-        </p>
-
-        <p>
-          <span class="label">সম্পর্কে:</span>
-          শান্ত ও পরিবারপ্রিয়
-        </p>
-
-      </div>
-
-      <a class="view-btn" href="profile.html">
-        প্রোফাইল দেখুন
-      </a>
-
-    </div>
+  <script type="module">
 
 
-    <!-- Rakib -->
+    import {
+      initializeApp
+    }
 
-    <div class="profile-card"
-         data-name="রাকিব"
-         data-gender="পুরুষ"
-         data-location="চট্টগ্রাম"
-         data-job="ব্যবসায়ী">
-
-      <div class="avatar">র</div>
-
-      <h2>রাকিব</h2>
-
-      <p class="basic">
-        ৩০ বছর • পুরুষ • চট্টগ্রাম
-      </p>
-
-      <div class="info">
-
-        <p>
-          <span class="label">পেশা:</span>
-          ব্যবসায়ী
-        </p>
-
-        <p>
-          <span class="label">শিক্ষা:</span>
-          বিবিএ
-        </p>
-
-        <p>
-          <span class="label">সম্পর্কে:</span>
-          সৎ ও পরিশ্রমী
-        </p>
-
-      </div>
-
-      <a class="view-btn" href="profile.html">
-        প্রোফাইল দেখুন
-      </a>
-
-    </div>
-
-  </div>
-
-  <div class="no-result" id="noResult">
-    😔 কোনো প্রোফাইল পাওয়া যায়নি।<br>
-    অন্যভাবে অনুসন্ধান করুন।
-  </div>
-
-</div>
-
-<footer>
-  <p>© 2026 JORON — জোড়ন | দুজনের গল্প, এক জোড়ন। ❤️</p>
-</footer>
+    from
+      "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
 
 
-<script>
+    import {
+      getFirestore,
+      collection,
+      getDocs
+    }
 
-function filterProfiles() {
+    from
+      "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
-  const search =
-    document.getElementById("searchInput")
-      .value
-      .toLowerCase();
 
-  const gender =
-    document.getElementById("genderFilter")
-      .value;
+    /* ==============================
+       FIREBASE CONFIG
+    ============================== */
 
-  const location =
-    document.getElementById("locationFilter")
-      .value;
+    const firebaseConfig = {
 
-  const cards =
-    document.querySelectorAll(".profile-card");
+      apiKey:
+        "AIzaSyDWxxu3zwThJp1fuWMhXiRig3Fswt0QARA",
 
-  let count = 0;
+      authDomain:
+        "joron-d7742.firebaseapp.com",
 
-  cards.forEach(function(card) {
+      projectId:
+        "joron-d7742",
 
-    const name =
-      card.dataset.name.toLowerCase();
+      storageBucket:
+        "joron-d7742.firebasestorage.app",
 
-    const job =
-      card.dataset.job.toLowerCase();
+      messagingSenderId:
+        "907727989078",
 
-    const cardGender =
-      card.dataset.gender;
+      appId:
+        "1:907727989078:web:4fdd266e3517a862fa0ef7",
 
-    const cardLocation =
-      card.dataset.location;
+      measurementId:
+        "G-Q8PXH6C5NC"
 
-    const searchMatch =
-      name.includes(search) ||
-      job.includes(search);
+    };
 
-    const genderMatch =
-      gender === "" ||
-      cardGender === gender;
 
-    const locationMatch =
-      location === "" ||
-      cardLocation === location;
+    /* ==============================
+       FIREBASE START
+    ============================== */
 
-    if (
-      searchMatch &&
-      genderMatch &&
-      locationMatch
-    ) {
+    const app =
+      initializeApp(
+        firebaseConfig
+      );
 
-      card.style.display = "block";
-      count++;
 
-    } else {
+    const db =
+      getFirestore(app);
 
-      card.style.display = "none";
+
+    /* ==============================
+       ELEMENTS
+    ============================== */
+
+    const profilesContainer =
+      document.getElementById(
+        "profiles"
+      );
+
+
+    const loading =
+      document.getElementById(
+        "loading"
+      );
+
+
+    const noResult =
+      document.getElementById(
+        "noResult"
+      );
+
+
+    const errorMessage =
+      document.getElementById(
+        "errorMessage"
+      );
+
+
+    const resultCount =
+      document.getElementById(
+        "resultCount"
+      );
+
+
+    const searchInput =
+      document.getElementById(
+        "searchInput"
+      );
+
+
+    const genderFilter =
+      document.getElementById(
+        "genderFilter"
+      );
+
+
+    const locationFilter =
+      document.getElementById(
+        "locationFilter"
+      );
+
+
+    /* ==============================
+       ALL PROFILES
+    ============================== */
+
+    let allProfiles = [];
+
+
+    /* ==============================
+       LOAD PROFILES
+    ============================== */
+
+    async function loadProfiles() {
+
+      try {
+
+
+        loading.style.display =
+          "block";
+
+
+        errorMessage.style.display =
+          "none";
+
+
+        const snapshot =
+          await getDocs(
+            collection(
+              db,
+              "biodata"
+            )
+          );
+
+
+        allProfiles = [];
+
+
+        snapshot.forEach(
+          function(docSnap) {
+
+
+            const data =
+              docSnap.data();
+
+
+            allProfiles.push({
+
+              id:
+                docSnap.id,
+
+              ...data
+
+            });
+
+
+          }
+        );
+
+
+        loading.style.display =
+          "none";
+
+
+        renderProfiles(
+          allProfiles
+        );
+
+
+      }
+
+      catch (error) {
+
+
+        console.error(
+          "Profiles loading error:",
+          error
+        );
+
+
+        loading.style.display =
+          "none";
+
+
+        errorMessage.style.display =
+          "block";
+
+
+        resultCount.textContent =
+          "Profile লোড করা যায়নি";
+
+
+      }
 
     }
 
-  });
 
-  document.getElementById("resultCount").innerText =
-    count + "টি প্রোফাইল পাওয়া গেছে";
+    /* ==============================
+       RENDER PROFILES
+    ============================== */
 
-  document.getElementById("noResult").style.display =
-    count === 0 ? "block" : "none";
+    function renderProfiles(
+      profiles
+    ) {
 
-}
 
-</script>
+      profilesContainer.innerHTML =
+        "";
+
+
+      noResult.style.display =
+        "none";
+
+
+      if (
+        profiles.length === 0
+      ) {
+
+
+        noResult.style.display =
+          "block";
+
+
+        resultCount.textContent =
+          "কোনো Profile পাওয়া যায়নি";
+
+
+        return;
+
+      }
+
+
+      resultCount.textContent =
+        profiles.length +
+        "টি Profile পাওয়া গেছে";
+
+
+      profiles.forEach(
+        function(data) {
+
+
+          const name =
+            data.name ||
+            "JORON User";
+
+
+          const age =
+            data.age ||
+            "—";
+
+
+          const gender =
+            data.gender ||
+            "—";
+
+
+          const district =
+            data.district ||
+            "—";
+
+
+          const profession =
+            data.profession ||
+            "—";
+
+
+          const education =
+            data.education ||
+            "—";
+
+
+          const educationSystem =
+            data.educationSystem ||
+            "—";
+
+
+          const about =
+            data.about ||
+            "নিজের সম্পর্কে তথ্য দেওয়া হয়নি।";
+
+
+          /* ==========================
+             MEMBERSHIP
+          ========================== */
+
+          const membership =
+            data.membership ||
+            "Basic";
+
+
+          let badgeClass =
+            "basic-badge";
+
+
+          let badgeText =
+            "🌱 Basic";
+
+
+          if (
+            membership ===
+            "Standard"
+          ) {
+
+
+            badgeClass =
+              "standard-badge";
+
+
+            badgeText =
+              "⭐ Standard";
+
+          }
+
+
+          if (
+            membership ===
+            "Premium"
+          ) {
+
+
+            badgeClass =
+              "premium-badge";
+
+
+            badgeText =
+              "👑 Premium";
+
+          }
+
+
+          if (
+            membership ===
+            "Premium Plus"
+          ) {
+
+
+            badgeClass =
+              "plus-badge";
+
+
+            badgeText =
+              "💎 Premium Plus";
+
+          }
+
+
+          /* ==========================
+             AVATAR
+          ========================== */
+
+          const firstLetter =
+            name.charAt(0);
+
+
+          /* ==========================
+             CREATE CARD
+          ========================== */
+
+          const card =
+            document.createElement(
+              "div"
+            );
+
+
+          card.className =
+            "profile-card";
+
+
+          card.dataset.name =
+            name.toLowerCase();
+
+
+          card.dataset.job =
+            profession.toLowerCase();
+
+
+          card.dataset.gender =
+            gender;
+
+
+          card.dataset.location =
+            district;
+
+
+          card.innerHTML = `
+
+            <div
+              class="membership ${badgeClass}"
+            >
+              ${badgeText}
+            </div>
+
+
+            <div class="avatar">
+              ${firstLetter}
+            </div>
+
+
+            <h2>
+              ${escapeHTML(name)}
+            </h2>
+
+
+            <p class="basic">
+
+              ${escapeHTML(
+                String(age)
+              )}
+
+              বছর
+
+              •
+              ${escapeHTML(gender)}
+
+              •
+              ${escapeHTML(district)}
+
+            </p>
+
+
+            <div class="info">
+
+
+              <p>
+
+                <span class="label">
+                  পেশা:
+                </span>
+
+                ${escapeHTML(
+                  profession
+                )}
+
+              </p>
+
+
+              <p>
+
+                <span class="label">
+                  শিক্ষা:
+                </span>
+
+                ${escapeHTML(
+                  education
+                )}
+
+              </p>
+
+
+              <p>
+
+                <span class="label">
+                  শিক্ষাব্যবস্থা:
+                </span>
+
+                ${escapeHTML(
+                  educationSystem
+                )}
+
+              </p>
+
+
+              <p>
+
+                <span class="label">
+                  সম্পর্কে:
+                </span>
+
+                ${escapeHTML(
+                  shortenText(
+                    about,
+                    75
+                  )
+                )}
+
+              </p>
+
+
+            </div>
+
+
+            <div class="privacy">
+
+              🔒 মোবাইল নম্বর
+              গোপন রাখা হয়েছে
+
+            </div>
+
+
+            <a
+              class="view-btn"
+              href="profile.html?id=${encodeURIComponent(data.id)}"
+            >
+
+              প্রোফাইল দেখুন
+
+            </a>
+
+          `;
+
+
+          profilesContainer.appendChild(
+            card
+          );
+
+
+        }
+      );
+
+
+      filterProfiles();
+
+    }
+
+
+    /* ==============================
+       SEARCH & FILTER
+    ============================== */
+
+    function filterProfiles() {
+
+
+      const search =
+        searchInput.value
+          .trim()
+          .toLowerCase();
+
+
+      const gender =
+        genderFilter.value;
+
+
+      const location =
+        locationFilter.value;
+
+
+      const cards =
+        document.querySelectorAll(
+          ".profile-card"
+        );
+
+
+      let count = 0;
+
+
+      cards.forEach(
+        function(card) {
+
+
+          const name =
+            card.dataset.name ||
+            "";
+
+
+          const job =
+            card.dataset.job ||
+            "";
+
+
+          const cardGender =
+            card.dataset.gender ||
+            "";
+
+
+          const cardLocation =
+            card.dataset.location ||
+            "";
+
+
+          const searchMatch =
+
+            search === "" ||
+
+            name.includes(
+              search
+            ) ||
+
+            job.includes(
+              search
+            );
+
+
+          const genderMatch =
+
+            gender === "" ||
+
+            cardGender === gender;
+
+
+          const locationMatch =
+
+            location === "" ||
+
+            cardLocation === location;
+
+
+          if (
+
+            searchMatch &&
+
+            genderMatch &&
+
+            locationMatch
+
+          ) {
+
+
+            card.style.display =
+              "block";
+
+
+            count++;
+
+
+          }
+
+          else {
+
+
+            card.style.display =
+              "none";
+
+
+          }
+
+
+        }
+      );
+
+
+      resultCount.textContent =
+        count +
+        "টি Profile পাওয়া গেছে";
+
+
+      noResult.style.display =
+
+        count === 0
+          ? "block"
+          : "none";
+
+    }
+
+
+    /* ==============================
+       HTML SECURITY
+    ============================== */
+
+    function escapeHTML(
+      value
+    ) {
+
+
+      return String(value)
+
+        .replace(
+          /&/g,
+          "&amp;"
+        )
+
+        .replace(
+          /</g,
+          "&lt;"
+        )
+
+        .replace(
+          />/g,
+          "&gt;"
+        )
+
+        .replace(
+          /"/g,
+          "&quot;"
+        )
+
+        .replace(
+          /'/g,
+          "&#039;"
+        );
+
+    }
+
+
+    /* ==============================
+       SHORT TEXT
+    ============================== */
+
+    function shortenText(
+      text,
+      maxLength
+    ) {
+
+
+      const value =
+        String(text);
+
+
+      if (
+        value.length <=
+        maxLength
+      ) {
+
+
+        return value;
+
+      }
+
+
+      return (
+
+        value.substring(
+          0,
+          maxLength
+        )
+
+        + "..."
+
+      );
+
+    }
+
+
+    /* ==============================
+       EVENTS
+    ============================== */
+
+    searchInput.addEventListener(
+      "input",
+      filterProfiles
+    );
+
+
+    genderFilter.addEventListener(
+      "change",
+      filterProfiles
+    );
+
+
+    locationFilter.addEventListener(
+      "change",
+      filterProfiles
+    );
+
+
+    /* ==============================
+       START
+    ============================== */
+
+    loadProfiles();
+
+
+  </script>
+
 
 </body>
 </html>

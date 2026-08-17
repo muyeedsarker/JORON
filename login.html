@@ -167,9 +167,11 @@
 
   </div>
 
-  <!-- Firebase -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+
+    import { initializeApp }
+      from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+
     import {
       getAuth,
       signInWithEmailAndPassword
@@ -189,19 +191,26 @@
     const auth = getAuth(app);
 
     window.loginUser = async function(event) {
+
       event.preventDefault();
 
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
 
       try {
-        await signInWithEmailAndPassword(auth, email, password);
+
+        await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
 
         alert("লগইন সফল হয়েছে।");
 
         window.location.href = "biodata.html";
 
       } catch (error) {
+
         console.error(error);
 
         let message = "লগইন করা সম্ভব হয়নি। আবার চেষ্টা করুন।";
@@ -212,15 +221,20 @@
           error.code === "auth/user-not-found"
         ) {
           message = "ইমেইল অথবা পাসওয়ার্ড সঠিক নয়।";
-        } else if (error.code === "auth/invalid-email") {
+        }
+
+        else if (error.code === "auth/invalid-email") {
           message = "সঠিক ইমেইল ঠিকানা দিন।";
-        } else if (error.code === "auth/too-many-requests") {
+        }
+
+        else if (error.code === "auth/too-many-requests") {
           message = "অনেকবার চেষ্টা করা হয়েছে। কিছুক্ষণ পরে আবার চেষ্টা করুন।";
         }
 
         alert(message);
       }
     };
+
   </script>
 
 </body>

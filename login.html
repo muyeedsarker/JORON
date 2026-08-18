@@ -240,20 +240,48 @@ body{
   ❤️ JORON — বিশ্বাস থেকে সম্পর্ক
 </footer>
 
-<script>
-function loginUser(){
-  const email=document.getElementById("email").value.trim();
-  const password=document.getElementById("password").value.trim();
 
-  if(!email || !password){
-    alert("ইমেইল ও পাসওয়ার্ড দিন।");
-    return false;
-  }
 
-  alert("লগইন সিস্টেম প্রস্তুত করা হচ্ছে।");
-  return false;
-}
-</script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+const firebaseConfig = {
 
-</body>
+      apiKey:
+        "AIzaSyDWxxu3zwThJp1fuWMhXiRig3Fswt0QARA",
+
+      authDomain:
+        "joron-d7742.firebaseapp.com",
+
+      projectId:
+        "joron-d7742",
+
+      storageBucket:
+        "joron-d7742.firebasestorage.app",
+
+      messagingSenderId:
+        "907727989078",
+
+      appId:
+        "1:907727989078:web:4fdd266e3517a862fa0ef7",
+
+      measurementId:
+        "G-Q8PXH6C5NC"
+
+    };
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+window.loginUser = async function() {
+ const email=document.getElementById("email").value.trim();
+ const password=document.getElementById("password").value;
+ if(!email || !password) { alert("ইমেইল ও পাসওয়ার্ড দিন"); return false; }
+ try {
+  await signInWithEmailAndPassword(auth,email,password);
+  window.location.href="biodata.html";
+ } catch(e) {
+  alert("লগইন ব্যর্থ: "+e.message);
+ }
+ return false;
+};
+</script></body>
 </html>

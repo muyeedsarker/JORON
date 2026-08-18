@@ -213,7 +213,7 @@ body{
 
         <div class="password-row">
           <span></span>
-          <a class="forgot" href="#">পাসওয়ার্ড ভুলে গেছেন?</a>
+          <a class="forgot" href="#" onclick="window.resetPassword(); return false;">পাসওয়ার্ড ভুলে গেছেন?</a>
         </div>
       </div>
 
@@ -244,7 +244,7 @@ body{
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 const firebaseConfig = {
 
       apiKey:
@@ -282,6 +282,19 @@ window.loginUser = async function() {
   alert("লগইন ব্যর্থ: "+e.message);
  }
  return false;
+};
+window.resetPassword = async function() {
+  const email = document.getElementById("email").value.trim();
+  if (!email) {
+    alert("আগে আপনার ইমেইল লিখুন।");
+    return;
+  }
+  try {
+    await sendPasswordResetEmail(auth, email);
+    alert("পাসওয়ার্ড পরিবর্তনের লিংক আপনার ইমেইলে পাঠানো হয়েছে।");
+  } catch (error) {
+    alert("সমস্যা হয়েছে: " + error.message);
+  }
 };
 </script></body>
 </html>

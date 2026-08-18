@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JORON — Profiles</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f8f7;
+      color: #222;
+      padding: 18px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #176b5b, #23947d);
+      color: white;
+      text-align: center;
+      padding: 28px 18px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 25px rgba(0,0,0,.10);
+    }
+
+    .header h1 {
+      font-size: 30px;
+      margin-bottom: 8px;
+    }
+
+    .header p {
+      opacity: .95;
+    }
+
+    .search-box {
+      background: white;
+      padding: 15px;
+      border-radius: 16px;
+      margin-bottom: 20px;
+      box-shadow: 0 5px 18px rgba(0,0,0,.07);
+    }
+
+    #searchInput {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid #dcefe9;
+      border-radius: 12px;
+      outline: none;
+      font-size: 16px;
+    }
+
+    #searchInput:focus {
+      border-color: #176b5b;
+    }
+
+    .status {
+      text-align: center;
+      padding: 25px;
+      color: #176b5b;
+    }
+
+    .profiles {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid #dcefe9;
+      box-shadow: 0 7px 25px rgba(0,0,0,.08);
+      transition: transform .2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+    }
+
+    .card-top {
+      background: linear-gradient(135deg, #176b5b, #23947d);
+      color: white;
+      text-align: center;
+      padding: 25px 15px 20px;
+    }
+
+    .avatar {
+      width: 75px;
+      height: 75px;
+      border-radius: 50%;
+      background: white;
+      color: #176b5b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: auto;
+      font-size: 30px;
+      font-weight: bold;
+    }
+
+    .card-top h2 {
+      margin-top: 12px;
+      font-size: 21px;
+    }
+
+    .card-top p {
+      margin-top: 5px;
+      font-size: 14px;
+    }
+
+    .card-body {
+      padding: 18px;
+    }
+
+    .info {
+      display: grid;
+      gap: 9px;
+      color: #555;
+      font-size: 14px;
+    }
+
+    .info div {
+      background: #f7faf9;
+      padding: 10px;
+      border-radius: 9px;
+    }
+
+    .info strong {
+      color: #176b5b;
+    }
+
+    .view-btn {
+      display: block;
+      text-align: center;
+      text-decoration: none;
+      background: #176b5b;
+      color: white;
+      padding: 12px;
+      border-radius: 25px;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    .empty {
+      background: white;
+      border-radius: 16px;
+      padding: 40px 20px;
+      text-align: center;
+      color: #777;
+    }
+
+    @media (max-width: 800px) {
+      .profiles {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 550px) {
+      .profiles {
+        grid-template-columns: 1fr;
+      }
+
+      body {
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="header">
+      <h1>JORON</h1>
+      <p>আপনার পছন্দের Profile খুঁজে নিন</p>
+    </div>
+
+    <div class="search-box">
+      <input
+        type="search"
+        id="searchInput"
+        placeholder="নাম, জেলা বা পেশা দিয়ে খুঁজুন..."
+      >
+    </div>
+
+    <div id="status" class="status">
+      Profile লোড হচ্ছে...
+    </div>
+
+    <div
+      id="profiles"
+      class="profiles"
+    ></div>
+
+  </div>
+
+
+  <script type="module">
+
+    import {
+      initializeApp
+    }
+    from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+
+
+    import {
+      getFirestore,
+      collection,
+      getDocs
+    }
+    from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+
+    const firebaseConfig = {
+
+      apiKey:
+        "AIzaSyDWxxu3zwThJp1fuWMhXiRig3Fswt0QARA",
+
+      authDomain:
+        "joron-d7742.firebaseapp.com",
+
+      projectId:
+        "joron-d7742",
+
+      storageBucket:
+        "joron-d7742.firebasestorage.app",
+
+      messagingSenderId:
+        "907727989078",
+
+      appId:
+        "1:907727989078:web:4fdd266e3517a862fa0ef7",
+
+      measurementId:
+        "G-Q8PXH6C5NC"
+
+    };
+
+
+    const app =
+      initializeApp(
+        firebaseConfig
+      );
+
+
+    const db =
+      getFirestore(app);
+
+
+    const profilesContainer =
+      document.getElementById(
+        "profiles"
+      );
+
+
+    const status =
+      document.getElementById(
+        "status"
+      );
+
+
+    const searchInput =
+      document.getElementById(
+        "searchInput"
+      );
+
+
+    let allProfiles = [];
+
+
+    function createCard(
+      id,
+      data
+    ) {
+
+      const name =
+        data.name ||
+        "JORON User";
+
+
+      const age =
+        data.age ??
+        "—";
+
+
+      const gender =
+        data.gender ||
+        "—";
+
+
+      const district =
+        data.district ||
+        "—";
+
+
+      const profession =
+        data.profession ||
+        "—";
+
+
+      const firstLetter =
+        name.charAt(0);
+
+
+      return `
+
+        <div class="card">
+
+          <div class="card-top">
+
+            <div class="avatar">
+              ${escapeHtml(firstLetter)}
+            </div>
+
+            <h2>
+              ${escapeHtml(name)}
+            </h2>
+
+            <p>
+              ${escapeHtml(String(age))}
+              বছর •
+              ${escapeHtml(gender)}
+            </p>
+
+          </div>
+
+
+          <div class="card-body">
+
+            <div class="info">
+
+              <div>
+                <strong>📍 জেলা:</strong>
+                ${escapeHtml(district)}
+              </div>
+
+              <div>
+                <strong>💼 পেশা:</strong>
+                ${escapeHtml(profession)}
+              </div>
+
+            </div>
+
+
+            <a
+              class="view-btn"
+              href="profile.html?id=${encodeURIComponent(id)}"
+            >
+              প্রোফাইল দেখুন
+            </a>
+
+          </div>
+
+        </div>
+
+      `;
+
+    }
+
+
+    function escapeHtml(value) {
+
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+    }
+
+
+    function renderProfiles(
+      profiles
+    ) {
+
+      if (!profiles.length) {
+
+        profilesContainer.innerHTML = `
+          <div class="empty">
+            কোনো Profile পাওয়া যায়নি।
+          </div>
+        `;
+
+        return;
+
+      }
+
+
+      profilesContainer.innerHTML =
+        profiles
+          .map(
+            item =>
+              createCard(
+                item.id,
+                item.data
+              )
+          )
+          .join("");
+
+    }
+
+
+    async function loadProfiles() {
+
+      try {
+
+        const snapshot =
+          await getDocs(
+            collection(
+              db,
+              "biodata"
+            )
+          );
+
+
+        allProfiles = [];
+
+
+        snapshot.forEach(
+          documentSnapshot => {
+
+            allProfiles.push({
+
+              id:
+                documentSnapshot.id,
+
+              data:
+                documentSnapshot.data()
+
+            });
+
+          }
+        );
+
+
+        status.style.display =
+          "none";
+
+
+        renderProfiles(
+          allProfiles
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          "Profiles loading error:",
+          error
+        );
+
+
+        status.textContent =
+          "Profile লোড করা যায়নি। Firebase Firestore Rules পরীক্ষা করুন।";
+
+      }
+
+    }
+
+
+    searchInput
+      .addEventListener(
+        "input",
+        function () {
+
+          const query =
+            this.value
+              .trim()
+              .toLowerCase();
+
+
+          if (!query) {
+
+            renderProfiles(
+              allProfiles
+            );
+
+            return;
+
+          }
+
+
+          const filtered =
+            allProfiles.filter(
+              item => {
+
+                const data =
+                  item.data;
+
+
+                const text = [
+
+                  data.name,
+
+                  data.district,
+
+                  data.profession,
+
+                  data.gender,
+
+                  data.education,
+
+                  data.institution
+
+                ]
+                .filter(Boolean)
+                .join(" ")
+                .toLowerCase();
+
+
+                return text.includes(
+                  query
+                );
+
+              }
+            );
+
+
+          renderProfiles(
+            filtered
+          );
+
+        }
+      );
+
+
+    loadProfiles();
+
+  </script>
+
+</body>
+</html>

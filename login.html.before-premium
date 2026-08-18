@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JORON | লগইন</title>
+<link rel="stylesheet" href="assets/style.css">
+
+<style>
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 15% 15%,#d8f7ee 0,transparent 32%),
+    radial-gradient(circle at 85% 85%,#ffd9e7 0,transparent 35%),
+    linear-gradient(135deg,#f5fffc,#fff5f8);
+}
+
+.login-wrap{
+  min-height:calc(100vh - 70px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:35px 15px;
+}
+
+.login-card{
+  width:min(460px,100%);
+  background:rgba(255,255,255,.96);
+  border:1px solid #f2dce4;
+  border-radius:34px;
+  padding:38px 30px;
+  box-shadow:0 25px 70px rgba(8,117,99,.13);
+  position:relative;
+  overflow:hidden;
+}
+
+.login-card:before{
+  content:"";
+  position:absolute;
+  width:180px;
+  height:180px;
+  border-radius:50%;
+  background:#dff7ef;
+  top:-100px;
+  right:-80px;
+}
+
+.login-card:after{
+  content:"♥";
+  position:absolute;
+  color:#ef5b88;
+  opacity:.13;
+  font-size:110px;
+  bottom:-45px;
+  left:-20px;
+}
+
+.login-logo{
+  text-align:center;
+  font-family:Georgia,serif;
+  font-size:50px;
+  font-weight:900;
+  letter-spacing:2px;
+  color:#087563;
+  position:relative;
+  z-index:1;
+}
+
+.login-logo span{
+  color:#e72c68;
+}
+
+.login-subtitle{
+  text-align:center;
+  color:#777;
+  margin:7px 0 30px;
+  font-size:17px;
+}
+
+.login-title{
+  text-align:center;
+  font-size:32px;
+  color:#222;
+  margin-bottom:25px;
+}
+
+.login-card .field{
+  position:relative;
+  z-index:1;
+}
+
+.login-card input{
+  background:#fff;
+  border:1px solid #e5dfe2;
+  transition:.2s;
+}
+
+.login-card input:focus{
+  border-color:#e72c68;
+  box-shadow:0 0 0 4px #e72c6812;
+}
+
+.password-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:8px;
+}
+
+.forgot{
+  color:#087563;
+  font-size:14px;
+  font-weight:700;
+}
+
+.login-button{
+  width:100%;
+  margin-top:12px;
+  position:relative;
+  z-index:1;
+}
+
+.signup-box{
+  margin-top:25px;
+  padding-top:22px;
+  border-top:1px solid #eee;
+  text-align:center;
+  color:#777;
+  position:relative;
+  z-index:1;
+}
+
+.signup-box a{
+  color:#e72c68;
+  font-weight:800;
+}
+
+.back{
+  display:block;
+  text-align:center;
+  margin-top:20px;
+  color:#087563;
+  font-weight:700;
+  position:relative;
+  z-index:1;
+}
+
+@media(max-width:500px){
+  .login-card{
+    padding:32px 20px;
+    border-radius:27px;
+  }
+
+  .login-logo{
+    font-size:43px;
+  }
+
+  .login-title{
+    font-size:28px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+  <div class="container nav">
+    <a href="index.html" class="logo">J<span>♡</span>RON</a>
+
+    <nav class="navlinks">
+      <a href="index.html">হোম</a>
+      <a href="signup.html">Membership</a>
+      <a href="login.html">Login</a>
+    </nav>
+  </div>
+</header>
+
+<main class="login-wrap">
+
+  <section class="login-card">
+
+    <div class="login-logo">
+      J<span>♡</span>RON
+    </div>
+
+    <div class="login-subtitle">
+      দুজনের গল্প, এক জোড়ন। ❤️
+    </div>
+
+    <h1 class="login-title">লগইন করুন</h1>
+
+    <form onsubmit="return loginUser()">
+
+      <div class="field">
+        <label for="email">ইমেইল</label>
+        <input
+          id="email"
+          type="email"
+          placeholder="আপনার ইমেইল লিখুন"
+          required
+        >
+      </div>
+
+      <div class="field">
+        <label for="password">পাসওয়ার্ড</label>
+        <input
+          id="password"
+          type="password"
+          placeholder="আপনার পাসওয়ার্ড লিখুন"
+          required
+        >
+
+        <div class="password-row">
+          <span></span>
+          <a class="forgot" href="#">পাসওয়ার্ড ভুলে গেছেন?</a>
+        </div>
+      </div>
+
+      <button class="btn pink login-button" type="submit">
+        🔐 লগইন
+      </button>
+
+    </form>
+
+    <div class="signup-box">
+      JORON-এ নতুন?
+      <a href="signup.html">প্রোফাইল তৈরি করুন</a>
+    </div>
+
+    <a class="back" href="index.html">
+      ← হোমে ফিরে যান
+    </a>
+
+  </section>
+
+</main>
+
+<footer class="footer">
+  ❤️ JORON — বিশ্বাস থেকে সম্পর্ক
+</footer>
+
+<script>
+function loginUser(){
+  const email=document.getElementById("email").value.trim();
+  const password=document.getElementById("password").value.trim();
+
+  if(!email || !password){
+    alert("ইমেইল ও পাসওয়ার্ড দিন।");
+    return false;
+  }
+
+  alert("লগইন সিস্টেম প্রস্তুত করা হচ্ছে।");
+  return false;
+}
+</script>
+
+</body>
+</html>

@@ -1,690 +1,129 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>JORON — জোড়ন | দুজনের গল্প, এক জোড়ন</title>
-
-  <meta name="description"
-    content="JORON — জোড়ন। আধুনিক, নিরাপদ ও বিশ্বস্ত matrimonial platform যেখানে বিশ্বাস, সম্মান ও মূল্যবোধের ভিত্তিতে meaningful connection তৈরি হয়।">
-
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: Arial, "Noto Sans Bengali", sans-serif;
-      background: #f6faf8;
-      color: #1f2937;
-      line-height: 1.7;
-    }
-
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      background: rgba(255,255,255,.96);
-      backdrop-filter: blur(10px);
-      padding: 15px 6%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 3px 18px rgba(0,0,0,.08);
-    }
-
-    .logo {
-      font-size: 28px;
-      font-weight: 800;
-      color: #126b5b;
-      letter-spacing: .5px;
-    }
-
-    .logo span {
-      display: block;
-      font-size: 12px;
-      font-weight: normal;
-      color: #6b7280;
-      letter-spacing: 0;
-      margin-top: -5px;
-    }
-
-    nav a {
-      text-decoration: none;
-      color: #374151;
-      margin-left: 16px;
-      font-size: 14px;
-      font-weight: 700;
-      transition: .2s;
-    }
-
-    nav a:hover {
-      color: #126b5b;
-    }
-
-    .hero {
-      min-height: 78vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 70px 20px;
-      background:
-        radial-gradient(circle at top left, #d8f5eb, transparent 35%),
-        radial-gradient(circle at bottom right, #e9f8f3, transparent 35%),
-        linear-gradient(135deg, #f4fffb, #ffffff);
-    }
-
-    .hero-content {
-      max-width: 850px;
-    }
-
-    .badge {
-      display: inline-block;
-      background: #e1f6ef;
-      color: #126b5b;
-      padding: 7px 16px;
-      border-radius: 30px;
-      font-size: 14px;
-      font-weight: bold;
-      margin-bottom: 18px;
-    }
-
-    .hero h1 {
-      font-size: clamp(38px, 7vw, 64px);
-      color: #126b5b;
-      line-height: 1.15;
-      margin-bottom: 12px;
-    }
-
-    .hero h2 {
-      font-size: clamp(22px, 4vw, 32px);
-      color: #111827;
-      margin-bottom: 18px;
-    }
-
-    .hero p {
-      max-width: 700px;
-      margin: auto;
-      color: #667085;
-      font-size: 17px;
-    }
-
-    .buttons {
-      margin-top: 30px;
-    }
-
-    .btn {
-      display: inline-block;
-      padding: 13px 25px;
-      margin: 5px;
-      border-radius: 30px;
-      text-decoration: none;
-      font-weight: bold;
-      transition: .25s;
-    }
-
-    .primary {
-      background: #126b5b;
-      color: white;
-      box-shadow: 0 7px 18px rgba(18,107,91,.22);
-    }
-
-    .primary:hover {
-      transform: translateY(-2px);
-      background: #0e584b;
-    }
-
-    .secondary {
-      border: 2px solid #126b5b;
-      color: #126b5b;
-      background: white;
-    }
-
-    .secondary:hover {
-      background: #eaf8f3;
-    }
-
-    .section {
-      padding: 70px 6%;
-      text-align: center;
-    }
-
-    .section-title {
-      color: #126b5b;
-      font-size: 32px;
-      margin-bottom: 10px;
-    }
-
-    .section-subtitle {
-      color: #6b7280;
-      max-width: 650px;
-      margin: 0 auto 35px;
-    }
-
-    .about-box {
-      max-width: 900px;
-      margin: auto;
-      background: white;
-      padding: 30px;
-      border-radius: 22px;
-      box-shadow: 0 8px 30px rgba(0,0,0,.06);
-    }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 20px;
-      max-width: 1050px;
-      margin: auto;
-    }
-
-    .card {
-      background: white;
-      padding: 30px 20px;
-      border-radius: 20px;
-      box-shadow: 0 7px 25px rgba(0,0,0,.07);
-      transition: .25s;
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
-    }
-
-    .icon {
-      font-size: 35px;
-      margin-bottom: 10px;
-    }
-
-    .card h3 {
-      color: #126b5b;
-      margin-bottom: 8px;
-    }
-
-    .card p {
-      color: #6b7280;
-      font-size: 14px;
-    }
-
-    /* MEMBERSHIP */
-
-    .membership-section {
-      background: #eef9f5;
-    }
-
-    .membership-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 22px;
-      max-width: 1050px;
-      margin: 35px auto 0;
-    }
-
-    .membership-card {
-      position: relative;
-      background: white;
-      padding: 30px 22px;
-      border-radius: 22px;
-      box-shadow: 0 8px 30px rgba(0,0,0,.08);
-      border: 1px solid #e5eee9;
-    }
-
-    .membership-card.featured {
-      border: 2px solid #126b5b;
-      transform: scale(1.03);
-    }
-
-    .popular {
-      position: absolute;
-      top: -13px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #126b5b;
-      color: white;
-      padding: 5px 15px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: bold;
-    }
-
-    .membership-card h3 {
-      color: #126b5b;
-      font-size: 22px;
-      margin-bottom: 10px;
-    }
-
-    .price {
-      font-size: 34px;
-      font-weight: 800;
-      color: #111827;
-      margin-bottom: 15px;
-    }
-
-    .price small {
-      font-size: 13px;
-      color: #6b7280;
-      font-weight: normal;
-    }
-
-    .membership-card ul {
-      list-style: none;
-      text-align: left;
-      margin: 20px 0;
-    }
-
-    .membership-card li {
-      padding: 6px 0;
-      font-size: 14px;
-      color: #4b5563;
-    }
-
-    .membership-card li::before {
-      content: "✓";
-      color: #126b5b;
-      font-weight: bold;
-      margin-right: 8px;
-    }
-
-    .membership-btn {
-      display: block;
-      text-decoration: none;
-      background: #126b5b;
-      color: white;
-      padding: 12px;
-      border-radius: 25px;
-      font-weight: bold;
-    }
-
-    .membership-btn:hover {
-      background: #0e584b;
-    }
-
-    .trust {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 15px;
-      max-width: 900px;
-      margin: 30px auto 0;
-    }
-
-    .trust-item {
-      background: white;
-      padding: 18px;
-      border-radius: 15px;
-      font-weight: bold;
-      color: #126b5b;
-    }
-
-    footer {
-      background: #126b5b;
-      color: white;
-      text-align: center;
-      padding: 30px 20px;
-    }
-
-    footer strong {
-      font-size: 18px;
-    }
-
-    footer p {
-      margin-top: 6px;
-      font-size: 13px;
-      opacity: .9;
-    }
-
-    @media (max-width: 650px) {
-
-      header {
-        padding: 12px 4%;
-      }
-
-      .logo {
-        font-size: 23px;
-      }
-
-      nav a {
-        margin-left: 7px;
-        font-size: 12px;
-      }
-
-      .hero {
-        min-height: 72vh;
-        padding: 55px 18px;
-      }
-
-      .hero p {
-        font-size: 15px;
-      }
-
-      .section {
-        padding: 55px 5%;
-      }
-
-      .membership-card.featured {
-        transform: none;
-      }
-
-      .section-title {
-        font-size: 27px;
-      }
-    }
-  </style>
-</head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JORON | জোড়ন</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>
+body{
+  background:
+    radial-gradient(circle at 10% 10%,#ffdce8 0,transparent 30%),
+    radial-gradient(circle at 90% 20%,#d9f8ee 0,transparent 30%),
+    linear-gradient(135deg,#fff8fa,#effcf8);
+}
+.home-logo{
+  font-family:Georgia,serif;
+  font-size:clamp(48px,12vw,92px);
+  letter-spacing:3px;
+  color:#087563;
+  font-weight:900;
+}
+.home-logo .heart{color:#e52b67}
+.hero-card{
+  position:relative;
+  overflow:hidden;
+  border:1px solid #ffffff;
+}
+.hero-card:before,
+.hero-card:after{
+  content:"♥";
+  position:absolute;
+  color:#f5a5bd;
+  opacity:.22;
+  font-size:100px;
+}
+.hero-card:before{left:-25px;top:-35px}
+.hero-card:after{right:-20px;bottom:-45px}
+.tagline{
+  font-size:clamp(22px,5vw,34px);
+  font-weight:800;
+  color:#222;
+}
+.features{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+  max-width:800px;
+  margin:35px auto;
+}
+.feature{
+  padding:18px 10px;
+  background:#ffffffc9;
+  border:1px solid #f3d9e2;
+  border-radius:20px;
+}
+.feature b{display:block;color:#087563;font-size:18px;margin-bottom:5px}
+.feature span{color:#777;font-size:14px}
+.actions{display:flex;justify-content:center;gap:15px;flex-wrap:wrap}
+@media(max-width:600px){
+ .features{grid-template-columns:1fr}
+ .feature{padding:14px}
+}
+</style>
+<link rel="stylesheet" href="assets/premium.css"></head>
 
 <body>
 
-<header>
-
-  <div class="logo">
-    JORON
-    <span>জোড়ন • দুজনের গল্প, এক জোড়ন</span>
+<header class="header">
+  <div class="container nav">
+    <a href="index.html" class="logo">J<span>♡</span>RON</a>
+    <nav class="navlinks">
+      <a href="index.html">হোম</a>
+      <a href="#about">আমাদের সম্পর্কে</a>
+      <a href="#features">বৈশিষ্ট্য</a>
+      <a href="signup.html">Membership</a>
+      <a href="login.html">Login</a>
+    </nav>
   </div>
-
-  <nav>
-    <a href="#home">হোম</a>
-    <a href="#about">আমাদের সম্পর্কে</a>
-    <a href="#features">বৈশিষ্ট্য</a>
-    <a href="#membership">Membership</a>
-    <a href="login.html">Login</a>
-  </nav>
-
 </header>
 
+<main class="hero">
+  <div class="container">
+    <section class="hero-card">
 
-<main>
+      <div class="badge">❤️ বিশ্বাস • সম্মান • সম্পর্ক</div>
 
-  <!-- HERO -->
-
-  <section class="hero" id="home">
-
-    <div class="hero-content">
-
-      <div class="badge">
-        ❤️ বিশ্বাস • সম্মান • সম্পর্ক
+      <div class="home-logo">
+        J<span class="heart">♡</span>RON
       </div>
 
-      <h1>JORON | জোড়ন</h1>
+      <div class="tagline">
+        দুজনের গল্প, এক জোড়ন।
+      </div>
 
-      <h2>দুজনের গল্প, এক জোড়ন।</h2>
-
-      <p>
+      <p id="about">
         একটি আধুনিক, নিরাপদ ও বিশ্বস্ত matrimonial platform—
-        যেখানে পরিচয় শুরু হয় বিশ্বাস থেকে,
-        সম্পর্ক এগিয়ে যায় সম্মানের সঙ্গে,
-        আর ভবিষ্যৎ গড়ে ওঠে দুজনের বোঝাপড়ায়।
+        যেখানে পরিচয় শুরু হয় বিশ্বাস থেকে, সম্পর্ক এগিয়ে যায়
+        সম্মানের সঙ্গে, আর ভবিষ্যৎ গড়ে ওঠে দুজনের বোঝাপড়ায়।
       </p>
 
-      <div class="buttons">
-
-        <a class="btn primary" href="signup.html">
-          💚 নতুন সদস্য হোন
-        </a>
-
-        <a class="btn secondary" href="profiles.html">
-          👥 Profile দেখুন
-        </a>
-
+      <div class="actions">
+        <a href="signup.html" class="btn pink">💚 নতুন সদস্য হন</a>
+        <a href="profiles.html" class="btn">👥 Profile দেখুন</a>
       </div>
 
-    </div>
-
-  </section>
-
-
-  <!-- ABOUT -->
-
-  <section class="section" id="about">
-
-    <h2 class="section-title">
-      JORON সম্পর্কে
-    </h2>
-
-    <p class="section-subtitle">
-      শুধু বিয়ের বায়োডাটা নয়—
-      JORON-এর লক্ষ্য একটি নিরাপদ ও অর্থবহ সম্পর্কের পরিবেশ তৈরি করা।
-    </p>
-
-    <div class="about-box">
-
-      <p>
-        JORON এমন একটি আধুনিক matrimonial platform,
-        যেখানে মানুষ নিজের পরিচয়, পছন্দ, মূল্যবোধ ও ভবিষ্যৎ
-        প্রত্যাশা সুন্দরভাবে তুলে ধরতে পারে।
-        আমাদের মূল লক্ষ্য হলো বিশ্বাসযোগ্য পরিচয়,
-        ব্যক্তিগত গোপনীয়তা এবং সম্মানজনক যোগাযোগকে গুরুত্ব দেওয়া।
-      </p>
-
-    </div>
-
-  </section>
-
-
-  <!-- FEATURES -->
-
-  <section class="section" id="features">
-
-    <h2 class="section-title">
-      কেন JORON?
-    </h2>
-
-    <p class="section-subtitle">
-      আপনার জীবনসঙ্গী খোঁজার যাত্রাকে সহজ, সুন্দর ও নিরাপদ করার জন্য।
-    </p>
-
-    <div class="cards">
-
-      <div class="card">
-        <div class="icon">📝</div>
-        <h3>Smart Biodata</h3>
-        <p>
-          সহজেই নিজের তথ্য দিয়ে সুন্দর একটি matrimonial profile তৈরি করুন।
-        </p>
-      </div>
-
-      <div class="card">
-        <div class="icon">💚</div>
-        <h3>Attractive Profile</h3>
-        <p>
-          গুরুত্বপূর্ণ তথ্যগুলো সুন্দর ও গোছানো Profile Card আকারে দেখুন।
-        </p>
-      </div>
-
-      <div class="card">
-        <div class="icon">🔒</div>
-        <h3>Privacy First</h3>
-        <p>
-          ব্যক্তিগত তথ্যের গোপনীয়তা ও নিরাপত্তাকে সর্বোচ্চ গুরুত্ব দেওয়া হবে।
-        </p>
-      </div>
-
-      <div class="card">
-        <div class="icon">🤝</div>
-        <h3>Meaningful Connection</h3>
-        <p>
-          পছন্দ, মূল্যবোধ ও প্রয়োজনের ভিত্তিতে অর্থবহ সম্পর্কের সুযোগ।
-        </p>
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- MEMBERSHIP -->
-
-  <section class="section membership-section" id="membership">
-
-    <h2 class="section-title">
-      JORON Membership
-    </h2>
-
-    <p class="section-subtitle">
-      আপনার প্রয়োজন অনুযায়ী Membership বেছে নিন।
-      এখানে কারও আয় বা আর্থিক অবস্থাকে প্রকাশ্যে শ্রেণিবদ্ধ করা হবে না।
-    </p>
-
-
-    <div class="membership-grid">
-
-
-      <!-- BASIC -->
-
-      <div class="membership-card">
-
-        <h3>Basic</h3>
-
-        <div class="price">
-          ৳99
-          <small>/ Membership</small>
+      <div class="features" id="features">
+        <div class="feature">
+          <b>🛡️ নিরাপদ</b>
+          <span>আপনার তথ্যের নিরাপত্তাকে গুরুত্ব দেওয়া হয়</span>
         </div>
-
-        <ul>
-          <li>নিজস্ব Profile</li>
-          <li>Biodata তৈরি</li>
-          <li>Profile browsing</li>
-          <li>মৌলিক সুবিধা</li>
-        </ul>
-
-        <a class="membership-btn" href="signup.html">
-          Basic দিয়ে শুরু করুন
-        </a>
-
-      </div>
-
-
-      <!-- STANDARD -->
-
-      <div class="membership-card featured">
-
-        <div class="popular">
-          ⭐ জনপ্রিয়
+        <div class="feature">
+          <b>💗 বিশ্বস্ত</b>
+          <span>সুন্দর ও সম্মানজনক সম্পর্কের জন্য</span>
         </div>
-
-        <h3>Standard</h3>
-
-        <div class="price">
-          ৳199
-          <small>/ Membership</small>
+        <div class="feature">
+          <b>🤝 সহজ</b>
+          <span>সহজভাবে প্রোফাইল তৈরি ও পছন্দ খুঁজুন</span>
         </div>
-
-        <ul>
-          <li>Basic-এর সব সুবিধা</li>
-          <li>উন্নত Profile visibility</li>
-          <li>আরও সুবিধাজনক browsing</li>
-          <li>অতিরিক্ত Member features</li>
-        </ul>
-
-        <a class="membership-btn" href="signup.html">
-          Standard বেছে নিন
-        </a>
-
       </div>
 
-
-      <!-- PREMIUM -->
-
-      <div class="membership-card">
-
-        <h3>Premium</h3>
-
-        <div class="price">
-          ৳399
-          <small>/ Membership</small>
-        </div>
-
-        <ul>
-          <li>Standard-এর সব সুবিধা</li>
-          <li>Premium visibility</li>
-          <li>বিশেষ Member features</li>
-          <li>অগ্রাধিকার সুবিধা</li>
-        </ul>
-
-        <a class="membership-btn" href="signup.html">
-          Premium বেছে নিন
-        </a>
-
-      </div>
-
-    </div>
-
-
-    <!-- TRUST -->
-
-    <div class="trust">
-
-      <div class="trust-item">
-        🔒 Privacy Focused
-      </div>
-
-      <div class="trust-item">
-        🤝 Respect First
-      </div>
-
-      <div class="trust-item">
-        💚 Meaningful Connection
-      </div>
-
-      <div class="trust-item">
-        🛡️ Trusted Platform
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- CTA -->
-
-  <section class="section">
-
-    <h2 class="section-title">
-      আপনার গল্পের শুরুটা আজই হোক ❤️
-    </h2>
-
-    <p class="section-subtitle">
-      একটি সুন্দর পরিচয় কখনও কখনও বদলে দিতে পারে পুরো ভবিষ্যৎ।
-    </p>
-
-    <div class="buttons">
-
-      <a class="btn primary" href="signup.html">
-        ✨ JORON-এ যোগ দিন
-      </a>
-
-      <a class="btn secondary" href="profiles.html">
-        👥 Profiles দেখুন
-      </a>
-
-    </div>
-
-  </section>
-
+    </section>
+  </div>
 </main>
 
-
-<footer>
-
-  <strong>JORON — জোড়ন</strong>
-
-  <p>
-    দুজনের গল্প, এক জোড়ন। ❤️
-  </p>
-
-  <p>
-    © 2026 JORON. All Rights Reserved.
-  </p>
-
-  <p>
-    Created by Muyeed
-  </p>
-
+<footer class="footer">
+  ❤️ JORON — দুজনের গল্প, এক জোড়ন।
 </footer>
 
 </body>

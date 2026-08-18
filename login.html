@@ -1,241 +1,259 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JORON — Login</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JORON | লগইন</title>
+<link rel="stylesheet" href="assets/style.css">
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<style>
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 15% 15%,#d8f7ee 0,transparent 32%),
+    radial-gradient(circle at 85% 85%,#ffd9e7 0,transparent 35%),
+    linear-gradient(135deg,#f5fffc,#fff5f8);
+}
 
-    body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #e8f7f2, #f5f8f7);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
+.login-wrap{
+  min-height:calc(100vh - 70px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:35px 15px;
+}
 
-    .login-box {
-      width: 100%;
-      max-width: 430px;
-      background: white;
-      padding: 35px 28px;
-      border-radius: 22px;
-      box-shadow: 0 8px 30px rgba(0,0,0,.10);
-    }
+.login-card{
+  width:min(460px,100%);
+  background:rgba(255,255,255,.96);
+  border:1px solid #f2dce4;
+  border-radius:34px;
+  padding:38px 30px;
+  box-shadow:0 25px 70px rgba(8,117,99,.13);
+  position:relative;
+  overflow:hidden;
+}
 
-    .logo {
-      text-align: center;
-      color: #176b5b;
-      font-size: 34px;
-      font-weight: bold;
-      margin-bottom: 8px;
-    }
+.login-card:before{
+  content:"";
+  position:absolute;
+  width:180px;
+  height:180px;
+  border-radius:50%;
+  background:#dff7ef;
+  top:-100px;
+  right:-80px;
+}
 
-    .tagline {
-      text-align: center;
-      color: #777;
-      margin-bottom: 30px;
-    }
+.login-card:after{
+  content:"♥";
+  position:absolute;
+  color:#ef5b88;
+  opacity:.13;
+  font-size:110px;
+  bottom:-45px;
+  left:-20px;
+}
 
-    h1 {
-      text-align: center;
-      color: #333;
-      margin-bottom: 25px;
-      font-size: 24px;
-    }
+.login-logo{
+  text-align:center;
+  font-family:Georgia,serif;
+  font-size:50px;
+  font-weight:900;
+  letter-spacing:2px;
+  color:#087563;
+  position:relative;
+  z-index:1;
+}
 
-    label {
-      display: block;
-      margin: 14px 0 7px;
-      font-weight: bold;
-      color: #444;
-    }
+.login-logo span{
+  color:#e72c68;
+}
 
-    input {
-      width: 100%;
-      padding: 14px;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      font-size: 16px;
-      outline: none;
-    }
+.login-subtitle{
+  text-align:center;
+  color:#777;
+  margin:7px 0 30px;
+  font-size:17px;
+}
 
-    input:focus {
-      border-color: #176b5b;
-    }
+.login-title{
+  text-align:center;
+  font-size:32px;
+  color:#222;
+  margin-bottom:25px;
+}
 
-    button {
-      width: 100%;
-      margin-top: 22px;
-      padding: 14px;
-      border: none;
-      border-radius: 28px;
-      background: #176b5b;
-      color: white;
-      font-size: 17px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+.login-card .field{
+  position:relative;
+  z-index:1;
+}
 
-    .forgot {
-      display: block;
-      text-align: right;
-      margin-top: 12px;
-      color: #176b5b;
-      text-decoration: none;
-      font-size: 14px;
-    }
+.login-card input{
+  background:#fff;
+  border:1px solid #e5dfe2;
+  transition:.2s;
+}
 
-    .register {
-      text-align: center;
-      margin-top: 25px;
-      color: #666;
-    }
+.login-card input:focus{
+  border-color:#e72c68;
+  box-shadow:0 0 0 4px #e72c6812;
+}
 
-    .register a {
-      color: #176b5b;
-      font-weight: bold;
-      text-decoration: none;
-    }
+.password-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:8px;
+}
 
-    .back {
-      display: block;
-      text-align: center;
-      margin-top: 20px;
-      color: #555;
-      text-decoration: none;
-    }
-  </style>
+.forgot{
+  color:#087563;
+  font-size:14px;
+  font-weight:700;
+}
+
+.login-button{
+  width:100%;
+  margin-top:12px;
+  position:relative;
+  z-index:1;
+}
+
+.signup-box{
+  margin-top:25px;
+  padding-top:22px;
+  border-top:1px solid #eee;
+  text-align:center;
+  color:#777;
+  position:relative;
+  z-index:1;
+}
+
+.signup-box a{
+  color:#e72c68;
+  font-weight:800;
+}
+
+.back{
+  display:block;
+  text-align:center;
+  margin-top:20px;
+  color:#087563;
+  font-weight:700;
+  position:relative;
+  z-index:1;
+}
+
+@media(max-width:500px){
+  .login-card{
+    padding:32px 20px;
+    border-radius:27px;
+  }
+
+  .login-logo{
+    font-size:43px;
+  }
+
+  .login-title{
+    font-size:28px;
+  }
+}
+</style>
 </head>
 
 <body>
 
-  <div class="login-box">
+<header class="header">
+  <div class="container nav">
+    <a href="index.html" class="logo">J<span>♡</span>RON</a>
 
-    <div class="logo">JORON</div>
+    <nav class="navlinks">
+      <a href="index.html">হোম</a>
+      <a href="signup.html">Membership</a>
+      <a href="login.html">Login</a>
+    </nav>
+  </div>
+</header>
 
-    <p class="tagline">
+<main class="login-wrap">
+
+  <section class="login-card">
+
+    <div class="login-logo">
+      J<span>♡</span>RON
+    </div>
+
+    <div class="login-subtitle">
       দুজনের গল্প, এক জোড়ন। ❤️
-    </p>
+    </div>
 
-    <h1>লগইন করুন</h1>
+    <h1 class="login-title">লগইন করুন</h1>
 
-    <form onsubmit="loginUser(event)">
+    <form onsubmit="return loginUser()">
 
-      <label for="email">ইমেইল</label>
-      <input
-        type="email"
-        id="email"
-        placeholder="আপনার ইমেইল লিখুন"
-        required
-      >
+      <div class="field">
+        <label for="email">ইমেইল</label>
+        <input
+          id="email"
+          type="email"
+          placeholder="আপনার ইমেইল লিখুন"
+          required
+        >
+      </div>
 
-      <label for="password">পাসওয়ার্ড</label>
-      <input
-        type="password"
-        id="password"
-        placeholder="আপনার পাসওয়ার্ড লিখুন"
-        required
-      >
+      <div class="field">
+        <label for="password">পাসওয়ার্ড</label>
+        <input
+          id="password"
+          type="password"
+          placeholder="আপনার পাসওয়ার্ড লিখুন"
+          required
+        >
 
-      <a href="#" class="forgot">
-        পাসওয়ার্ড ভুলে গেছেন?
-      </a>
+        <div class="password-row">
+          <span></span>
+          <a class="forgot" href="#">পাসওয়ার্ড ভুলে গেছেন?</a>
+        </div>
+      </div>
 
-      <button type="submit">
-        লগইন
+      <button class="btn pink login-button" type="submit">
+        🔐 লগইন
       </button>
 
     </form>
 
-    <div class="register">
+    <div class="signup-box">
       JORON-এ নতুন?
       <a href="signup.html">প্রোফাইল তৈরি করুন</a>
     </div>
 
-    <a href="index.html" class="back">
+    <a class="back" href="index.html">
       ← হোমে ফিরে যান
     </a>
 
-  </div>
+  </section>
 
-  <script type="module">
+</main>
 
-    import { initializeApp }
-      from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+<footer class="footer">
+  ❤️ JORON — বিশ্বাস থেকে সম্পর্ক
+</footer>
 
-    import {
-      getAuth,
-      signInWithEmailAndPassword
-    } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+<script>
+function loginUser(){
+  const email=document.getElementById("email").value.trim();
+  const password=document.getElementById("password").value.trim();
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyDWxxu3zwThJp1fuWMhXiRig3Fswt0QARA",
-      authDomain: "joron-d7742.firebaseapp.com",
-      projectId: "joron-d7742",
-      storageBucket: "joron-d7742.firebasestorage.app",
-      messagingSenderId: "907727989078",
-      appId: "1:907727989078:web:4fdd266e3517a862fa0ef7",
-      measurementId: "G-Q8PXH6C5NC"
-    };
+  if(!email || !password){
+    alert("ইমেইল ও পাসওয়ার্ড দিন।");
+    return false;
+  }
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    window.loginUser = async function(event) {
-
-      event.preventDefault();
-
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
-
-      try {
-
-        await signInWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
-
-        alert("লগইন সফল হয়েছে।");
-
-        window.location.href = "biodata.html";
-
-      } catch (error) {
-
-        console.error(error);
-
-        let message = "লগইন করা সম্ভব হয়নি। আবার চেষ্টা করুন।";
-
-        if (
-          error.code === "auth/invalid-credential" ||
-          error.code === "auth/wrong-password" ||
-          error.code === "auth/user-not-found"
-        ) {
-          message = "ইমেইল অথবা পাসওয়ার্ড সঠিক নয়।";
-        }
-
-        else if (error.code === "auth/invalid-email") {
-          message = "সঠিক ইমেইল ঠিকানা দিন।";
-        }
-
-        else if (error.code === "auth/too-many-requests") {
-          message = "অনেকবার চেষ্টা করা হয়েছে। কিছুক্ষণ পরে আবার চেষ্টা করুন।";
-        }
-
-        alert(message);
-      }
-    };
-
-  </script>
+  alert("লগইন সিস্টেম প্রস্তুত করা হচ্ছে।");
+  return false;
+}
+</script>
 
 </body>
 </html>

@@ -1,0 +1,40 @@
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,"Noto Sans Bengali",sans-serif;background:linear-gradient(135deg,#fff5f8,#eefbf7);color:#263238}
+a{text-decoration:none;color:inherit}
+.container{width:min(1100px,92%);margin:auto}
+.header{background:rgba(255,255,255,.94);padding:18px 0;border-bottom:1px solid #f3d6df;position:sticky;top:0;z-index:10}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:20px}
+.logo{font-size:34px;font-weight:900;color:#087563;letter-spacing:2px}
+.logo span{color:#e72c68}
+.navlinks{display:flex;gap:22px;font-weight:700;color:#333}
+.hero{min-height:calc(100vh - 80px);display:flex;align-items:center;text-align:center;padding:60px 0}
+.hero-card{background:rgba(255,255,255,.8);border-radius:35px;padding:55px 25px;box-shadow:0 20px 60px rgba(0,0,0,.08)}
+.badge{display:inline-block;padding:10px 22px;border-radius:30px;background:#def7ef;color:#087563;font-weight:700;margin-bottom:25px}
+.hero h1{font-size:clamp(42px,8vw,76px);color:#087563;margin-bottom:18px}
+.hero h1 span{color:#e72c68}
+.hero p{font-size:20px;line-height:1.8;color:#667;margin:20px auto 35px;max-width:720px}
+.btn{display:inline-block;border:0;border-radius:35px;padding:16px 34px;background:linear-gradient(90deg,#087563,#159b83);color:white;font-size:18px;font-weight:800;cursor:pointer;box-shadow:0 10px 25px #08756333}
+.btn.pink{background:linear-gradient(90deg,#e51d61,#f45183)}
+.form-page{min-height:100vh;padding:45px 0}
+.form-card{max-width:650px;margin:auto;background:#fff;border-radius:30px;padding:35px;box-shadow:0 20px 60px #00000012}
+.form-card h1{text-align:center;color:#087563;margin-bottom:25px}
+.field{margin:16px 0}
+.field label{display:block;font-weight:700;margin-bottom:7px}
+.field input,.field select,.field textarea{width:100%;padding:14px 16px;border:1px solid #ddd;border-radius:14px;font-size:16px;outline:none}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:#e72c68}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.profile-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.profile-card{background:white;border-radius:25px;padding:22px;text-align:center;box-shadow:0 10px 35px #00000010}
+.avatar{width:100px;height:100px;border-radius:50%;margin:auto auto 15px;background:linear-gradient(135deg,#ffd4df,#d8f5ed);display:flex;align-items:center;justify-content:center;font-size:40px}
+.profile-card h3{color:#087563;margin-bottom:7px}
+.profile-card p{color:#777;line-height:1.7}
+.footer{text-align:center;padding:30px;color:#777}
+@media(max-width:700px){
+.navlinks{display:none}
+.logo{font-size:28px}
+.hero{padding:25px 0}
+.hero-card{padding:40px 18px;border-radius:25px}
+.hero p{font-size:17px}
+.grid,.profile-grid{grid-template-columns:1fr}
+.form-card{padding:25px 18px}
+}

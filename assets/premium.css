@@ -1,0 +1,56 @@
+*{box-sizing:border-box}
+body{
+margin:0;
+font-family:"Noto Sans Bengali","Hind Siliguri",Arial,sans-serif;
+min-height:100vh;
+background:
+radial-gradient(circle at 10% 10%,rgba(255,120,170,.25),transparent 30%),
+radial-gradient(circle at 90% 20%,rgba(255,210,220,.45),transparent 35%),
+linear-gradient(135deg,#fff7fa,#ffe8ef 50%,#fff);
+color:#44233a;
+}
+.joron-logo{
+font-family:Georgia,serif;
+font-size:42px;
+font-weight:900;
+letter-spacing:3px;
+color:#b71852;
+text-align:center;
+text-shadow:0 2px 8px rgba(183,24,82,.18);
+}
+.joron-logo span{color:#ed356c}
+.premium-card{
+max-width:520px;
+margin:30px auto;
+padding:28px 22px;
+border-radius:30px;
+background:rgba(255,255,255,.88);
+border:1px solid rgba(255,255,255,.9);
+box-shadow:0 18px 55px rgba(117,35,72,.18);
+backdrop-filter:blur(12px);
+}
+.premium-title{
+text-align:center;
+font-size:27px;
+font-weight:800;
+color:#8f1647;
+margin:15px 0 8px;
+}
+.premium-subtitle{
+text-align:center;
+color:#8d6678;
+margin-bottom:25px;
+}
+.premium-btn{
+display:block;
+width:100%;
+border:0;
+border-radius:18px;
+padding:15px;
+font-size:17px;
+font-weight:800;
+color:white;
+background:linear-gradient(90deg,#d71962,#f34b7d);
+box-shadow:0 8px 20px rgba(215,25,98,.25);
+}
+.heart{color:#e72b69}

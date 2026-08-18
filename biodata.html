@@ -975,92 +975,31 @@
 
           // ===================================
           // Firestore Save
-          // ===================================
+// =========================
+await setDoc(
+  doc(db, "biodata", currentUser.uid),
+  {
+    uid: currentUser.uid,
+    name: name,
+    email: currentUser.email || "",
+    age: Number(age),
+    gender: gender,
+    district: district,
+    educationSystem: educationSystemValue,
+    education: educationValue,
+    institution: institution,
+    subject: subject,
+    passingYear: Number(passingYear),
+    profession: profession,
+    about: about,
+    partner: partner,
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp()
+  },
+  { merge: true }
+);
 
-          await setDoc(
-
-            doc(
-              db,
-              "biodata",
-              currentUser.uid
-            ),
-
-            {
-
-              uid:
-                currentUser.uid,
-
-
-              name:
-                name,
-
-
-              email:
-                currentUser.email || "",
-
-
-              age:
-                Number(age),
-
-
-              gender:
-                gender,
-
-
-              district:
-                district,
-
-
-              educationSystem:
-                educationSystemValue,
-
-
-              education:
-                educationValue,
-
-
-              institution:
-                institution,
-
-
-              subject:
-                subject,
-
-
-              passingYear:
-                Number(passingYear),
-
-
-              profession:
-                profession,
-
-
-              about:
-                about,
-
-
-              partner:
-                partner,
-
-
-              createdAt:
-                serverTimestamp(),
-
-
-              updatedAt:
-                serverTimestamp()
-
-            },
-
-            {
-              merge: true
-            }
-
-          );
-
-
-          // ===================================
-          // Success
+// Success
           // ===================================
 
           successMessage.style.display =

@@ -25,6 +25,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var registerButton: Button
     private lateinit var loginButton: Button
     private lateinit var resetButton: Button
+    private lateinit var saveBiodataButton: Button
+    private lateinit var biodataAgeInput: EditText
+    private lateinit var biodataDistrictInput: EditText
+    private lateinit var biodataOccupationInput: EditText
+    private lateinit var biodataEducationInput: EditText
     private lateinit var progressBar: ProgressBar
     private lateinit var statusText: TextView
 
@@ -40,12 +45,18 @@ class MainActivity : AppCompatActivity() {
         registerButton = findViewById(R.id.registerButton)
         loginButton = findViewById(R.id.loginButton)
         resetButton = findViewById(R.id.resetButton)
+        saveBiodataButton = findViewById(R.id.saveBiodataButton)
+        biodataAgeInput = findViewById(R.id.biodataAgeInput)
+        biodataDistrictInput = findViewById(R.id.biodataDistrictInput)
+        biodataOccupationInput = findViewById(R.id.biodataOccupationInput)
+        biodataEducationInput = findViewById(R.id.biodataEducationInput)
         progressBar = findViewById(R.id.progressBar)
         statusText = findViewById(R.id.statusText)
 
         registerButton.setOnClickListener { register() }
         loginButton.setOnClickListener { login() }
         resetButton.setOnClickListener { resetPassword() }
+        saveBiodataButton.setOnClickListener { saveOwnerBiodata() }
 
         if (Build.VERSION.SDK_INT >= 33 && checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 1001)
@@ -113,11 +124,46 @@ class MainActivity : AppCompatActivity() {
             .addOnCompleteListener { setLoading(false) }
     }
 
+    private fun saveOwnerBiodata() {
+        val user = auth.currentUser ?: return showStatus("Please login first to save your biodata.")
+        val name = nameInput.text.toString().trim()
+        val age = biodataAgeInput.text.toString().trim()
+        val district = biodataDistrictInput.text.toString().trim()
+        val occupation = biodataOccupationInput.text.toString().trim()
+        val education = biodataEducationInput.text.toString().trim()
+
+        if (name.isBlank()) return showStatus("Enter your name first.")
+        if (age.isBlank()) return showStatus("Enter your age.")
+        if (district.isBlank()) return showStatus("Enter your district.")
+
+        setLoading(true)
+        val biodata = mapOf(
+            "uid" to user.uid,
+            "name" to name,
+            "email" to (user.email ?: ""),
+            "age" to age,
+            "district" to district,
+            "occupation" to occupation,
+            "education" to education,
+            "profileType" to "owner-matrimony",
+            "isOwner" to true,
+            "registrationFee" to 0,
+            "accountStatus" to "active",
+            "updatedAt" to FieldValue.serverTimestamp()
+        )
+
+        db.collection("biodata").document(user.uid).set(biodata)
+            .addOnSuccessListener { showStatus("আপনার Owner Matrimony Biodata সফলভাবে সংরক্ষণ হয়েছে। Registration fee: 0 টাকা।") }
+            .addOnFailureListener { e -> showStatus("Biodata save failed: ${e.localizedMessage}") }
+            .addOnCompleteListener { setLoading(false) }
+    }
+
     private fun setLoading(loading: Boolean) {
         progressBar.visibility = if (loading) View.VISIBLE else View.GONE
         registerButton.isEnabled = !loading
         loginButton.isEnabled = !loading
         resetButton.isEnabled = !loading
+        saveBiodataButton.isEnabled = !loading
     }
 
     private fun showStatus(message: String) {

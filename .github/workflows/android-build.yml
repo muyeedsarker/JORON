@@ -28,8 +28,11 @@ jobs:
         with:
           gradle-version: '8.11.1'
 
+      - name: Verify Android project
+        run: gradle -p android tasks --all --stacktrace
+
       - name: Build debug APK
-        run: gradle -p android assembleDebug
+        run: gradle -p android assembleDebug --stacktrace
 
       - name: Upload debug APK
         uses: actions/upload-artifact@v4

@@ -1,0 +1,11 @@
+{
+  "name": "সেবাসূত্র",
+  "short_name": "সেবাসূত্র",
+  "description": "আপনার প্রয়োজন, এক সূত্রে।",
+  "lang": "bn",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "theme_color": "#087f5b",
+  "background_color": "#f6faf8",
+  "icons": []
+}

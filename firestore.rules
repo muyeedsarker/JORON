@@ -3,17 +3,49 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // Authenticated users may read the public biodata collection.
+    // Each user may only create/update/delete their own biodata document.
     match /biodata/{userId} {
       allow read: if request.auth != null;
       allow create, update, delete: if request.auth != null
         && request.auth.uid == userId;
     }
 
-    match /interests/{userId} {
-      allow read, write: if request.auth != null
+    // Account metadata is private to the authenticated owner.
+    // role/accountStatus are intentionally immutable from the client.
+    match /users/{userId} {
+      allow create: if request.auth != null
+        && request.auth.uid == userId
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.role == 'user'
+        && request.resource.data.accountStatus == 'active';
+      allow read: if request.auth != null
         && request.auth.uid == userId;
+      allow update: if request.auth != null
+        && request.auth.uid == userId
+        && request.resource.data.uid == resource.data.uid
+        && request.resource.data.role == resource.data.role
+        && request.resource.data.accountStatus == resource.data.accountStatus;
+      allow delete: if false;
     }
 
+    // A user's interest is stored as: <viewerUid>_<profileId>.
+    match /interests/{interestId} {
+      allow create, update: if request.auth != null
+        && request.resource.data.fromUserId == request.auth.uid;
+      allow read, delete: if request.auth != null
+        && resource.data.fromUserId == request.auth.uid;
+    }
+
+    // Reports are write-only for users. Admin tooling will use a privileged
+    // server-side path later; clients must never read another user's reports.
+    match /reports/{reportId} {
+      allow create: if request.auth != null
+        && request.resource.data.reporterId == request.auth.uid;
+      allow read, update, delete: if false;
+    }
+
+    // Default deny: every collection must opt in explicitly above.
     match /{document=**} {
       allow read, write: if false;
     }

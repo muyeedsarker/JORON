@@ -1,5 +1,8 @@
 package com.joron.app
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -21,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var passwordInput: EditText
     private lateinit var registerButton: Button
     private lateinit var loginButton: Button
+    private lateinit var resetButton: Button
     private lateinit var progressBar: ProgressBar
     private lateinit var statusText: TextView
 
@@ -35,11 +39,17 @@ class MainActivity : AppCompatActivity() {
         passwordInput = findViewById(R.id.passwordInput)
         registerButton = findViewById(R.id.registerButton)
         loginButton = findViewById(R.id.loginButton)
+        resetButton = findViewById(R.id.resetButton)
         progressBar = findViewById(R.id.progressBar)
         statusText = findViewById(R.id.statusText)
 
         registerButton.setOnClickListener { register() }
         loginButton.setOnClickListener { login() }
+        resetButton.setOnClickListener { resetPassword() }
+
+        if (Build.VERSION.SDK_INT >= 33 && checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 1001)
+        }
 
         auth.currentUser?.let {
             statusText.text = "Signed in as ${it.email}"
@@ -92,10 +102,22 @@ class MainActivity : AppCompatActivity() {
             .addOnCompleteListener { setLoading(false) }
     }
 
+    private fun resetPassword() {
+        val email = emailInput.text.toString().trim()
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) return showStatus("Enter your email first.")
+
+        setLoading(true)
+        auth.sendPasswordResetEmail(email)
+            .addOnSuccessListener { showStatus("Password reset email sent.") }
+            .addOnFailureListener { e -> showStatus(e.localizedMessage ?: "Could not send reset email.") }
+            .addOnCompleteListener { setLoading(false) }
+    }
+
     private fun setLoading(loading: Boolean) {
         progressBar.visibility = if (loading) View.VISIBLE else View.GONE
         registerButton.isEnabled = !loading
         loginButton.isEnabled = !loading
+        resetButton.isEnabled = !loading
     }
 
     private fun showStatus(message: String) {

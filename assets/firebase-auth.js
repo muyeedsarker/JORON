@@ -102,3 +102,37 @@ export function authErrorMessage(error) {
   };
   return messages[code] || "অনুরোধটি সম্পন্ন করা যায়নি। আবার চেষ্টা করুন।";
 }
+
+export function requireAuth({ redirect = "login.html" } = {}) {
+  let settled = false;
+  return new Promise((resolve) => {
+    const unsubscribe = watchAuth((user) => {
+      if (settled) return;
+      settled = true;
+      unsubscribe();
+      if (!user) {
+        const next = `${window.location.pathname.split("/").pop() || "index.html"}${window.location.search}`;
+        const target = `${redirect}?next=${encodeURIComponent(next)}`;
+        window.location.replace(target);
+        return;
+      }
+      resolve(user);
+    });
+  });
+}
+
+export function redirectIfAuthenticated({ redirect = "biodata.html" } = {}) {
+  let settled = false;
+  return new Promise((resolve) => {
+    const unsubscribe = watchAuth((user) => {
+      if (settled) return;
+      settled = true;
+      unsubscribe();
+      if (user) {
+        window.location.replace(redirect);
+        return;
+      }
+      resolve(null);
+    });
+  });
+}

@@ -3,15 +3,32 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // Public-ish profile data: the app uses authenticated (including
+    // anonymous) sessions to read profile cards. Keep sensitive fields out
+    // of this collection; store private data separately with tighter rules.
     match /biodata/{userId} {
       allow read: if request.auth != null;
       allow create, update, delete: if request.auth != null
         && request.auth.uid == userId;
     }
 
-    match /interests/{userId} {
-      allow read, write: if request.auth != null
-        && request.auth.uid == userId;
+    // A user's interest is stored as: <viewerUid>_<profileId>.
+    // The previous rule expected the document ID itself to equal the UID,
+    // which made the Like/Interest button fail with PERMISSION_DENIED.
+    match /interests/{interestId} {
+      allow create, update: if request.auth != null
+        && request.resource.data.fromUserId == request.auth.uid;
+      allow read, delete: if request.auth != null
+        && resource.data.fromUserId == request.auth.uid;
+    }
+
+    // Reports are write-only for users; Admin tooling can read them through
+    // a privileged/server-side path later. This prevents users from reading
+    // other people's reports.
+    match /reports/{reportId} {
+      allow create: if request.auth != null
+        && request.resource.data.reporterId == request.auth.uid;
+      allow read, update, delete: if false;
     }
 
     match /{document=**} {

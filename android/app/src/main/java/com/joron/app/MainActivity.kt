@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 
 class MainActivity : AppCompatActivity() {
@@ -62,7 +63,9 @@ class MainActivity : AppCompatActivity() {
                     "uid" to uid,
                     "name" to name,
                     "email" to email,
-                    "createdAt" to com.google.firebase.firestore.FieldValue.serverTimestamp()
+                    "role" to "user",
+                    "accountStatus" to "active",
+                    "createdAt" to FieldValue.serverTimestamp()
                 )
                 db.collection("users").document(uid).set(profile)
                     .addOnSuccessListener { showStatus("Account created successfully.") }

@@ -15,12 +15,7 @@ public class MainActivity extends Activity {
         WebSettings settings = web.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setDomStorageEnabled(true);
-        settings.setMediaPlaybackRequiresUserGesture(false);
         web.loadUrl(APP_URL);
         setContentView(web);
-    }
-    @Override public void onBackPressed() {
-        WebView web = (WebView) findViewById(android.R.id.content).getRootView().findViewById(android.R.id.content);
-        super.onBackPressed();
     }
 }

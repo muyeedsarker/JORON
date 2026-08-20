@@ -68,6 +68,60 @@
             android:layout_marginTop="8dp"
             android:text="Reset password" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:text="নিজের বিয়ের Biodata"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="আপনার নিজের বিয়ের প্রোফাইল তৈরি করুন — কোনো আলাদা অ্যাপ ফি নেই।"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/biodataAgeInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:hint="Age"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/biodataDistrictInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="District"
+            android:inputType="textCapWords" />
+
+        <EditText
+            android:id="@+id/biodataOccupationInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Occupation"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/biodataEducationInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Education"
+            android:inputType="text" />
+
+        <Button
+            android:id="@+id/saveBiodataButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Save my biodata" />
+
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"

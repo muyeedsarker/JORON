@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "907727989078",
+    "project_id": "joron-d7742",
+    "storage_bucket": "joron-d7742.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:907727989078:android:f6d43268d0295111fa0ef7",
+        "android_client_info": {
+          "package_name": "com.joron.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAo1qh0ylCWeyc-mXl2nV3RAer62dUQJxU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

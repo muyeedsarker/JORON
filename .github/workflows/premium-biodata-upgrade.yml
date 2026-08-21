@@ -1,0 +1,42 @@
+name: JORON Premium Biodata Upgrade
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  upgrade:
+    if: "!contains(github.event.head_commit.message, '[premium-biodata-applied]')"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Apply premium Smart Biodata presentation
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('smart-biodata.html')
+          s = p.read_text(encoding='utf-8')
+          marker = 'JORON_PREMIUM_BIODATA_V2'
+          if marker in s:
+              print('Premium Biodata V2 already present')
+          else:
+              premium_css = r'''\n<!-- JORON_PREMIUM_BIODATA_V2 -->\n<style>\n:root{--joron-emerald:#064f3d;--joron-green:#087b59;--joron-mint:#dff8ed;--joron-gold:#c7a24a;--joron-pink:#e81768}\nbody{background:radial-gradient(circle at 15% 0%,#e9fff5 0,#f7fffb 34%,#fff7fb 72%,#f5fff9 100%);}\n.top{background:linear-gradient(100deg,var(--joron-emerald),var(--joron-green) 55%,#0d6a50);letter-spacing:.15px;box-shadow:0 5px 18px #064f3d18}\n.head{border-top:0;background:rgba(255,255,255,.94);backdrop-filter:blur(14px);box-shadow:0 12px 32px #064f3d12}\n.brand img{box-shadow:0 0 0 3px #fff,0 0 0 5px #c7a24a55,0 8px 22px #064f3d20}\n.brand b{background:linear-gradient(90deg,#064f3d,#087b59);-webkit-background-clip:text;background-clip:text;color:transparent}\n.back{border:1px solid #cce9dc;border-radius:999px;padding:9px 13px;background:#f2fbf7;transition:.2s}.back:hover{transform:translateY(-1px);box-shadow:0 7px 18px #087b5918}\n.hero{position:relative;padding:34px 0 22px}.hero:before{content:'SMART • TRUSTED • PRIVATE';display:inline-block;padding:6px 11px;border:1px solid #d9c98e;border-radius:999px;color:#8a6d1f;background:#fffaf0;font-size:10px;font-weight:900;letter-spacing:1.2px;box-shadow:0 5px 15px #c7a24a14}.hero h1{margin-top:12px;color:var(--joron-emerald);text-shadow:0 1px 0 #fff}.hero p{font-size:14px}.progress{height:11px;background:#e5f3ed;border:1px solid #cde8dc;padding:2px}.bar{border-radius:20px;background:linear-gradient(90deg,var(--joron-emerald),#0fae77,var(--joron-gold))}.steps span{padding:4px 5px;border-radius:8px}.card{position:relative;border:1px solid #dcece5;border-radius:26px;background:linear-gradient(145deg,#fff 0%,#fbfffd 100%);box-shadow:0 20px 55px #064f3d0e;overflow:hidden}.card:before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--joron-green),var(--joron-gold));opacity:.85}.card h2{color:var(--joron-emerald);letter-spacing:.1px}.field label{color:#263d35}.field input,.field select,.field textarea{border-color:#d5e5df;background:#fcfffd}.field input:hover,.field select:hover,.field textarea:hover{border-color:#9ccfba}.privacy{background:linear-gradient(135deg,#effbf6,#fffdf5);border-color:#d9e8ce}.primary{background:linear-gradient(105deg,#064f3d,#087b59 55%,#c7a24a);box-shadow:0 7px 0 #064f3d;transition:.2s}.primary:hover{transform:translateY(-1px);filter:saturate(1.05)}.save{background:linear-gradient(100deg,#064f3d,#087b59);border:1px solid #c7a24a55}.notice{background:linear-gradient(135deg,#ecfbf4,#fffdf3);border-color:#cfe7d5}.premium-bio-badge{display:flex;align-items:center;justify-content:center;gap:8px;margin:12px auto 0;width:min(720px,94%);padding:9px 14px;border:1px solid #d9c98e;border-radius:14px;background:linear-gradient(135deg,#fffdf6,#f3fff9);color:#5d5129;font-size:11px;font-weight:900;letter-spacing:.35px;box-shadow:0 8px 22px #064f3d0a}.premium-bio-badge b{color:var(--joron-green)}\n@media(max-width:620px){.hero{padding:26px 0 18px}.hero h1{font-size:34px}.premium-bio-badge{font-size:10px}.back{padding:8px 10px}.card{border-radius:22px}}\n</style>\n'''
+              badge = '<div class="premium-bio-badge">✦ <b>JORON</b> Premium Biodata • Privacy-first matrimonial profile</div>\n'
+              s = s.replace('</head>', premium_css + '</head>', 1)
+              s = s.replace('<body>', '<body>\n' + badge, 1)
+              p.write_text(s, encoding='utf-8')
+
+      - name: Commit premium upgrade and remove one-time workflow
+        shell: bash
+        run: |
+          git config user.name "JORON Premium Bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add smart-biodata.html .github/workflows/premium-biodata-upgrade.yml
+          git rm .github/workflows/premium-biodata-upgrade.yml
+          git diff --cached --quiet || git commit -m "feat: premium Smart Biodata visual upgrade [premium-biodata-applied]"
+          git push

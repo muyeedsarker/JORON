@@ -4,7 +4,13 @@
     "ignore": [
       "firebase.json",
       "**/.*",
-      "**/node_modules/**"
+      "**/node_modules/**",
+      "**/*.apk",
+      "**/*.aab",
+      "**/*.exe",
+      "**/*.dll",
+      "**/*.bat",
+      "**/*.ipa"
     ],
     "rewrites": [
       {

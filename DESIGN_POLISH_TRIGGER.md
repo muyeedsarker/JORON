@@ -1,0 +1,1 @@
+Temporary trigger for the homepage visual polish workflow. This file can remain as a small project note.

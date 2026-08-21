@@ -1,0 +1,40 @@
+name: JORON Address Select Upgrade
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  upgrade:
+    if: "!contains(github.event.head_commit.message, '[address-select-applied]')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Convert address fields to select-only
+        shell: python
+        run: |
+          from pathlib import Path
+          p=Path('smart-biodata.html')
+          s=p.read_text(encoding='utf-8')
+          replacements={
+            '<input id="district">':'<select id="district"><option value="">জেলা নির্বাচন করুন</option><option>ঢাকা</option><option>গাজীপুর</option><option>নারায়ণগঞ্জ</option><option>নরসিংদী</option><option>মুন্সিগঞ্জ</option><option>মানিকগঞ্জ</option><option>মাদারীপুর</option><option>ফরিদপুর</option><option>টাঙ্গাইল</option><option>কিশোরগঞ্জ</option><option>চট্টগ্রাম</option><option>কক্সবাজার</option><option>রাজশাহী</option><option>খুলনা</option><option>বরিশাল</option><option>সিলেট</option><option>রংপুর</option><option>ময়মনসিংহ</option></select>',
+            '<input id="upazila">':'<select id="upazila"><option value="">উপজেলা / থানা নির্বাচন করুন</option></select>',
+            '<input id="area">':'<select id="area"><option value="">এলাকা / গ্রাম নির্বাচন করুন</option></select>',
+            '<input id="pdistrict">':'<select id="pdistrict"><option value="">Permanent জেলা নির্বাচন করুন</option><option>ঢাকা</option><option>গাজীপুর</option><option>নারায়ণগঞ্জ</option><option>নরসিংদী</option><option>মুন্সিগঞ্জ</option><option>মানিকগঞ্জ</option><option>মাদারীপুর</option><option>ফরিদপুর</option><option>টাঙ্গাইল</option><option>কিশোরগঞ্জ</option><option>চট্টগ্রাম</option><option>কক্সবাজার</option><option>রাজশাহী</option><option>খুলনা</option><option>বরিশাল</option><option>সিলেট</option><option>রংপুর</option><option>ময়মনসিংহ</option></select>'
+          }
+          for a,b in replacements.items():
+            s=s.replace(a,b)
+          marker='<!-- JORON_ADDRESS_SELECT_V1 -->'
+          if marker not in s:
+            js='''\n<!-- JORON_ADDRESS_SELECT_V1 -->\n<script>\nconst joronDistricts={\n"গাজীপুর":["গাজীপুর সদর","কালিয়াকৈর","কালীগঞ্জ","কাপাসিয়া","শ্রীপুর"],\n"ঢাকা":["ঢাকা সদর","সাভার","ধামরাই","দোহার","কেরানীগঞ্জ","নবাবগঞ্জ"],\n"নারায়ণগঞ্জ":["নারায়ণগঞ্জ সদর","আড়াইহাজার","রূপগঞ্জ","সোনারগাঁ"],\n"নরসিংদী":["নরসিংদী সদর","বেলাব","মনোহরদী","পলাশ","রায়পুরা","শিবপুর"],\n"চট্টগ্রাম":["চট্টগ্রাম সদর","সীতাকুণ্ড","পটিয়া","রাউজান","হাটহাজারী"],\n"রাজশাহী":["রাজশাহী সদর","বাঘা","বাগমারা","চারঘাট","পুঠিয়া"],\n"খুলনা":["খুলনা সদর","দাকোপ","ডুমুরিয়া","তেরখাদা","ফুলতলা"],\n"বরিশাল":["বরিশাল সদর","বাকেরগঞ্জ","বানারীপাড়া","গৌরনদী","মেহেন্দিগঞ্জ"],\n"সিলেট":["সিলেট সদর","বালাগঞ্জ","বিয়ানীবাজার","গোলাপগঞ্জ","জকিগঞ্জ"],\n"রংপুর":["রংপুর সদর","বদরগঞ্জ","গঙ্গাচড়া","মিঠাপুকুর","পীরগঞ্জ"],\n"ময়মনসিংহ":["ময়মনসিংহ সদর","ভালুকা","ত্রিশাল","গফরগাঁও","মুক্তাগাছা"]};\nconst d=document.getElementById('district'),u=document.getElementById('upazila'),a=document.getElementById('area');\nfunction fillUpazila(){const old=u.value;u.innerHTML='<option value="">উপজেলা / থানা নির্বাচন করুন</option>';(joronDistricts[d.value]||[]).forEach(x=>{const o=document.createElement('option');o.textContent=x;o.value=x;u.appendChild(o)});u.value=old;fillArea()}\nfunction fillArea(){const old=a.value;a.innerHTML='<option value="">এলাকা / গ্রাম নির্বাচন করুন</option>';if(u.value){['সদর এলাকা','কেন্দ্রীয় এলাকা','বাজার এলাকা','পৌর এলাকা','গ্রাম এলাকা'].forEach(x=>{const o=document.createElement('option');o.textContent=x;o.value=x;a.appendChild(o)})}a.value=old}\nd.addEventListener('change',fillUpazila);u.addEventListener('change',fillArea);fillUpazila();\n</script>\n'''
+            s=s.replace('</body>',js+'</body>',1)
+          p.write_text(s,encoding='utf-8')
+      - name: Commit and remove one-time workflow
+        shell: bash
+        run: |
+          git config user.name "JORON Premium Bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add smart-biodata.html
+          git rm .github/workflows/joron-address-select.yml
+          git diff --cached --quiet || git commit -m "feat: make Smart Biodata address select-only [address-select-applied]"
+          git push

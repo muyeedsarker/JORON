@@ -31,4 +31,7 @@ article h2{color:var(--joron-green)!important}
 .card{background:rgba(255,255,255,.92)!important;border-color:#d8ebe4!important}
 .item,.text{background:linear-gradient(135deg,#f2fbf7,#fff5f9)!important;border:1px solid #e1eee9}
 .avatar{box-shadow:0 10px 25px rgba(8,123,89,.14)}
-@media(max-width:600px){body{padding-left:10px!important;padding-right:10px!important}.signup-box{padding:26px 17px!important;margin:10px auto!important}.logo{font-size:52px!important}.signup-box h1{font-size:29px!important}.membership-grid{gap:9px!important}.step-title{font-size:17px!important}main>h1{font-size:34px!important}#results article{padding:17px!important}}
+/* Shared Master Logo for profile/list headers. */
+body:not(.logo-ignore) .brand{display:flex!important;align-items:center;gap:9px;font-size:0!important;font-family:inherit!important;color:transparent!important}
+body:not(.logo-ignore) .brand:before{content:"";display:block;width:52px;height:52px;border-radius:50%;background:url("./joron-logo.jpg") center/cover no-repeat;border:2px solid #fff;box-shadow:0 7px 20px rgba(8,123,89,.20)}
+@media(max-width:600px){body{padding-left:10px!important;padding-right:10px!important}.signup-box{padding:26px 17px!important;margin:10px auto!important}.logo{font-size:52px!important}.signup-box h1{font-size:29px!important}.membership-grid{gap:9px!important}.step-title{font-size:17px!important}main>h1{font-size:34px!important}#results article{padding:17px!important}body:not(.logo-ignore) .brand:before{width:48px;height:48px}}

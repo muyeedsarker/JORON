@@ -5,12 +5,17 @@
       "firebase.json",
       "**/.*",
       "**/node_modules/**",
+      "android/**",
+      "**/build/**",
+      "**/.gradle/**",
       "**/*.apk",
       "**/*.aab",
       "**/*.exe",
       "**/*.dll",
       "**/*.bat",
-      "**/*.ipa"
+      "**/*.ipa",
+      "**/*.jar",
+      "**/*.so"
     ],
     "rewrites": [
       {

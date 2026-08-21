@@ -1,10 +1,53 @@
 <!doctype html>
 <html lang="bn">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JORON — Smart Match</title><style>*{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans Bengali",sans-serif;background:linear-gradient(135deg,#fff5fa,#f0fff8);color:#202936}.wrap{max-width:760px;margin:auto;padding:16px}.top{text-align:center;padding:18px 8px}.brand{font:900 30px Georgia;color:#087f5b}.tag{color:#d91c62;font-weight:700}.card{background:#fff;border-radius:22px;padding:20px;margin:14px 0;box-shadow:0 12px 35px #17202a16;border:1px solid #e8eaf0}h1{font-size:26px;margin:5px 0}h2{font-size:19px;color:#075f47;margin:0 0 12px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}label{display:block;font-weight:700;margin:10px 0 6px}input,select{width:100%;padding:12px;border:1px solid #d9deea;border-radius:11px;font-size:16px;background:#fff}button{width:100%;border:0;border-radius:14px;padding:14px;margin-top:15px;font-weight:800;font-size:16px;color:#fff;background:linear-gradient(90deg,#e91e63,#087f5b);cursor:pointer}.hint{font-size:12px;color:#737b89;line-height:1.6}.result{display:none}.score{font-size:34px;font-weight:900;color:#e91e63}.reason{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #edf0f4}.ok{color:#087f5b;font-weight:800}.partial{color:#c58a00;font-weight:800}.empty{text-align:center;color:#737b89;padding:15px}.back{display:block;text-align:center;margin:15px;font-weight:700;color:#087f5b}@media(max-width:520px){.grid{grid-template-columns:1fr}.card{padding:16px}}
-</style></head>
-<body><div class="wrap"><header class="top"><div class="brand">❤️ JORON | জোড়ন</div><div class="tag">আমরা সম্পর্ক জুড়ে দিই</div></header><section class="card"><h1>❤️ আমার জন্য Match খুঁজুন</h1><p class="hint">আপনার পছন্দ অনুযায়ী প্রাথমিক compatibility দেখা যাবে। কোনো paid plan Match Score বাড়াবে না।</p><div class="grid"><div><label>লিঙ্গ</label><select id="gender"><option value="">যেকোনো</option><option>পুরুষ</option><option>নারী</option></select></div><div><label>বয়স</label><input id="age" type="number" min="18" placeholder="যেমন 28"></div><div><label>জেলা</label><input id="district" placeholder="যেমন ঢাকা"></div><div><label>শিক্ষা</label><select id="education"><option value="">যেকোনো</option><option>SSC / সমমান</option><option>HSC / সমমান</option><option>Honours / স্নাতক</option><option>Masters / স্নাতকোত্তর</option><option>Doctorate / PhD</option></select></div><div><label>পেশা</label><select id="profession"><option value="">যেকোনো</option><option>সরকারি চাকরি</option><option>বেসরকারি চাকরি</option><option>ব্যাংক</option><option>শিক্ষক</option><option>ডাক্তার</option><option>ইঞ্জিনিয়ার</option><option>ব্যবসায়ী</option><option>উদ্যোক্তা</option><option>ফ্রিল্যান্সার</option><option>প্রবাসী</option><option>শিক্ষার্থী</option><option>গৃহিণী</option></select></div><div><label>বৈবাহিক অবস্থা</label><select id="marital"><option value="">যেকোনো</option><option>অবিবাহিত</option><option>তালাকপ্রাপ্ত</option><option>বিধবা / বিপত্নীক</option></select></div></div><button id="matchBtn">❤️ Match বিশ্লেষণ করুন</button></section><section class="card result" id="result"><h2>Smart Match Result</h2><div class="score" id="score">0%</div><p id="summary" class="hint"></p><div id="reasons"></div></section><section class="card"><h2>🔐 Privacy</h2><p class="hint">Phone, email, exact address, health, income এবং child-identifying information এই search screen-এ প্রকাশ করা হয় না। বাস্তব user-to-user matching চালু হলে Firebase/Firestore security rules দিয়ে access control প্রয়োগ করতে হবে।</p></section><a class="back" href="index.html">← JORON Home</a></div><script>
-const get=id=>document.getElementById(id);function val(id){return get(id).value.trim()}
-get('matchBtn').onclick=()=>{const saved=JSON.parse(localStorage.getItem('joron_biodata')||'null');const target={gender:val('gender'),age:Number(val('age')),district:val('district').toLowerCase(),education:val('education'),profession:val('profession'),marital:val('marital')};let points=0,total=6,rows=[];
-function add(name,ok,partial=false){if(ok)points++;rows.push(`<div class="reason"><span>${name}</span><span class="${ok?'ok':partial?'partial':''}">${ok?'✅ মিল':partial?'⚠️ আংশিক':'—'}</span></div>`)}
-add('👤 লিঙ্গ',!target.gender||!saved||!saved.gender||saved.gender!==target.gender);add('🎂 বয়স',!target.age||!saved||!saved.age||Math.abs(Number(saved.age)-target.age)<=3,true);add('📍 জেলা',!target.district||!saved||!saved.district||saved.district.toLowerCase()===target.district,true);add('🎓 শিক্ষা',!target.education||!saved||!saved.education||saved.education===target.education,true);add('💼 পেশা',!target.profession||!saved||!saved.profession||saved.profession===target.profession,true);add('💍 বৈবাহিক অবস্থা',!target.marital||!saved||!saved.marital||saved.marital===target.marital,true);const pct=Math.round(points/total*100);get('score').textContent=pct+'%';get('summary').textContent=saved?'আপনার সংরক্ষিত Biodata-এর সঙ্গে নির্বাচিত পছন্দ মিলিয়ে একটি প্রাথমিক score তৈরি হয়েছে।':'Biodata সংরক্ষণ না থাকায় এটি preference-based preview score।';get('reasons').innerHTML=rows.join('');get('result').style.display='block'};
-</script></body></html>
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JORON — Smart Match</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans Bengali",sans-serif;background:linear-gradient(135deg,#fff5fa,#f0fff8);color:#202936}.wrap{max-width:760px;margin:auto;padding:16px}.top{text-align:center;padding:18px 8px}.brand{font:900 30px Georgia;color:#087f5b}.tag{color:#d91c62;font-weight:700}.card{background:#fff;border-radius:22px;padding:20px;margin:14px 0;box-shadow:0 12px 35px #17202a16;border:1px solid #e8eaf0}h1{font-size:26px;margin:5px 0}h2{font-size:19px;color:#075f47;margin:0 0 12px}.hint{font-size:12px;color:#737b89;line-height:1.6}.result{display:grid;gap:10px}.match{padding:14px;border:1px solid #e8eaf0;border-radius:14px;background:#fff}.score{font-size:28px;font-weight:900;color:#e91e63}.back{display:block;text-align:center;margin:15px;font-weight:700;color:#087f5b}@media(max-width:520px){.card{padding:16px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top"><div class="brand">❤️ JORON | জোড়ন</div><div class="tag">আমরা সম্পর্ক জুড়ে দিই</div></header>
+<section class="card"><h1>❤️ Smart Match</h1><p id="status" class="hint">Secure matching চালু হচ্ছে…</p></section>
+<section class="card"><h2>সম্ভাব্য Match</h2><div id="results" class="result"></div></section>
+<section class="card"><h2>🔐 Privacy</h2><p class="hint">শুধু অনুমোদিত Firebase user-এর matching data ব্যবহার করা হয়। Phone, email, exact address বা অন্যান্য সংবেদনশীল তথ্য এখানে দেখানো হয় না। Firestore Security Rules দিয়ে access control প্রয়োগ করতে হবে।</p></section>
+<a class="back" href="index.html">← JORON Home</a>
+</div>
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js';
+import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js';
+import { getFirestore, collection, getDocs, query, limit, getDoc, doc } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js';
+import { firebaseConfig } from './assets/firebase-config.js';
+
+const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
+const status=document.getElementById('status'),results=document.getElementById('results');
+const clean=v=>typeof v==='string'?v.trim().toLowerCase():'';
+const esc=v=>String(v??'—').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function score(me,c){
+  let s=0,w=0;
+  const checks=[['district',30],['education',20],['profession',15],['marital',15]];
+  for(const [k,weight] of checks){w+=weight;if(clean(me[k])&&clean(c[k])&&clean(me[k])===clean(c[k]))s+=weight}
+  if(Number(me.age)&&Number(c.age)){w+=20;const d=Math.abs(Number(me.age)-Number(c.age));if(d<=3)s+=20;else if(d<=7)s+=10}
+  return w?Math.round(s/w*100):0;
+}
+
+onAuthStateChanged(auth,async user=>{
+  if(!user){location.replace('login.html');return}
+  try{
+    status.textContent='Finding compatible profiles…';
+    const mineSnap=await getDoc(doc(db,'biodata',user.uid));
+    const mine=mineSnap.exists()?mineSnap.data():{};
+    const snap=await getDocs(query(collection(db,'biodata'),limit(100)));
+    const rows=[];
+    snap.forEach(d=>{if(d.id!==user.uid){const x=d.data()||{};rows.push({score:score(mine,x),age:x.age,district:x.district,education:x.education,profession:x.profession,marital:x.marital})}});
+    rows.sort((a,b)=>b.score-a.score);
+    results.innerHTML=rows.slice(0,20).map(x=>`<article class="match"><div class="score">${esc(x.score)}% Match</div><div>${esc(x.age)} · ${esc(x.district)} · ${esc(x.education)}</div><div class="hint">${esc(x.profession)} · ${esc(x.marital)}</div></article>`).join('')||'<p class="hint">এখনো কোনো compatible profile পাওয়া যায়নি।</p>';
+    status.textContent='Secure Firebase matching complete.';
+  }catch(e){console.error(e);status.textContent='Match load করা যাচ্ছে না। Firebase configuration ও Firestore Security Rules পরীক্ষা করুন।';}
+});
+</script>
+</body>
+</html>

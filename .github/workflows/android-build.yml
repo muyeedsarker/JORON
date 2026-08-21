@@ -1,17 +1,22 @@
-name: Android build
+name: JORON Android CI
 
 on:
   push:
-    branches: [ "feature/android-project", "feature/android-firebase-complete-v2" ]
+    branches:
+      - feature/android-project
+      - feature/android-firebase-complete-v2
   pull_request:
-    branches: [ "feature/android-project" ]
+    branches:
+      - feature/android-project
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
+    timeout-minutes: 20
 
     steps:
       - name: Checkout
@@ -22,18 +27,29 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
+          cache: gradle
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK components
+        run: |
+          yes | sdkmanager --licenses >/dev/null || true
+          sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0"
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.11.1'
 
-      # Build directly with the configured Gradle distribution; the repository does not require a checked-in wrapper.
       - name: Verify Android project
         run: gradle -p android tasks --all --stacktrace --no-daemon
 
       - name: Build debug APK
         run: gradle -p android assembleDebug --stacktrace --no-daemon
+
+      - name: Verify APK exists
+        run: test -s android/app/build/outputs/apk/debug/app-debug.apk
 
       - name: Upload debug APK
         uses: actions/upload-artifact@v4

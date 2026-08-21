@@ -16,7 +16,8 @@ service cloud.firestore {
       allow create, update, delete: if own(userId);
     }
 
-    // An interest document id is: senderUid_receiverUid
+    // An interest document id is: senderUid_receiverUid.
+    // Only the sender can create/delete; the recipient can accept/reject.
     match /interests/{interestId} {
       allow create: if signedIn()
         && request.resource.data.fromUserId == request.auth.uid
@@ -38,19 +39,23 @@ service cloud.firestore {
         && resource.data.fromUserId == request.auth.uid;
     }
 
-    // User settings are private. Membership activation must be server/admin controlled.
+    // Private account settings. A normal user may never grant themselves admin
+    // or activate membership; they can only submit/keep a pending payment state.
     match /users/{userId} {
       allow read: if own(userId);
       allow create: if own(userId)
         && (!request.resource.data.keys().hasAny(['membershipStatus','admin','isAdmin'])
           || request.resource.data.membershipStatus == 'pending');
       allow update: if own(userId)
-        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['membershipStatus','admin','isAdmin']);
+        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['admin','isAdmin'])
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['membershipStatus','paymentStatus'])
+          || (request.resource.data.membershipStatus == 'pending'
+            && request.resource.data.paymentStatus == 'pending'));
       allow delete: if own(userId);
     }
 
-    // Payment submissions can only be created/updated by their owner and must remain pending.
-    // Activation/approval must be performed by a trusted server/admin path.
+    // Payment submissions. Users can submit/edit only their own pending record.
+    // Approval/activation must be done by a trusted server/admin path.
     match /payments/{userId} {
       allow read: if own(userId);
       allow create: if own(userId)
@@ -65,7 +70,7 @@ service cloud.firestore {
       allow delete: if own(userId);
     }
 
-    // Participant-only chat. Conversation id is the two UIDs sorted and joined with '_'.
+    // Participant-only chat. Conversation id must contain the authenticated UID.
     match /chats/{chatId} {
       allow read, create: if signedIn()
         && chatId.matches('^' + request.auth.uid + '_.*$|^.*_' + request.auth.uid + '$');

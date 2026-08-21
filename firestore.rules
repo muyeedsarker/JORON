@@ -3,15 +3,81 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    match /biodata/{userId} {
-      allow read: if request.auth != null;
-      allow create, update, delete: if request.auth != null
-        && request.auth.uid == userId;
+    function signedIn() {
+      return request.auth != null;
     }
 
-    match /interests/{userId} {
-      allow read, write: if request.auth != null
-        && request.auth.uid == userId;
+    function own(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    match /biodata/{userId} {
+      allow read: if signedIn();
+      allow create, update, delete: if own(userId);
+    }
+
+    // An interest document id is: senderUid_receiverUid
+    match /interests/{interestId} {
+      allow create: if signedIn()
+        && request.resource.data.fromUserId == request.auth.uid
+        && request.resource.data.profileId != request.auth.uid
+        && request.resource.data.status == 'pending';
+
+      allow read: if signedIn()
+        && (resource.data.fromUserId == request.auth.uid
+          || resource.data.profileId == request.auth.uid);
+
+      allow update: if signedIn()
+        && resource.data.profileId == request.auth.uid
+        && request.resource.data.fromUserId == resource.data.fromUserId
+        && request.resource.data.profileId == resource.data.profileId
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status','updatedAt'])
+        && request.resource.data.status in ['pending','accepted','rejected'];
+
+      allow delete: if signedIn()
+        && resource.data.fromUserId == request.auth.uid;
+    }
+
+    // User settings are private. Membership activation must be server/admin controlled.
+    match /users/{userId} {
+      allow read: if own(userId);
+      allow create: if own(userId)
+        && (!request.resource.data.keys().hasAny(['membershipStatus','admin','isAdmin'])
+          || request.resource.data.membershipStatus == 'pending');
+      allow update: if own(userId)
+        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['membershipStatus','admin','isAdmin']);
+      allow delete: if own(userId);
+    }
+
+    // Payment submissions can only be created/updated by their owner and must remain pending.
+    // Activation/approval must be performed by a trusted server/admin path.
+    match /payments/{userId} {
+      allow read: if own(userId);
+      allow create: if own(userId)
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.paymentStatus == 'pending'
+        && request.resource.data.membershipStatus == 'pending';
+      allow update: if own(userId)
+        && request.resource.data.uid == resource.data.uid
+        && request.resource.data.paymentStatus == 'pending'
+        && request.resource.data.membershipStatus == 'pending'
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['senderNumber','transactionId','updatedAt']);
+      allow delete: if own(userId);
+    }
+
+    // Participant-only chat. Conversation id is the two UIDs sorted and joined with '_'.
+    match /chats/{chatId} {
+      allow read, create: if signedIn()
+        && chatId.matches('^' + request.auth.uid + '_.*$|^.*_' + request.auth.uid + '$');
+
+      match /messages/{messageId} {
+        allow read, create: if signedIn()
+          && chatId.matches('^' + request.auth.uid + '_.*$|^.*_' + request.auth.uid + '$')
+          && request.resource.data.senderId == request.auth.uid;
+        allow update, delete: if signedIn()
+          && chatId.matches('^' + request.auth.uid + '_.*$|^.*_' + request.auth.uid + '$')
+          && resource.data.senderId == request.auth.uid;
+      }
     }
 
     match /{document=**} {

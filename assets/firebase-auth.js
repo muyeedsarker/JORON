@@ -16,6 +16,15 @@ import {
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
+/* JORON universal premium visual system — visual only, no auth logic changed. */
+if (typeof document !== "undefined" && !document.querySelector("link[data-joron-premium]")) {
+  const premiumLink = document.createElement("link");
+  premiumLink.rel = "stylesheet";
+  premiumLink.href = new URL("./premium-universal.css", import.meta.url).href;
+  premiumLink.dataset.joronPremium = "true";
+  document.head.appendChild(premiumLink);
+}
+
 const firebaseConfig = {
   apiKey: "AIzaSyDWxxu3zwThJp1fuWMhXiRig3Fswt0QARA",
   authDomain: "joron-d7742.firebaseapp.com",

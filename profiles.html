@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#b20b4d">
-<title>JORON | প্রোফাইল খুঁজুন</title>
+<title>J❤️R❤️N | প্রোফাইল খুঁজুন</title>
 <style>
 :root{--pink:#b20b4d;--pink2:#e81768;--purple:#5b1a8e;--green:#087b59;--ink:#17232b;--muted:#69757b;--line:#eadfe6;--soft:#fff7fa;--shadow:0 18px 50px rgba(71,18,47,.10)}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:"Noto Sans Bengali","Hind Siliguri",system-ui,sans-serif;color:var(--ink);background:linear-gradient(135deg,#fff7fa,#fff,#f6fff9);line-height:1.65}a{text-decoration:none;color:inherit}.wrap{width:min(1180px,94%);margin:auto}
@@ -14,8 +14,8 @@
 </style>
 </head>
 <body>
-<div class="top">❤️ JORON • নিরাপদ • সম্মানজনক • Smart Search</div>
-<header class="header"><div class="wrap nav"><a class="brand" href="index.html"><img src="assets/joron-logo.jpg" alt="JORON Logo"><div><b>JORON</b><small>সম্পর্ক জুড়ে দেয় জোড়ন</small></div></a><nav class="navlinks"><a href="index.html">🏠 হোম</a><a href="matching.html">❤️ Match</a><a href="payment.html">💎 Premium</a><a href="login.html">🔒 Login</a><a class="join" href="signup.html">❤️ Profile তৈরি</a></nav></div></header>
+<div class="top">❤️ J❤️R❤️N • নিরাপদ • সম্মানজনক • Smart Search</div>
+<header class="header"><div class="wrap nav"><a class="brand" href="index.html"><img src="assets/joron-logo.jpg" alt="J❤️R❤️N Logo"><div><b>J❤️R❤️N</b><small>সম্পর্ক জুড়ে দেয় জোড়ন</small></div></a><nav class="navlinks"><a href="index.html">🏠 হোম</a><a href="matching.html">❤️ Match</a><a href="payment.html">💎 Premium</a><a href="login.html">🔒 Login</a><a class="join" href="signup.html">❤️ Profile তৈরি</a></nav></div></header>
 <main class="wrap">
 <section class="hero"><h1>আপনার জীবনসঙ্গী খুঁজুন</h1><p>নাম, বয়স, লিঙ্গ, জেলা, শিক্ষা ও পেশার মতো প্রয়োজনীয় তথ্য দিয়ে প্রোফাইল খুঁজুন। সংবেদনশীল তথ্য ডিফল্টভাবে দেখানো হবে না।</p>
 <div class="searchbox">
@@ -31,7 +31,7 @@
 <div class="summary"><div id="count" class="count">Profile লোড হচ্ছে...</div><button id="clearBtn" class="clear" type="button">↺ ফিল্টার পরিষ্কার</button></div>
 <div id="status" class="status">Profile লোড হচ্ছে...</div><section id="profiles" class="profiles"></section>
 </main>
-<footer class="footer">© JORON (জোড়ন) • বিশ্বাস • নিরাপত্তা • সম্মান • সামঞ্জস্য</footer>
+<footer class="footer">© J❤️R❤️N (জোড়ন) • বিশ্বাস • নিরাপত্তা • সম্মান • সামঞ্জস্য</footer>
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
 import{getFirestore,collection,getDocs}from"https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
@@ -42,7 +42,7 @@ const esc=v=>String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replac
 const val=(d,...keys)=>{for(const k of keys){if(d[k]!==undefined&&d[k]!==null&&String(d[k]).trim()!=="")return d[k]}return ""};
 const ageNum=d=>{const n=parseInt(String(val(d,"age")).replace(/[^0-9]/g,""),10);return Number.isFinite(n)?n:null};
 function addOptions(select,values,label){const keep=select.value;const unique=[...new Set(values.filter(Boolean).map(String))].sort((a,b)=>a.localeCompare(b,"bn"));select.innerHTML=`<option value="">${label}</option>`+unique.map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join("");if(unique.includes(keep))select.value=keep}
-function render(list){count.textContent=`${list.length}টি Profile পাওয়া গেছে`;if(!list.length){box.innerHTML='<div class="empty">💗 কোনো Profile পাওয়া যায়নি। ফিল্টার বা সার্চ পরিবর্তন করে আবার চেষ্টা করুন।</div>';return}box.innerHTML=list.map(x=>{const d=x.data,n=val(d,"name")||"JORON User",photo=val(d,"photoUrl","photoURL","profilePhoto","profileImage"),verified=val(d,"verified","isVerified");const avatar=photo?`<img src="${esc(photo)}" alt="${esc(n)}">`:esc(n.charAt(0));return `<article class="card"><div class="cardtop">${verified?'<span class="verified">✓ যাচাইকৃত</span>':''}<div class="avatar">${avatar}</div><h2>${esc(n)}</h2><p class="summaryline">${esc(val(d,"age")||"—")} বছর • ${esc(val(d,"gender")||"—")} • ${esc(val(d,"district")||"—")}</p></div><div class="body"><div class="info"><div><strong>🎓 শিক্ষা:</strong> ${esc(val(d,"education","educationLevel")||val(d,"educationSystem")||"—")}</div><div><strong>💼 পেশা:</strong> ${esc(val(d,"profession")||"—")}</div><div><strong>📍 জেলা:</strong> ${esc(val(d,"district")||"—")}</div></div><a class="view" href="profile.html?id=${encodeURIComponent(x.id)}">প্রোফাইল দেখুন →</a></div></article>`}).join("")}
+function render(list){count.textContent=`${list.length}টি Profile পাওয়া গেছে`;if(!list.length){box.innerHTML='<div class="empty">💗 কোনো Profile পাওয়া যায়নি। ফিল্টার বা সার্চ পরিবর্তন করে আবার চেষ্টা করুন।</div>';return}box.innerHTML=list.map(x=>{const d=x.data,n=val(d,"name")||"J❤️R❤️N User",photo=val(d,"photoUrl","photoURL","profilePhoto","profileImage"),verified=val(d,"verified","isVerified");const avatar=photo?`<img src="${esc(photo)}" alt="${esc(n)}">`:esc(n.charAt(0));return `<article class="card"><div class="cardtop">${verified?'<span class="verified">✓ যাচাইকৃত</span>':''}<div class="avatar">${avatar}</div><h2>${esc(n)}</h2><p class="summaryline">${esc(val(d,"age")||"—")} বছর • ${esc(val(d,"gender")||"—")} • ${esc(val(d,"district")||"—")}</p></div><div class="body"><div class="info"><div><strong>🎓 শিক্ষা:</strong> ${esc(val(d,"education","educationLevel")||val(d,"educationSystem")||"—")}</div><div><strong>💼 পেশা:</strong> ${esc(val(d,"profession")||"—")}</div><div><strong>📍 জেলা:</strong> ${esc(val(d,"district")||"—")}</div></div><a class="view" href="profile.html?id=${encodeURIComponent(x.id)}">প্রোফাইল দেখুন →</a></div></article>`}).join("")}
 function matchesAge(n,range){if(!range)return true;if(n===null)return false;if(range==="18-24")return n>=18&&n<=24;if(range==="25-29")return n>=25&&n<=29;if(range==="30-34")return n>=30&&n<=34;if(range==="35-39")return n>=35&&n<=39;if(range==="40+")return n>=40;return true}
 function apply(){const q=search.value.trim().toLowerCase(),g=gender.value,a=age.value,di=district.value,ed=education.value,p=profession.value;const list=all.filter(x=>{const d=x.data,n=ageNum(d),hay=[val(d,"name"),val(d,"district"),val(d,"profession"),val(d,"gender"),val(d,"education"),val(d,"educationSystem"),val(d,"institution")].join(" ").toLowerCase();return(!q||hay.includes(q))&&(!g||val(d,"gender")===g)&&matchesAge(n,a)&&(!di||val(d,"district")===di)&&(!ed||val(d,"educationSystem")===ed)&&(!p||val(d,"profession")===p)});render(list)}
 function clearFilters(){search.value="";gender.value="";age.value="";district.value="";education.value="";profession.value="";render(all)}

@@ -11,6 +11,11 @@ service cloud.firestore {
       return signedIn() && request.auth.uid == uid;
     }
 
+    function chatParticipant(chatId) {
+      return signedIn()
+        && chatId.matches('^' + request.auth.uid + '_.*$|^.*_' + request.auth.uid + '$');
+    }
+
     match /biodata/{userId} {
       allow read: if signedIn();
       allow create, update, delete: if own(userId);
@@ -72,16 +77,21 @@ service cloud.firestore {
 
     // Participant-only chat. Conversation id must contain the authenticated UID.
     match /chats/{chatId} {
-      allow read, create: if signedIn()
-        && chatId.matches('^' + request.auth.uid + '_.*$|^.*_' + request.auth.uid + '$');
+      allow read, create: if chatParticipant(chatId);
+      allow update, delete: if false;
 
       match /messages/{messageId} {
-        allow read, create: if signedIn()
-          && chatId.matches('^' + request.auth.uid + '_.*$|^.*_' + request.auth.uid + '$')
-          && request.resource.data.senderId == request.auth.uid;
-        allow update, delete: if signedIn()
-          && chatId.matches('^' + request.auth.uid + '_.*$|^.*_' + request.auth.uid + '$')
-          && resource.data.senderId == request.auth.uid;
+        // Messages are immutable after creation. Clients may only create a
+        // message for themselves, with a bounded text payload and the fields
+        // used by the chat contract.
+        allow read: if chatParticipant(chatId);
+        allow create: if chatParticipant(chatId)
+          && request.resource.data.senderId == request.auth.uid
+          && request.resource.data.keys().hasOnly(['senderId','text','createdAt'])
+          && request.resource.data.text is string
+          && request.resource.data.text.size() > 0
+          && request.resource.data.text.size() <= 1000;
+        allow update, delete: if false;
       }
     }
 

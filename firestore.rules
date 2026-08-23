@@ -11,7 +11,19 @@ service cloud.firestore {
       return signedIn() && request.auth.uid == uid;
     }
 
+    // Searchable/public projection. Never put sensitive biodata in this document.
     match /biodata/{userId} {
+      allow read: if signedIn();
+      allow create, update, delete: if own(userId);
+    }
+
+    // Full Smart Biodata. Owner-only access.
+    match /privateBiodata/{userId} {
+      allow read, create, update, delete: if own(userId);
+    }
+
+    // Legacy/public projection path kept for controlled future migration.
+    match /publicProfiles/{userId} {
       allow read: if signedIn();
       allow create, update, delete: if own(userId);
     }

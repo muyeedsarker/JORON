@@ -1,5 +1,5 @@
 import { db } from "./firebase-client.js";
-import { getDocs, collection, query, where, limit } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+import { collection, getDocs, limit, query, where } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
 const clean = (value) => typeof value === "string" ? value.trim().toLowerCase() : "";
 
@@ -15,9 +15,7 @@ export function calculateMatchScore(me, candidate) {
 
   for (const [key, points] of checks) {
     weight += points;
-    if (clean(me?.[key]) && clean(candidate?.[key]) && clean(me[key]) === clean(candidate[key])) {
-      score += points;
-    }
+    if (clean(me?.[key]) && clean(candidate?.[key]) && clean(me[key]) === clean(candidate[key])) score += points;
   }
 
   if (Number(me?.age) && Number(candidate?.age)) {
@@ -33,26 +31,24 @@ export function calculateMatchScore(me, candidate) {
 export async function findMatches(currentUid, myProfile, maxProfiles = 100) {
   if (!currentUid) throw new Error("Authentication required");
 
-  // Only query explicitly public projections. Firestore rules can then enforce
-  // visibility server-side instead of relying on the client to filter results.
+  // Query only the public search projection. Private profiles never enter the result set.
   const snapshot = await getDocs(
     query(collection(db, "biodata"), where("visibility", "==", "public"), limit(maxProfiles))
   );
 
-  const matches = [];
-  snapshot.forEach((item) => {
-    if (item.id === currentUid) return;
-    const profile = item.data() || {};
-    matches.push({
-      id: item.id,
-      score: calculateMatchScore(myProfile, profile),
-      age: profile.age ?? null,
-      district: profile.district ?? null,
-      education: profile.education ?? null,
-      profession: profile.profession ?? null,
-      marital: profile.marital ?? null
-    });
-  });
-
-  return matches.sort((a, b) => b.score - a.score);
+  return snapshot.docs
+    .filter((item) => item.id !== currentUid)
+    .map((item) => {
+      const profile = item.data() || {};
+      return {
+        id: item.id,
+        score: calculateMatchScore(myProfile, profile),
+        age: profile.age ?? null,
+        district: profile.district ?? null,
+        education: profile.education ?? null,
+        profession: profile.profession ?? null,
+        marital: profile.marital ?? null
+      };
+    })
+    .sort((a, b) => b.score - a.score);
 }

@@ -1,5 +1,5 @@
 import { db } from "./firebase-client.js";
-import { getDocs, collection, query, limit } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+import { getDocs, collection, query, where, limit } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
 const clean = (value) => typeof value === "string" ? value.trim().toLowerCase() : "";
 
@@ -33,9 +33,13 @@ export function calculateMatchScore(me, candidate) {
 export async function findMatches(currentUid, myProfile, maxProfiles = 100) {
   if (!currentUid) throw new Error("Authentication required");
 
-  const snapshot = await getDocs(query(collection(db, "biodata"), limit(maxProfiles)));
-  const matches = [];
+  // Only query explicitly public projections. Firestore rules can then enforce
+  // visibility server-side instead of relying on the client to filter results.
+  const snapshot = await getDocs(
+    query(collection(db, "biodata"), where("visibility", "==", "public"), limit(maxProfiles))
+  );
 
+  const matches = [];
   snapshot.forEach((item) => {
     if (item.id === currentUid) return;
     const profile = item.data() || {};

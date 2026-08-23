@@ -1,11 +1,13 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 import { firebaseConfig } from "./firebase-config.js";
+import { persistenceReady } from "./firebase-client.js";
+import { auth as sharedAuth, onAuthStateChanged } from "./firebase-client.js";
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+// Keep this module compatible with the existing page while using the shared
+// Firebase session persistence introduced for the protected-route work.
+const auth = sharedAuth || getAuth({ options: { apiKey: firebaseConfig.apiKey } });
+const db = getFirestore(auth.app || undefined);
 const form = document.getElementById("form");
 const notice = document.getElementById("notice");
 
@@ -57,9 +59,11 @@ function publicProjection(data) {
   return out;
 }
 
+await persistenceReady;
+
 onAuthStateChanged(auth, async user => {
   if (!user) {
-    location.href = "login.html?next=smart-biodata.html";
+    location.replace("login.html?next=smart-biodata.html");
     return;
   }
   try {
@@ -70,7 +74,7 @@ onAuthStateChanged(auth, async user => {
   }
 });
 
-// Private data is owner-only; the existing biodata collection remains a safe searchable projection.
+// Private data is owner-only; the public collection is a deliberately limited projection.
 form?.addEventListener("submit", async event => {
   event.preventDefault();
   event.stopImmediatePropagation();
@@ -83,7 +87,7 @@ form?.addEventListener("submit", async event => {
   const user = auth.currentUser;
   if (!user) {
     alert("আগে Login করুন।");
-    location.href = "login.html?next=smart-biodata.html";
+    location.replace("login.html?next=smart-biodata.html");
     return;
   }
 
@@ -100,9 +104,9 @@ form?.addEventListener("submit", async event => {
       { merge: true }
     );
 
-    const local = { ...data, updatedAt: Date.now() };
-    delete local.email;
-    localStorage.setItem("joronSmartBiodata", JSON.stringify(local));
+    // Do not mirror the full biodata into localStorage. Browser storage is not
+    // an appropriate place for private biodata and can outlive logout/device use.
+    localStorage.removeItem("joronSmartBiodata");
 
     if (notice) {
       notice.textContent = "❤️ আপনার Smart Biodata Firebase-এ নিরাপদভাবে সংরক্ষিত হয়েছে।";

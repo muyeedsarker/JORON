@@ -11,9 +11,10 @@ service cloud.firestore {
       return signedIn() && request.auth.uid == uid;
     }
 
-    // Searchable/public projection. Never put sensitive biodata in this document.
+    // Searchable/public projection. Only explicitly public profiles are readable.
+    // Sensitive fields must never be written into this collection.
     match /biodata/{userId} {
-      allow read: if signedIn();
+      allow read: if signedIn() && resource.data.visibility == 'public';
       allow create, update, delete: if own(userId);
     }
 
@@ -24,7 +25,7 @@ service cloud.firestore {
 
     // Legacy/public projection path kept for controlled future migration.
     match /publicProfiles/{userId} {
-      allow read: if signedIn();
+      allow read: if signedIn() && resource.data.visibility == 'public';
       allow create, update, delete: if own(userId);
     }
 

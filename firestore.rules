@@ -29,10 +29,11 @@ service cloud.firestore {
       allow create, update, delete: if own(userId);
     }
 
-    // An interest document id is: senderUid_receiverUid.
-    // Only the sender can create/delete; the recipient can accept/reject.
+    // Interest document id is senderUid_receiverUid.
+    // Only the sender can create/delete; only the recipient can respond.
     match /interests/{interestId} {
       allow create: if signedIn()
+        && interestId == request.resource.data.fromUserId + '_' + request.resource.data.profileId
         && request.resource.data.fromUserId == request.auth.uid
         && request.resource.data.profileId != request.auth.uid
         && request.resource.data.status == 'pending';
@@ -41,12 +42,15 @@ service cloud.firestore {
         && (resource.data.fromUserId == request.auth.uid
           || resource.data.profileId == request.auth.uid);
 
+      // Recipient may only move a pending interest to accepted/rejected.
+      // Sender/profile identity and all other fields are immutable from this path.
       allow update: if signedIn()
         && resource.data.profileId == request.auth.uid
+        && resource.data.status == 'pending'
         && request.resource.data.fromUserId == resource.data.fromUserId
         && request.resource.data.profileId == resource.data.profileId
         && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status','updatedAt'])
-        && request.resource.data.status in ['pending','accepted','rejected'];
+        && request.resource.data.status in ['accepted','rejected'];
 
       allow delete: if signedIn()
         && resource.data.fromUserId == request.auth.uid;
@@ -83,18 +87,14 @@ service cloud.firestore {
       allow delete: if own(userId);
     }
 
-    // Participant-only chat. Conversation id must contain the authenticated UID.
+    // Chat is still a prototype on the current UI. When real chat is enabled,
+    // access must be granted from a server-verified mutual-match boundary,
+    // not merely because a UID appears in a client-controlled chat id.
     match /chats/{chatId} {
-      allow read, create: if signedIn()
-        && chatId.matches('^' + request.auth.uid + '_.*$|^.*_' + request.auth.uid + '$');
+      allow read, create: if false;
 
       match /messages/{messageId} {
-        allow read, create: if signedIn()
-          && chatId.matches('^' + request.auth.uid + '_.*$|^.*_' + request.auth.uid + '$')
-          && request.resource.data.senderId == request.auth.uid;
-        allow update, delete: if signedIn()
-          && chatId.matches('^' + request.auth.uid + '_.*$|^.*_' + request.auth.uid + '$')
-          && resource.data.senderId == request.auth.uid;
+        allow read, create, update, delete: if false;
       }
     }
 

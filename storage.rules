@@ -1,0 +1,22 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Profile photos and other private user uploads are owner-only.
+    // Keep uploads under users/{uid}/... and never trust client-supplied uid fields.
+    match /users/{userId}/{allPaths=**} {
+      allow read, delete: if request.auth != null
+        && request.auth.uid == userId;
+
+      allow create, update: if request.auth != null
+        && request.auth.uid == userId
+        && request.resource.size < 5 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+    }
+
+    // Default deny: no other Storage path is accessible.
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

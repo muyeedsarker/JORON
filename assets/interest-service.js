@@ -1,5 +1,5 @@
 import { auth, db } from './firebase-client.js';
-import { collection, doc, getDocs, query, where, setDoc, updateDoc, deleteDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js';
+import { collection, doc, getDoc, getDocs, query, where, setDoc, updateDoc, deleteDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js';
 
 function uid() {
   const user = auth.currentUser;
@@ -10,8 +10,21 @@ function uid() {
 export async function likeProfile(profileId) {
   const fromUserId = uid();
   if (!profileId || profileId === fromUserId) throw new Error('INVALID_PROFILE');
+
   const interestId = `${fromUserId}_${profileId}`;
-  await setDoc(doc(db, 'interests', interestId), {
+  const ref = doc(db, 'interests', interestId);
+  const existing = await getDoc(ref);
+
+  // Do not silently reset an accepted/rejected interest to pending.
+  // A user can remove the existing interest first and then send a fresh one.
+  if (existing.exists()) {
+    const current = existing.data();
+    if (current.status === 'accepted') return { interestId, status: 'accepted' };
+    if (current.status === 'rejected') return { interestId, status: 'rejected' };
+    return { interestId, status: 'pending' };
+  }
+
+  await setDoc(ref, {
     fromUserId,
     profileId,
     status: 'pending',
@@ -25,6 +38,13 @@ export async function removeLike(profileId) {
   const fromUserId = uid();
   if (!profileId || profileId === fromUserId) throw new Error('INVALID_PROFILE');
   await deleteDoc(doc(db, 'interests', `${fromUserId}_${profileId}`));
+}
+
+export async function getInterestState(profileId) {
+  const fromUserId = uid();
+  if (!profileId || profileId === fromUserId) throw new Error('INVALID_PROFILE');
+  const snap = await getDoc(doc(db, 'interests', `${fromUserId}_${profileId}`));
+  return snap.exists() ? { id: snap.id, ...snap.data() } : null;
 }
 
 export async function getIncomingInterests() {

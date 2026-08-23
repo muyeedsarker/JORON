@@ -1,30 +1,20 @@
-import {
-  auth,
-  onAuthStateChanged,
-  signOut,
-  persistenceReady
-} from "./firebase-client.js";
+import { auth, onAuthStateChanged, signOut, persistenceReady } from "./firebase-client.js";
 
-const next = encodeURIComponent(
-  `${location.pathname.split("/").pop() || "index.html"}${location.search}`
-);
+const next = encodeURIComponent(`${location.pathname.split("/").pop() || "index.html"}${location.search}`);
 
 export async function requireAuth({ login = "login.html" } = {}) {
   await persistenceReady;
-
   return new Promise((resolve) => {
     let settled = false;
-
-    onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (settled) return;
       settled = true;
-
+      unsubscribe();
       if (!user) {
         location.replace(`${login}?next=${next}`);
         resolve(null);
         return;
       }
-
       resolve(user);
     });
   });

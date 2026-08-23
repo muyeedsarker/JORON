@@ -1,13 +1,6 @@
-import { getAuth } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
-import { firebaseConfig } from "./firebase-config.js";
-import { persistenceReady } from "./firebase-client.js";
-import { auth as sharedAuth, onAuthStateChanged } from "./firebase-client.js";
+import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+import { auth, db, onAuthStateChanged, persistenceReady } from "./firebase-client.js";
 
-// Keep this module compatible with the existing page while using the shared
-// Firebase session persistence introduced for the protected-route work.
-const auth = sharedAuth || getAuth({ options: { apiKey: firebaseConfig.apiKey } });
-const db = getFirestore(auth.app || undefined);
 const form = document.getElementById("form");
 const notice = document.getElementById("notice");
 
@@ -104,8 +97,7 @@ form?.addEventListener("submit", async event => {
       { merge: true }
     );
 
-    // Do not mirror the full biodata into localStorage. Browser storage is not
-    // an appropriate place for private biodata and can outlive logout/device use.
+    // Never mirror full private biodata into browser storage.
     localStorage.removeItem("joronSmartBiodata");
 
     if (notice) {

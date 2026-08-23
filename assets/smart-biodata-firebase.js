@@ -17,7 +17,7 @@ const ids = [
   "personality","about","prefAge","prefDistrict","top3","photoUrl","visibility"
 ];
 
-// Only these non-sensitive fields are published to the searchable public profile projection.
+// Public/searchable fields only. Sensitive/private fields stay in privateBiodata.
 const publicIds = [
   "name","nickname","age","gender","height","marital","division","district",
   "upazila","eduSystem","education","profession","familyType","personality","photoUrl","visibility"
@@ -63,14 +63,14 @@ onAuthStateChanged(auth, async user => {
     return;
   }
   try {
-    const snap = await getDoc(doc(db, "biodata", user.uid));
+    const snap = await getDoc(doc(db, "privateBiodata", user.uid));
     if (snap.exists()) fill(snap.data());
   } catch (error) {
     console.error("JORON Smart Biodata load failed:", error);
   }
 });
 
-// Capture the submit before the old localStorage-only handler. This makes Firestore the source of truth.
+// Private data is owner-only; the existing biodata collection remains a safe searchable projection.
 form?.addEventListener("submit", async event => {
   event.preventDefault();
   event.stopImmediatePropagation();
@@ -93,20 +93,19 @@ form?.addEventListener("submit", async event => {
   data.updatedAt = serverTimestamp();
 
   try {
-    await setDoc(doc(db, "biodata", user.uid), data, { merge: true });
+    await setDoc(doc(db, "privateBiodata", user.uid), data, { merge: true });
     await setDoc(
-      doc(db, "publicProfiles", user.uid),
+      doc(db, "biodata", user.uid),
       { ...publicProjection(data), uid: user.uid, updatedAt: serverTimestamp() },
       { merge: true }
     );
 
-    // Keep a local draft as a convenience, never as the authoritative database.
     const local = { ...data, updatedAt: Date.now() };
     delete local.email;
     localStorage.setItem("joronSmartBiodata", JSON.stringify(local));
 
     if (notice) {
-      notice.textContent = "❤️ আপনার Smart Biodata Firebase-এ সংরক্ষিত হয়েছে।";
+      notice.textContent = "❤️ আপনার Smart Biodata Firebase-এ নিরাপদভাবে সংরক্ষিত হয়েছে।";
       notice.style.display = "block";
     }
     alert("Smart Biodata সফলভাবে সংরক্ষিত হয়েছে।");

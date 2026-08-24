@@ -33,3 +33,6 @@ The frontend is being built in GitHub Pages/Firebase-compatible static pages. Re
 **শুধু বায়োডাটা নয়—আপনার জন্য উপযুক্ত মানুষ খুঁজুন।**
 
 The product roadmap prioritizes: Foundation → Registration → Smart Biodata → Previous Marriage & Child Privacy → Health & Privacy → Partner Preference → Search → Smart Match → Verification → Communication → Membership/Payment → Help Center → Admin → Ads/Marketplace → Security/Testing/Launch.
+
+## Visual QA
+The home hero visual is maintained as a lightweight, responsive 3D-style CSS component for mobile and desktop presentation.

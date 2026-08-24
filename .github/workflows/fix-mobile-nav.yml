@@ -1,0 +1,43 @@
+name: Fix mobile navigation
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  fix-mobile-nav:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Patch index navigation
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+
+          old = '<button class="icon-btn" aria-label="Menu">☰</button>'
+          new = '''<details class="mobile-menu"><summary class="icon-btn" aria-label="Menu">☰</summary><div class="mobile-menu-panel"><a href="index.html">🏠 হোম</a><a href="matching.html">❤️ Match</a><a href="profiles.html">👥 Profiles</a><a href="payment.html">💎 Premium</a><a href="login.html">🔒 Login</a><a href="signup.html">💗 Signup</a></div></details>'''
+          s = s.replace(old, new, 1)
+
+          old = '<a class="profile-btn" href="signup.html" aria-label="Profile তৈরি">♥</a>'
+          new = '<a class="profile-btn login-btn" href="login.html" aria-label="Login"><span>🔒</span><small>Login</small></a>'
+          s = s.replace(old, new, 1)
+
+          css = '''<style>.mobile-menu{position:relative;z-index:50}.mobile-menu summary{list-style:none}.mobile-menu summary::-webkit-details-marker{display:none}.mobile-menu-panel{position:absolute;top:58px;left:0;width:210px;background:#fff;border:1px solid #eadfea;border-radius:18px;padding:8px;box-shadow:0 14px 30px rgba(40,16,53,.18)}.mobile-menu-panel a{display:block;padding:12px 13px;border-radius:12px;font-weight:900;color:#30143f}.mobile-menu-panel a:hover{background:#f8efff}.login-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;line-height:1}.login-btn span{font-size:22px}.login-btn small{font:900 9px system-ui;color:#fff}@media(min-width:760px){.mobile-menu{display:none}}'''</style>'''
+          css = '''<style>.mobile-menu{position:relative;z-index:50}.mobile-menu summary{list-style:none}.mobile-menu summary::-webkit-details-marker{display:none}.mobile-menu-panel{position:absolute;top:58px;left:0;width:210px;background:#fff;border:1px solid #eadfea;border-radius:18px;padding:8px;box-shadow:0 14px 30px rgba(40,16,53,.18)}.mobile-menu-panel a{display:block;padding:12px 13px;border-radius:12px;font-weight:900;color:#30143f}.mobile-menu-panel a:hover{background:#f8efff}.login-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;line-height:1}.login-btn span{font-size:20px}.login-btn small{font:900 9px system-ui;color:#fff}@media(min-width:760px){.mobile-menu{display:none}}</style>'''
+          s = s.replace('</style></head>', css + '</style></head>', 1)
+          p.write_text(s, encoding='utf-8')
+          PY
+      - name: Commit patch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet || git commit -m "fix: mobile hamburger menu and visible login label"
+          git push

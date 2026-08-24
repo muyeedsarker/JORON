@@ -14,28 +14,38 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          ref: main
 
-      - name: Replace visible JORON branding with J❤️R❤️N
+      - name: Fix JORON header alignment and branding
         run: |
           python - <<'PY'
           from pathlib import Path
-          for p in Path('.').rglob('*.html'):
-              if '.git' in p.parts:
-                  continue
-              s = p.read_text(encoding='utf-8')
-              n = s.replace('JORON', 'J❤️R❤️N')
-              if n != s:
-                  p.write_text(n, encoding='utf-8')
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          fix = '''<style id="joron-final-header-fix">
+          .head{position:relative!important;grid-template-columns:50px minmax(0,1fr) 118px!important}
+          .brand{min-width:0!important;justify-self:center!important}
+          .relationship-btn{position:relative!important;right:auto!important;left:auto!important;justify-self:end!important;transform:none!important}
+          .relationship-btn:hover{transform:translateY(-2px)!important}
+          .brand strong{white-space:nowrap!important;display:block!important}
+          @media(max-width:760px){.head{grid-template-columns:48px minmax(0,1fr) 112px!important}.relationship-btn{justify-self:end!important}.brand{justify-self:center!important}}
+          @media(max-width:390px){.head{grid-template-columns:44px minmax(0,1fr) 100px!important}.relationship-btn{justify-self:end!important}}
+          </style>'''
+          if 'joron-final-header-fix' not in s:
+              s = s.replace('</head>', fix + '</head>')
+              p.write_text(s, encoding='utf-8')
           PY
 
-      - name: Commit branding fix
+      - name: Commit and push fix safely
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add '*.html'
+          git add index.html
           if git diff --cached --quiet; then
-            echo "No branding changes needed."
+            echo "No changes needed."
             exit 0
           fi
-          git commit -m "Update JORON branding to J❤️R❤️N"
-          git push
+          git commit -m "Fix JORON header alignment"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main

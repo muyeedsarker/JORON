@@ -31,16 +31,30 @@ jobs:
               raise SystemExit('Expected JORON brand text was not found in index.html')
 
           style = '''<style id="joron-final-brand-fix">
-          .brand{position:relative;min-width:0}
+          .head{grid-template-columns:48px minmax(0,1fr) 48px!important;align-items:center!important}
+          .brand{position:relative;min-width:0;justify-self:center!important;margin-left:auto!important;margin-right:auto!important}
           .brand div{min-width:0;text-align:center}
           .brand strong{display:block;white-space:nowrap;line-height:.95;font-family:Georgia,"Times New Roman",serif;font-weight:800;letter-spacing:1.5px;color:#64158f;text-shadow:0 2px 0 rgba(255,255,255,.9),0 5px 14px rgba(100,21,143,.18);animation:joronBrandFloat 2.8s ease-in-out infinite}
           .brand strong:after{content:"";display:block;width:76%;height:3px;margin:7px auto 0;border-radius:99px;background:linear-gradient(90deg,#64158f,#d90b62,#087b59);box-shadow:0 2px 7px rgba(100,21,143,.2)}
           .brand small{display:block;margin-top:6px;white-space:nowrap;font-family:"Noto Sans Bengali","Hind Siliguri",system-ui,sans-serif;font-size:8px!important;font-weight:900;line-height:1.1;color:#4d3b56;letter-spacing:.15px}
+          .relationship-btn{justify-self:end!important;margin-left:auto!important;margin-right:0!important;position:relative;left:auto!important;right:auto!important}
           @keyframes joronBrandFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
           .quick,.showcase,.card,.step,.cta,.trust div{background:linear-gradient(145deg,#fff 0%,#fff7fc 52%,#f3ebff 100%)}
           footer{background:linear-gradient(135deg,#281035,#64158f,#087b59)}
-          @media(max-width:560px){.head{height:88px;grid-template-columns:50px minmax(0,1fr) 50px;gap:4px}.brand{gap:4px}.brand img{width:54px;height:54px}.brand strong{font-size:25px!important;letter-spacing:1px}.brand strong:after{height:2px;margin-top:5px}.brand small{font-size:7px!important;margin-top:4px;max-width:190px;overflow:hidden;text-overflow:ellipsis}.quick{margin-top:12px;margin-bottom:12px}.hero{padding:10px 0 22px}.section{padding:28px 0}footer{margin-top:22px;padding-top:24px}}
-          @media(max-width:390px){.brand img{width:48px;height:48px}.brand strong{font-size:22px!important}.brand small{font-size:6.5px!important}}
+          @media(max-width:560px){
+            .head{height:88px!important;grid-template-columns:50px minmax(0,1fr) 50px!important;gap:4px!important}
+            .brand{gap:4px!important}
+            .brand img{width:54px;height:54px}
+            .brand strong{font-size:25px!important;letter-spacing:1px}
+            .brand strong:after{height:2px;margin-top:5px}
+            .brand small{font-size:7px!important;margin-top:4px;max-width:190px;overflow:hidden;text-overflow:ellipsis}
+            .relationship-btn{width:50px!important;min-width:50px!important;height:50px!important;justify-self:end!important}
+            .quick{margin-top:12px;margin-bottom:12px}
+            .hero{padding:10px 0 22px}
+            .section{padding:28px 0}
+            footer{margin-top:22px;padding-top:24px}
+          }
+          @media(max-width:390px){.head{grid-template-columns:46px minmax(0,1fr) 46px!important}.brand img{width:48px;height:48px}.brand strong{font-size:22px!important}.brand small{font-size:6.5px!important}.relationship-btn{width:46px!important;min-width:46px!important;height:46px!important}}
           </style>'''
           if 'id="joron-final-brand-fix"' not in s:
               s = s.replace('</head>', style + '</head>', 1)
@@ -65,5 +79,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html login.html profile.html .github/workflows/joron-final-brand-fix.yml
-          git diff --cached --quiet || git commit -m "style: finalize JORON master branding and premium pages"
+          git diff --cached --quiet || git commit -m "fix: center JORON relationship button and brand header"
           git push

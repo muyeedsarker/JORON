@@ -1,0 +1,47 @@
+name: Polish JORON brand header
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  polish:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Polish brand title and tagline
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+
+          pattern = re.compile(r'(<div class="brand">.*?<strong>)(.*?)(</strong>.*?<small>)(.*?)(</small>)', re.S)
+          replacement = r'\1J❤️R❤️N\3Connecting Hearts • Building Futures\5'
+          s, n = pattern.subn(replacement, s, count=1)
+          if n != 1:
+              raise SystemExit('Brand block not found exactly once')
+
+          css = '''<style id="joron-brand-polish">
+          .brand div{text-align:center}
+          .brand strong{display:inline-block;position:relative;padding-bottom:7px;text-shadow:0 2px 0 rgba(100,21,143,.10),0 5px 10px rgba(70,25,90,.12)}
+          .brand strong:after{content:"";position:absolute;left:8%;right:8%;bottom:1px;height:2px;border-radius:999px;background:linear-gradient(90deg,#64158f,#d90b62,#087b59);box-shadow:0 2px 5px rgba(100,21,143,.18)}
+          .brand small{display:block;margin-top:6px;font-family:system-ui,sans-serif;font-size:8px;font-weight:900;letter-spacing:.55px;color:#5b4a62;opacity:.9;text-transform:none}
+          @media(max-width:560px){.brand strong{padding-bottom:6px}.brand strong:after{height:1.5px;bottom:1px}.brand small{margin-top:5px;font-size:6.5px;letter-spacing:.35px}}
+          </style>'''
+          s = s.replace('</head>', css + '</head>', 1)
+          p.write_text(s, encoding='utf-8')
+          PY
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html .github/workflows/polish-joron-brand.yml
+          git diff --cached --quiet || git commit -m "style: polish JORON brand title and tagline"
+          git push

@@ -1,0 +1,124 @@
+name: Final JORON UI Fix
+
+on:
+  push:
+    paths:
+      - '.github/workflows/final-ui-fix.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  polish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Apply final UI fixes
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          # HOME: single-line JORON brand, balanced header, larger labeled navigation,
+          # centered trust strip, tighter lower spacing, and colorful surfaces.
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          css = r'''
+          <style id="joron-final-ui-fix">
+          /* FINAL JORON HOME POLISH */
+          body{background:radial-gradient(circle at 10% 8%,#ffe4f1 0,transparent 25%),radial-gradient(circle at 92% 18%,#e8dcff 0,transparent 24%),linear-gradient(145deg,#fff7fb 0%,#f5efff 52%,#effff8 100%)}
+          .top{justify-content:center;text-align:center}
+          .head{grid-template-columns:54px minmax(0,1fr) 118px!important}
+          .brand{min-width:0;white-space:nowrap}
+          .brand strong{white-space:nowrap!important;display:block!important;font-size:clamp(26px,7vw,36px)!important;line-height:1!important}
+          .brand small{white-space:nowrap!important;font-size:8px!important}
+          .brand:after{content:"✓"!important}
+          .relationship-btn{width:112px!important;min-width:112px!important;height:58px!important}
+          .quick{background:linear-gradient(145deg,rgba(255,255,255,.96),rgba(248,239,255,.94))!important}
+          .quick a{min-height:100px!important;background:linear-gradient(145deg,#fff,#f7efff)!important}
+          .quick .label{font-size:15px!important;font-weight:1000!important}
+          .hero-card{background:linear-gradient(135deg,#fff0f7,#eee5ff 56%,#e9fff5)!important}
+          .showcase,.card,.step,.trust div{background:linear-gradient(145deg,#fff,#faf2ff)!important}
+          .section{padding-top:26px!important;padding-bottom:26px!important}
+          footer{margin-top:10px!important}
+          @media(max-width:760px){
+            .head{grid-template-columns:48px minmax(0,1fr) 108px!important;height:84px!important}
+            .brand{gap:6px!important}
+            .brand img{width:54px!important;height:54px!important}
+            .brand strong{font-size:clamp(24px,7.2vw,31px)!important}
+            .brand small{font-size:7px!important}
+            .relationship-btn{width:102px!important;min-width:102px!important;height:54px!important}
+            .relationship-btn small{font-size:9px!important}
+            .quick{margin-top:10px!important}
+            .quick a{min-height:88px!important}
+          }
+          @media(max-width:390px){
+            .head{grid-template-columns:44px minmax(0,1fr) 96px!important}
+            .brand img{width:50px!important;height:50px!important}
+            .brand strong{font-size:25px!important}
+            .brand small{font-size:6.5px!important}
+            .relationship-btn{width:92px!important;min-width:92px!important;height:50px!important}
+          }
+          </style>
+          '''
+          if 'joron-final-ui-fix' not in s:
+              s = s.replace('</head>', css + '</head>')
+          p.write_text(s, encoding='utf-8')
+
+          # LOGIN: make the navigation explicit so Home and Relationship never appear icon-only.
+          p = Path('login.html')
+          s = p.read_text(encoding='utf-8')
+          old = '<nav class="navlinks"><a href="index.html">🏠 হোম</a><a href="matching.html">❤️ Smart Match</a><a class="active" href="login.html">🔐 লগইন</a></nav>'
+          new = '<nav class="navlinks"><a href="index.html">🏠 হোম</a><a href="matching.html">❤️ সম্পর্ক</a><a class="active" href="login.html">🔐 লগইন</a></nav>'
+          s = s.replace(old, new)
+          css = r'''
+          <style id="joron-login-final-ui-fix">
+          body{background:radial-gradient(circle at 8% 10%,#ffe0ed 0,transparent 28%),radial-gradient(circle at 92% 78%,#e0d6ff 0,transparent 30%),linear-gradient(135deg,#fff4f9,#f3ebff 52%,#e9fff6)!important}
+          .navlinks a{min-width:86px;text-align:center}
+          @media(max-width:560px){.navlinks{grid-template-columns:repeat(3,1fr)!important}.navlinks a{font-size:13px!important;padding:11px 4px!important}}
+          </style>
+          '''
+          if 'joron-login-final-ui-fix' not in s:
+              s = s.replace('</head>', css + '</head>')
+          p.write_text(s, encoding='utf-8')
+
+          # PROFILE: replace the plain white visual with a premium colorful profile surface.
+          p = Path('profile.html')
+          s = p.read_text(encoding='utf-8')
+          css = r'''
+          <style id="joron-profile-final-ui-fix">
+          body{padding:14px;background:radial-gradient(circle at 8% 8%,#ffdce9 0,transparent 25%),radial-gradient(circle at 92% 25%,#ddd2ff 0,transparent 27%),radial-gradient(circle at 50% 100%,#dffbed 0,transparent 35%),linear-gradient(145deg,#fff0f7,#f1eaff 52%,#eafff5);font-family:"Noto Sans Bengali","Hind Siliguri",system-ui,sans-serif}
+          .profile{background:linear-gradient(145deg,rgba(255,255,255,.94),rgba(250,241,255,.96));border:2px solid rgba(100,21,143,.12);box-shadow:0 20px 60px rgba(80,25,100,.16)}
+          .top{background:linear-gradient(135deg,#64158f,#d90b62 52%,#087b59);padding:38px 20px}
+          .avatar{background:linear-gradient(145deg,#fff,#f9eaff);color:#64158f;border:5px solid rgba(255,255,255,.75);box-shadow:0 12px 30px rgba(45,10,70,.22)}
+          .verified{background:linear-gradient(90deg,rgba(255,255,255,.24),rgba(255,255,255,.12));border:1px solid rgba(255,255,255,.3)}
+          .content{background:linear-gradient(180deg,rgba(255,255,255,.72),rgba(248,239,255,.72));padding:26px}
+          .section{margin-bottom:22px}
+          .section h2{color:#64158f;border-bottom:2px solid #ead7f2}
+          .info{gap:11px}
+          .item,.text{background:linear-gradient(145deg,#fff,#f8efff);border:1px solid #eadcf0;box-shadow:0 7px 18px rgba(70,25,90,.06)}
+          .item strong{color:#087b59}
+          .primary{background:linear-gradient(105deg,#d90b62,#7620ad,#087b59)!important;box-shadow:0 10px 24px rgba(100,21,143,.2)}
+          .secondary{border-color:#64158f!important;color:#64158f!important;background:#fff!important}
+          .loading{background:linear-gradient(145deg,#fff0f7,#eee4ff);color:#64158f;border-radius:18px;margin:10px}
+          .error{background:linear-gradient(145deg,#fff0f7,#eee4ff);border-radius:18px;margin:10px;color:#8b174e}
+          @media(max-width:600px){body{padding:8px}.profile{border-radius:20px}.content{padding:18px}.top{padding:30px 15px}.avatar{width:92px;height:92px;font-size:38px}.top h1{font-size:27px}.item{padding:13px}.text{padding:15px}}
+          </style>
+          '''
+          if 'joron-profile-final-ui-fix' not in s:
+              s = s.replace('</head>', css + '</head>')
+          p.write_text(s, encoding='utf-8')
+          PY
+
+      - name: Commit final UI fixes
+        run: |
+          git config user.name "JORON UI Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html login.html profile.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Final JORON UI polish for home login and profile"
+          git push

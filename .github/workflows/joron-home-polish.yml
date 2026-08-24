@@ -1,0 +1,35 @@
+name: Polish JORON Home Page
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - '.github/workflows/joron-home-polish.yml'
+permissions:
+  contents: write
+jobs:
+  polish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Polish mobile home layout
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          if 'id="joron-home-polish-v2"' in s:
+              print('Already polished')
+              raise SystemExit(0)
+          s=s.replace('<div class="top">❤️ বিশ্বাস • নিরাপত্তা • সম্মান &nbsp; | &nbsp; 🇧🇩 Bangladesh-first • 🔐 Privacy-first</div>', '<div class="top"><span>❤️ বিশ্বাস</span><b>•</b><span>🤝 সম্মান</span><b>•</b><span>💞 সম্পর্ক</span><em>🇧🇩 Bangladesh-first</em><em>🔐 Privacy-first</em></div>')
+          s=s.replace('<style id="joron-premium-header">', '<style id="joron-home-polish-v2">\n/* Final mobile polish: balanced header, visible labels, verified master logo, tighter footer */\n.top{display:flex;align-items:center;justify-content:center;gap:7px;flex-wrap:wrap;min-height:32px;padding:7px 10px;font-size:12px}.top b{opacity:.7}.top em{font-style:normal;font-size:9px;font-weight:800;opacity:.92;margin-left:4px}.head{grid-template-columns:62px minmax(0,1fr) 118px}.brand{position:relative;gap:10px}.brand:after{content:"✓";position:absolute;left:42px;bottom:7px;width:19px;height:19px;border-radius:50%;display:grid;place-items:center;background:#087b59;color:#fff;border:3px solid #fff;font:bold 11px system-ui;box-shadow:0 4px 9px rgba(8,123,89,.28);z-index:5}.brand img{border:3px solid #fff;box-shadow:0 0 0 2px rgba(100,21,143,.16),0 8px 18px rgba(70,25,90,.14)}.relationship-btn{width:112px!important;min-width:112px!important;height:58px!important;border-radius:18px!important}.relationship-btn small{font-size:10px!important}.relationship-icon{font-size:25px!important}.quick{margin-top:14px;padding:12px}.quick-grid{gap:12px}.quick a{min-height:102px;border-radius:22px}.quick .ico{font-size:34px}.quick .label{font-size:15px;font-weight:1000}.hero{padding:12px 0 28px}.hero-card{padding:30px 20px}.trust{margin:12px 0}.showcase{margin:16px 0}.section{padding:30px 0}.cta{padding:28px 18px}.showcase{min-height:0}footer{margin-top:20px;padding-top:24px}\n@media(max-width:760px){.head{height:88px;grid-template-columns:50px minmax(0,1fr) 112px;gap:8px}.brand{gap:7px}.brand img{width:56px;height:56px}.brand strong{font-size:30px}.brand small{font-size:7.5px}.brand:after{left:39px;bottom:7px;width:18px;height:18px}.relationship-btn{width:106px!important;min-width:106px!important;height:56px!important}.relationship-btn small{font-size:9px!important}.quick-grid{grid-template-columns:repeat(3,1fr);gap:10px}.quick a{min-height:92px}.quick .ico{font-size:31px}.quick .label{font-size:14px}.top em{display:none}.hero{padding-bottom:20px}.hero-card{padding:27px 17px}.trust{gap:7px}.trust div{padding:9px 4px}.showcase{padding:12px}.section{padding:27px 0}.cta{padding:25px 16px}footer{margin-top:12px;padding-top:22px}}\n@media(max-width:390px){.head{grid-template-columns:46px minmax(0,1fr) 100px}.brand img{width:52px;height:52px}.brand strong{font-size:26px}.brand small{font-size:6.5px}.relationship-btn{width:96px!important;min-width:96px!important;height:52px!important}.relationship-btn small{font-size:8px!important}.quick{padding:9px}.quick-grid{gap:8px}.quick a{min-height:86px;border-radius:19px}.quick .ico{font-size:28px}.quick .label{font-size:12px}.hero-card{padding:24px 15px}.showcase{padding:10px}.section{padding:24px 0}footer{margin-top:8px}}\n</style><style id="joron-premium-header">')
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Commit polished home page
+        run: |
+          git config user.name 'JORON Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m 'fix: polish JORON home layout and master logo'
+          git push

@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Repair malformed header style markup
+      - name: Repair header and upgrade hero visual
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -24,12 +24,32 @@ jobs:
           s = p.read_text(encoding='utf-8')
           s = s.replace('<style>\n.mobile-menu{', '.mobile-menu{', 1)
           s = s.replace('</style></style></head>', '</style></head>', 1)
+          css = '''.heart-art{min-height:250px;border-radius:28px;background:radial-gradient(circle at 50% 42%,rgba(255,255,255,.95) 0 12%,transparent 36%),radial-gradient(circle at 50% 60%,rgba(217,11,98,.18),transparent 58%),linear-gradient(145deg,#fff1f7 0%,#eee3ff 52%,#e4fff5 100%);display:grid;place-items:center;position:relative;overflow:hidden;isolation:isolate}.heart-art:before{content:"";position:absolute;width:220px;height:220px;border-radius:50%;border:1px solid rgba(100,21,143,.14);box-shadow:0 0 0 18px rgba(217,11,98,.035),0 0 0 36px rgba(100,21,143,.025);animation:joronPulse 3.8s ease-in-out infinite}.heart-art:after{content:"";position:absolute;width:92px;height:92px;border-radius:50%;background:rgba(255,255,255,.55);filter:blur(24px);transform:translateY(-18px);z-index:0}.heart-art .heart{font-size:0;width:132px;height:118px;position:relative;z-index:2;transform:rotate(-45deg);border-radius:18px 0 18px 0;background:linear-gradient(145deg,#ff6a9d 0%,#e5166f 38%,#9b1ac5 72%,#5b177f 100%);box-shadow:-10px 14px 24px rgba(83,17,100,.25),inset 12px 10px 18px rgba(255,255,255,.34),inset -14px -14px 22px rgba(50,8,70,.24);filter:drop-shadow(0 20px 18px rgba(105,20,125,.22));animation:joronFloat 3.8s ease-in-out infinite}.heart-art .heart:before,.heart-art .heart:after{content:"";position:absolute;width:132px;height:118px;border-radius:50%;background:inherit;box-shadow:inherit}.heart-art .heart:before{top:-62px;left:0}.heart-art .heart:after{top:0;left:62px}.heart-art .heart span{display:block;position:absolute;z-index:4;width:42px;height:20px;border-radius:50%;background:linear-gradient(90deg,rgba(255,255,255,.72),rgba(255,255,255,0));filter:blur(1px);transform:rotate(45deg);top:8px;left:24px}.heart-art .heart i{display:block;position:absolute;z-index:4;width:9px;height:9px;border-radius:50%;background:#fff;opacity:.8;top:30px;left:36px;box-shadow:18px 12px 0 rgba(255,255,255,.42);transform:rotate(45deg)}@keyframes joronFloat{0%,100%{transform:rotate(-45deg) translateY(0)}50%{transform:rotate(-45deg) translateY(-9px)}}@keyframes joronPulse{0%,100%{transform:scale(.94);opacity:.65}50%{transform:scale(1.04);opacity:1}}@media(max-width:560px){.heart-art{min-height:210px;border-radius:24px}.heart-art:before{width:180px;height:180px}.heart-art .heart{width:108px;height:96px}.heart-art .heart:before,.heart-art .heart:after{width:108px;height:96px}.heart-art .heart:before{top:-50px}.heart-art .heart:after{left:50px}.heart-art .heart span{width:34px;height:16px;top:7px;left:20px}.heart-art .heart i{width:7px;height:7px;top:25px;left:30px}}'''
+          start = s.find('.heart-art{')
+          end = s.find('.showcase h3{', start)
+          if start != -1 and end != -1:
+              s = s[:start] + css + s[end:]
+          marker = '<div class="heart-art"><div class="heart">'
+          if marker in s and '<span></span><i></i>' not in s:
+              s = s.replace(marker, marker + '<span></span><i></i>', 1)
           p.write_text(s, encoding='utf-8')
           PY
-      - name: Commit repair
+      - name: Validate and commit
         run: |
+          python - <<'PY'
+          from pathlib import Path
+          s = Path('index.html').read_text(encoding='utf-8')
+          assert '</style></style>' not in s
+          assert '.heart-art:before' in s
+          assert '.heart-art .heart:before' in s
+          print('Hero visual validation passed')
+          PY
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git diff --cached --quiet || git commit -m "fix: repair malformed header style markup"
+          if git diff --cached --quiet; then
+            echo "No changes needed."
+            exit 0
+          fi
+          git commit -m "feat: upgrade hero visual to professional 3D heart"
           git push

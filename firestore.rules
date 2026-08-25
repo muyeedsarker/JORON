@@ -28,11 +28,12 @@ service cloud.firestore {
       allow delete: if own(userId);
     }
     match /chats/{chatId} {
-      allow read, create: if signedIn() && chatId.matches('^' + request.auth.uid + '_.*$|^.*_' + request.auth.uid + '$');
+      allow create: if signedIn() && request.resource.data.participants is list && request.resource.data.participants.size() == 2 && request.auth.uid in request.resource.data.participants;
+      allow read, update: if signedIn() && resource.data.participants is list && request.auth.uid in resource.data.participants;
       match /messages/{messageId} {
-        allow read: if signedIn() && chatId.matches('^' + request.auth.uid + '_.*$|^.*_' + request.auth.uid + '$');
-        allow create: if signedIn() && chatId.matches('^' + request.auth.uid + '_.*$|^.*_' + request.auth.uid + '$') && request.resource.data.senderId == request.auth.uid;
-        allow update, delete: if signedIn() && chatId.matches('^' + request.auth.uid + '_.*$|^.*_' + request.auth.uid + '$') && resource.data.senderId == request.auth.uid;
+        allow read: if signedIn() && get(/databases/$(database)/documents/chats/$(chatId)).data.participants is list && request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.participants;
+        allow create: if signedIn() && request.resource.data.senderId == request.auth.uid && get(/databases/$(database)/documents/chats/$(chatId)).data.participants is list && request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.participants;
+        allow update, delete: if signedIn() && resource.data.senderId == request.auth.uid && get(/databases/$(database)/documents/chats/$(chatId)).data.participants is list && request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.participants;
       }
     }
     match /blocks/{blockId} {
@@ -43,10 +44,7 @@ service cloud.firestore {
       allow create: if signedIn() && request.resource.data.reporterId == request.auth.uid && request.resource.data.reportedId != request.auth.uid && request.resource.data.status == 'pending';
       allow read: if signedIn() && resource.data.reporterId == request.auth.uid;
     }
-    match /verificationRequests/{userId} {
-      allow read, create, update: if own(userId);
-      allow delete: if own(userId);
-    }
+    match /verificationRequests/{userId} { allow read, create, update: if own(userId); allow delete: if own(userId); }
     match /{document=**} { allow read, write: if false; }
   }
 }

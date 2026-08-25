@@ -1,2 +1,168 @@
 <!doctype html>
-<html lang="bn"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>J❤️R❤️N | Biodata</title></head><body><main><h1>J❤️R❤️N</h1><p>আপনার Biodata সম্পূর্ণ করুন</p><form id="biodataForm"><input id="name" required placeholder="পূর্ণ নাম"><input id="age" type="number" min="18" max="100" required placeholder="বয়স"><select id="gender" required><option value="">লিঙ্গ নির্বাচন করুন</option><option value="male">পুরুষ</option><option value="female">নারী</option></select><input id="district" required placeholder="জেলা"><input id="profession" placeholder="পেশা"><input id="phone" type="tel" pattern="01[0-9]{9}" placeholder="মোবাইল"><input id="educationSystem" placeholder="শিক্ষাব্যবস্থা"><input id="education" placeholder="শিক্ষাগত যোগ্যতা"><input id="institution" placeholder="প্রতিষ্ঠান"><input id="subject" placeholder="বিভাগ / বিষয়"><input id="passingYear" type="number" placeholder="পাশের সন"><textarea id="about" placeholder="নিজের সম্পর্কে"></textarea><textarea id="partner" placeholder="জীবনসঙ্গীর পছন্দ"></textarea><button id="saveButton" type="submit">💾 Biodata সংরক্ষণ করুন</button><p id="status"></p></form></main><script type="module">import{auth,db,persistenceReady}from"./assets/firebase-client.js";import{onAuthStateChanged}from"https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";import{doc,getDoc,setDoc,serverTimestamp}from"https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";const form=document.getElementById("biodataForm"),status=document.getElementById("status"),button=document.getElementById("saveButton");const ids=["name","age","gender","district","profession","phone","educationSystem","education","institution","subject","passingYear","about","partner"];let currentUser=null;const set=(id,v)=>document.getElementById(id).value=v??"";async function loadUser(user){currentUser=user;const snap=await getDoc(doc(db,"users",user.uid));if(snap.exists()){const d=snap.data();set("name",d.name);set("gender",d.gender);set("phone",d.phone)}}await persistenceReady;onAuthStateChanged(auth,user=>{if(!user){status.textContent="আগে Login করুন।";form.style.display="none";return}form.style.display="block";loadUser(user)});form.addEventListener("submit",async e=>{e.preventDefault();if(!currentUser)return;button.disabled=true;status.textContent="Biodata সংরক্ষণ হচ্ছে...";const d={};ids.forEach(id=>d[id]=document.getElementById(id).value.trim());d.age=Number(d.age);d.passingYear=d.passingYear?Number(d.passingYear):null;d.uid=currentUser.uid;d.email=currentUser.email||"";d.visibility="public";d.updatedAt=serverTimestamp();try{const ref=doc(db,"biodata",currentUser.uid),old=await getDoc(ref);await setDoc(ref,{...d,createdAt:old.exists()?old.data().createdAt:serverTimestamp()},{merge:true});await setDoc(doc(db,"users",currentUser.uid),{name:d.name,phone:d.phone,gender:d.gender,profileCompleted:true,updatedAt:serverTimestamp()},{merge:true});status.textContent="✅ Biodata সফলভাবে সংরক্ষণ হয়েছে।";setTimeout(()=>location.href="profile.html?id="+encodeURIComponent(currentUser.uid),700)}catch(err){console.error(err);status.textContent="Biodata সংরক্ষণ করা যায়নি।";button.disabled=false}});</script></body></html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>J❤️R❤️N | Biodata</title>
+</head>
+<body>
+  <main>
+    <h1>J❤️R❤️N</h1>
+    <p>আপনার Biodata সম্পূর্ণ করুন বা আপডেট করুন</p>
+
+    <form id="biodataForm">
+      <input id="name" required placeholder="পূর্ণ নাম">
+      <input id="age" type="number" min="18" max="100" required placeholder="বয়স">
+      <select id="gender" required>
+        <option value="">লিঙ্গ নির্বাচন করুন</option>
+        <option value="male">পুরুষ</option>
+        <option value="female">নারী</option>
+      </select>
+      <input id="district" required placeholder="জেলা">
+      <input id="profession" placeholder="পেশা">
+      <input id="phone" type="tel" pattern="01[0-9]{9}" placeholder="মোবাইল">
+      <input id="educationSystem" placeholder="শিক্ষাব্যবস্থা">
+      <input id="education" placeholder="শিক্ষাগত যোগ্যতা">
+      <input id="institution" placeholder="প্রতিষ্ঠান">
+      <input id="subject" placeholder="বিভাগ / বিষয়">
+      <input id="passingYear" type="number" placeholder="পাশের সন">
+      <textarea id="about" placeholder="নিজের সম্পর্কে"></textarea>
+      <textarea id="partner" placeholder="জীবনসঙ্গীর পছন্দ"></textarea>
+      <button id="saveButton" type="submit">💾 Biodata সংরক্ষণ করুন</button>
+      <p id="status"></p>
+    </form>
+  </main>
+
+  <script type="module">
+    import { auth, db, persistenceReady } from "./assets/firebase-client.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+    import {
+      doc,
+      getDoc,
+      setDoc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+    const form = document.getElementById("biodataForm");
+    const status = document.getElementById("status");
+    const button = document.getElementById("saveButton");
+
+    const ids = [
+      "name", "age", "gender", "district", "profession", "phone",
+      "educationSystem", "education", "institution", "subject",
+      "passingYear", "about", "partner"
+    ];
+
+    let currentUser = null;
+
+    function setField(id, value) {
+      document.getElementById(id).value = value ?? "";
+    }
+
+    function setFormData(data) {
+      ids.forEach(id => setField(id, data?.[id]));
+    }
+
+    async function loadBiodata(user) {
+      const ref = doc(db, "biodata", user.uid);
+      const snap = await getDoc(ref);
+
+      if (snap.exists()) {
+        setFormData(snap.data());
+        status.textContent = "✏️ আপনার আগের Biodata পাওয়া গেছে। প্রয়োজনমতো পরিবর্তন করে সংরক্ষণ করুন।";
+        button.textContent = "💾 Biodata আপডেট করুন";
+      } else {
+        status.textContent = "নতুন Biodata তৈরি করুন।";
+        button.textContent = "💾 Biodata সংরক্ষণ করুন";
+      }
+    }
+
+    await persistenceReady;
+
+    onAuthStateChanged(auth, async user => {
+      if (!user) {
+        currentUser = null;
+        form.style.display = "none";
+        status.textContent = "আগে Login করুন।";
+        return;
+      }
+
+      currentUser = user;
+      form.style.display = "block";
+
+      try {
+        await loadBiodata(user);
+      } catch (err) {
+        console.error(err);
+        status.textContent = "Biodata লোড করা যায়নি। Firestore permission পরীক্ষা করুন।";
+      }
+    });
+
+    form.addEventListener("submit", async e => {
+      e.preventDefault();
+
+      if (!currentUser) {
+        status.textContent = "আগে Login করুন।";
+        return;
+      }
+
+      button.disabled = true;
+      status.textContent = "Biodata সংরক্ষণ হচ্ছে...";
+
+      const data = {};
+      ids.forEach(id => {
+        data[id] = document.getElementById(id).value.trim();
+      });
+
+      data.age = Number(data.age);
+      data.passingYear = data.passingYear ? Number(data.passingYear) : null;
+      data.uid = currentUser.uid;
+      data.email = currentUser.email || "";
+      data.visibility = "public";
+      data.updatedAt = serverTimestamp();
+
+      try {
+        const ref = doc(db, "biodata", currentUser.uid);
+        const old = await getDoc(ref);
+
+        await setDoc(
+          ref,
+          {
+            ...data,
+            createdAt: old.exists() && old.data().createdAt
+              ? old.data().createdAt
+              : serverTimestamp()
+          },
+          { merge: true }
+        );
+
+        await setDoc(
+          doc(db, "users", currentUser.uid),
+          {
+            name: data.name,
+            phone: data.phone,
+            gender: data.gender,
+            profileCompleted: true,
+            updatedAt: serverTimestamp()
+          },
+          { merge: true }
+        );
+
+        status.textContent = old.exists()
+          ? "✅ Biodata সফলভাবে আপডেট হয়েছে।"
+          : "✅ Biodata সফলভাবে সংরক্ষণ হয়েছে।";
+        button.textContent = "💾 Biodata আপডেট করুন";
+        button.disabled = false;
+
+        setTimeout(() => {
+          location.href = "profile.html?id=" + encodeURIComponent(currentUser.uid);
+        }, 700);
+      } catch (err) {
+        console.error(err);
+        status.textContent = "❌ Biodata সংরক্ষণ করা যায়নি। Firestore rules/permission পরীক্ষা করুন।";
+        button.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

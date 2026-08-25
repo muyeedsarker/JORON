@@ -8,10 +8,7 @@ service cloud.firestore {
       allow create, update, delete: if own(userId);
     }
     match /privateBiodata/{userId} { allow read, create, update, delete: if own(userId); }
-    match /publicProfiles/{userId} {
-      allow read: if signedIn() && resource.data.visibility == 'public';
-      allow create, update, delete: if own(userId);
-    }
+    match /publicProfiles/{userId} { allow read: if signedIn() && resource.data.visibility == 'public'; allow create, update, delete: if own(userId); }
     match /interests/{interestId} {
       allow create: if signedIn() && request.resource.data.fromUserId == request.auth.uid && request.resource.data.profileId != request.auth.uid && request.resource.data.status == 'pending';
       allow read: if signedIn() && (resource.data.fromUserId == request.auth.uid || resource.data.profileId == request.auth.uid);
@@ -37,6 +34,18 @@ service cloud.firestore {
         allow create: if signedIn() && chatId.matches('^' + request.auth.uid + '_.*$|^.*_' + request.auth.uid + '$') && request.resource.data.senderId == request.auth.uid;
         allow update, delete: if signedIn() && chatId.matches('^' + request.auth.uid + '_.*$|^.*_' + request.auth.uid + '$') && resource.data.senderId == request.auth.uid;
       }
+    }
+    match /blocks/{blockId} {
+      allow create: if signedIn() && request.resource.data.blockerId == request.auth.uid && request.resource.data.blockedId != request.auth.uid;
+      allow read, delete: if signedIn() && resource.data.blockerId == request.auth.uid;
+    }
+    match /reports/{reportId} {
+      allow create: if signedIn() && request.resource.data.reporterId == request.auth.uid && request.resource.data.reportedId != request.auth.uid && request.resource.data.status == 'pending';
+      allow read: if signedIn() && resource.data.reporterId == request.auth.uid;
+    }
+    match /verificationRequests/{userId} {
+      allow read, create, update: if own(userId);
+      allow delete: if own(userId);
     }
     match /{document=**} { allow read, write: if false; }
   }

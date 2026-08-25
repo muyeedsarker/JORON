@@ -1,105 +1,43 @@
 rules_version = '2';
-
 service cloud.firestore {
   match /databases/{database}/documents {
-
-    function signedIn() {
-      return request.auth != null;
-    }
-
-    function own(uid) {
-      return signedIn() && request.auth.uid == uid;
-    }
-
-    // Searchable/public projection. Only explicitly public profiles are readable.
-    // Sensitive fields must never be written into this collection.
+    function signedIn(){ return request.auth != null; }
+    function own(uid){ return signedIn() && request.auth.uid == uid; }
     match /biodata/{userId} {
       allow read: if signedIn() && resource.data.visibility == 'public';
       allow create, update, delete: if own(userId);
     }
-
-    // Full Smart Biodata. Owner-only access.
-    match /privateBiodata/{userId} {
-      allow read, create, update, delete: if own(userId);
-    }
-
-    // Legacy/public projection path kept for controlled future migration.
+    match /privateBiodata/{userId} { allow read, create, update, delete: if own(userId); }
     match /publicProfiles/{userId} {
       allow read: if signedIn() && resource.data.visibility == 'public';
       allow create, update, delete: if own(userId);
     }
-
-    // An interest document id is: senderUid_receiverUid.
-    // Only the sender can create/delete; the recipient can accept/reject.
     match /interests/{interestId} {
-      allow create: if signedIn()
-        && request.resource.data.fromUserId == request.auth.uid
-        && request.resource.data.profileId != request.auth.uid
-        && request.resource.data.status == 'pending';
-
-      allow read: if signedIn()
-        && (resource.data.fromUserId == request.auth.uid
-          || resource.data.profileId == request.auth.uid);
-
-      allow update: if signedIn()
-        && resource.data.profileId == request.auth.uid
-        && request.resource.data.fromUserId == resource.data.fromUserId
-        && request.resource.data.profileId == resource.data.profileId
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status','updatedAt'])
-        && request.resource.data.status in ['pending','accepted','rejected'];
-
-      allow delete: if signedIn()
-        && resource.data.fromUserId == request.auth.uid;
+      allow create: if signedIn() && request.resource.data.fromUserId == request.auth.uid && request.resource.data.profileId != request.auth.uid && request.resource.data.status == 'pending';
+      allow read: if signedIn() && (resource.data.fromUserId == request.auth.uid || resource.data.profileId == request.auth.uid);
+      allow update: if signedIn() && resource.data.profileId == request.auth.uid && request.resource.data.fromUserId == resource.data.fromUserId && request.resource.data.profileId == resource.data.profileId && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status','updatedAt']) && request.resource.data.status in ['pending','accepted','rejected'];
+      allow delete: if signedIn() && resource.data.fromUserId == request.auth.uid;
     }
-
-    // Private account settings. A normal user may never grant themselves admin
-    // or activate membership; they can only submit/keep a pending payment state.
     match /users/{userId} {
       allow read: if own(userId);
-      allow create: if own(userId)
-        && (!request.resource.data.keys().hasAny(['membershipStatus','admin','isAdmin'])
-          || request.resource.data.membershipStatus == 'pending');
-      allow update: if own(userId)
-        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['admin','isAdmin'])
-        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['membershipStatus','paymentStatus'])
-          || (request.resource.data.membershipStatus == 'pending'
-            && request.resource.data.paymentStatus == 'pending'));
+      allow create: if own(userId) && (!request.resource.data.keys().hasAny(['membershipStatus','admin','isAdmin']) || request.resource.data.membershipStatus == 'pending');
+      allow update: if own(userId) && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['admin','isAdmin']) && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['membershipStatus','paymentStatus']) || (request.resource.data.membershipStatus == 'pending' && request.resource.data.paymentStatus == 'pending'));
       allow delete: if own(userId);
     }
-
-    // Payment submissions. Users can submit/edit only their own pending record.
-    // Approval/activation must be done by a trusted server/admin path.
     match /payments/{userId} {
       allow read: if own(userId);
-      allow create: if own(userId)
-        && request.resource.data.uid == request.auth.uid
-        && request.resource.data.paymentStatus == 'pending'
-        && request.resource.data.membershipStatus == 'pending';
-      allow update: if own(userId)
-        && request.resource.data.uid == resource.data.uid
-        && request.resource.data.paymentStatus == 'pending'
-        && request.resource.data.membershipStatus == 'pending'
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['senderNumber','transactionId','updatedAt']);
+      allow create: if own(userId) && request.resource.data.uid == request.auth.uid && request.resource.data.paymentStatus == 'pending' && request.resource.data.membershipStatus == 'pending';
+      allow update: if own(userId) && request.resource.data.uid == resource.data.uid && request.resource.data.paymentStatus == 'pending' && request.resource.data.membershipStatus == 'pending' && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['senderNumber','transactionId','updatedAt']);
       allow delete: if own(userId);
     }
-
-    // Participant-only chat. Conversation id must contain the authenticated UID.
     match /chats/{chatId} {
-      allow read, create: if signedIn()
-        && chatId.matches('^' + request.auth.uid + '_.*$|^.*_' + request.auth.uid + '$');
-
+      allow read, create: if signedIn() && chatId.matches('^' + request.auth.uid + '_.*$|^.*_' + request.auth.uid + '$');
       match /messages/{messageId} {
-        allow read, create: if signedIn()
-          && chatId.matches('^' + request.auth.uid + '_.*$|^.*_' + request.auth.uid + '$')
-          && request.resource.data.senderId == request.auth.uid;
-        allow update, delete: if signedIn()
-          && chatId.matches('^' + request.auth.uid + '_.*$|^.*_' + request.auth.uid + '$')
-          && resource.data.senderId == request.auth.uid;
+        allow read: if signedIn() && chatId.matches('^' + request.auth.uid + '_.*$|^.*_' + request.auth.uid + '$');
+        allow create: if signedIn() && chatId.matches('^' + request.auth.uid + '_.*$|^.*_' + request.auth.uid + '$') && request.resource.data.senderId == request.auth.uid;
+        allow update, delete: if signedIn() && chatId.matches('^' + request.auth.uid + '_.*$|^.*_' + request.auth.uid + '$') && resource.data.senderId == request.auth.uid;
       }
     }
-
-    match /{document=**} {
-      allow read, write: if false;
-    }
+    match /{document=**} { allow read, write: if false; }
   }
 }

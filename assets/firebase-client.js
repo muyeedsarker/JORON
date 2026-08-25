@@ -3,6 +3,8 @@ import {
   getAuth,
   onAuthStateChanged,
   signOut,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
   setPersistence,
   browserLocalPersistence
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
@@ -18,4 +20,14 @@ const storage = getStorage(app);
 // Keep the signed-in session across normal browser restarts.
 const persistenceReady = setPersistence(auth, browserLocalPersistence);
 
-export { app, auth, db, storage, onAuthStateChanged, signOut, persistenceReady };
+export {
+  app,
+  auth,
+  db,
+  storage,
+  onAuthStateChanged,
+  signOut,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+  persistenceReady
+};

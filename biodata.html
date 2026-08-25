@@ -1,21 +1,50 @@
 <!doctype html>
 <html lang="bn">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#64158f">
-<title>J❤️R❤️N | Smart Biodata</title>
+<title>J❤️R❤️N | Biodata</title>
 <style>
-*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:22px;font-family:"Noto Sans Bengali","Hind Siliguri",system-ui,sans-serif;background:linear-gradient(145deg,#fff,#fff4fa,#f0e8ff);color:#241b2a}.card{width:min(560px,100%);text-align:center;background:rgba(255,255,255,.94);border:1px solid #eadfea;border-radius:30px;padding:34px 24px;box-shadow:0 20px 55px rgba(70,25,90,.12)}.logo{width:82px;height:82px;border-radius:50%;object-fit:cover;box-shadow:0 10px 24px rgba(70,25,90,.16)}h1{margin:14px 0 4px;font:700 38px Georgia,serif;color:#64158f}h1:after{content:"";display:block;width:90px;height:3px;border-radius:99px;margin:9px auto 8px;background:linear-gradient(90deg,#64158f,#d90b62,#087b59)}.tag{margin:0;color:#667078;font-weight:800}.status{margin:24px 0 18px;padding:15px;border-radius:18px;background:#f4efff;border:1px solid #dfd0ef;color:#4d3760;font-weight:800}.btn{display:inline-grid;place-items:center;min-height:52px;padding:0 24px;border-radius:16px;background:linear-gradient(135deg,#d90b62,#7620ad);color:#fff;text-decoration:none;font-weight:900;box-shadow:0 10px 22px rgba(210,11,90,.2)}.note{margin:18px 0 0;color:#7b858b;font-size:12px}</style>
+*{box-sizing:border-box}body{margin:0;padding:18px;font-family:"Noto Sans Bengali","Hind Siliguri",system-ui,sans-serif;background:linear-gradient(145deg,#fff7fb,#f4efff 55%,#edfff7);color:#241b2a}.card{width:min(760px,100%);margin:auto;background:#fff;border:1px solid #ead8ee;border-radius:26px;padding:26px;box-shadow:0 20px 55px rgba(70,25,90,.12)}.head{text-align:center}.logo{width:72px;height:72px;border-radius:50%;object-fit:cover}.head h1{margin:10px 0 4px;color:#64158f;font:700 34px Georgia,serif}.head p{margin:0 0 22px;color:#667078;font-weight:800}.section{margin:22px 0}.section h2{font-size:19px;color:#64158f;border-bottom:2px solid #ead7f2;padding-bottom:8px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field label{display:block;font-size:12px;font-weight:900;color:#59636a;margin:0 0 5px}.field input,.field select,.field textarea{width:100%;border:1px solid #ddd6dc;border-radius:12px;padding:11px;background:#fff;font:inherit;outline:none}.field textarea{min-height:105px;resize:vertical}.field input:focus,.field select:focus,.field textarea:focus{border-color:#64158f;box-shadow:0 0 0 3px #64158f12}.full{grid-column:1/-1}.actions{text-align:center;margin-top:22px}.btn{border:0;border-radius:25px;padding:13px 25px;background:linear-gradient(105deg,#d90b62,#7620ad,#087b59);color:#fff;font-weight:900;font-size:15px;cursor:pointer}.btn:disabled{opacity:.6;cursor:not-allowed}.back{display:inline-block;margin:14px;color:#64158f;font-weight:900;text-decoration:none}.status{text-align:center;min-height:24px;margin-top:10px;font-weight:800;color:#087b59}.error{color:#b00020}.hidden{display:none}@media(max-width:600px){body{padding:8px}.card{padding:18px;border-radius:20px}.grid{grid-template-columns:1fr}.full{grid-column:auto}.head h1{font-size:29px}}
+</style>
 </head>
 <body>
 <main class="card">
-<img class="logo" src="assets/joron-logo.jpg" alt="J❤️R❤️N logo">
-<h1>J❤️R❤️N</h1>
-<p class="tag">সম্পর্ক জুড়ে দেয় জোড়ন</p>
-<div class="status">🛠️ Smart Biodata-এর উন্নত ধাপগুলো প্রস্তুত করা হচ্ছে।<br>বর্তমানে J❤️R❤️N-এর অন্যান্য ব্যবহারযোগ্য অংশ চালু আছে।</div>
-<a class="btn" href="index.html">← J❤️R❤️N-এ ফিরে যান</a>
-<p class="note">Smart Biodata সম্পূর্ণ হলে এই পেজ থেকেই আবার চালু করা হবে।</p>
+<div class="head"><img class="logo" src="assets/joron-logo.jpg" alt="J❤️R❤️N logo"><h1>J❤️R❤️N</h1><p>আপনার Biodata সম্পূর্ণ করুন</p></div>
+<form id="biodataForm">
+<section class="section"><h2>👤 ব্যক্তিগত তথ্য</h2><div class="grid">
+<div class="field"><label>পূর্ণ নাম</label><input id="name" required></div>
+<div class="field"><label>বয়স</label><input id="age" type="number" min="18" max="100" required></div>
+<div class="field"><label>লিঙ্গ</label><select id="gender" required><option value="">নির্বাচন করুন</option><option value="male">পুরুষ</option><option value="female">নারী</option></select></div>
+<div class="field"><label>জেলা</label><input id="district" placeholder="যেমন: গাজীপুর" required></div>
+<div class="field"><label>পেশা</label><input id="profession" placeholder="আপনার পেশা"></div>
+<div class="field"><label>মোবাইল</label><input id="phone" type="tel" pattern="01[0-9]{9}"></div>
+</div></section>
+<section class="section"><h2>🎓 শিক্ষাগত তথ্য</h2><div class="grid">
+<div class="field"><label>শিক্ষাব্যবস্থা</label><input id="educationSystem" placeholder="যেমন: সাধারণ / মাদ্রাসা / কারিগরি"></div>
+<div class="field"><label>শিক্ষাগত যোগ্যতা</label><input id="education" placeholder="যেমন: স্নাতক"></div>
+<div class="field"><label>প্রতিষ্ঠান</label><input id="institution"></div>
+<div class="field"><label>বিভাগ / বিষয়</label><input id="subject"></div>
+<div class="field"><label>পাশের সন</label><input id="passingYear" type="number" min="1950" max="2100"></div>
+</div></section>
+<section class="section"><h2>💗 নিজের সম্পর্কে</h2><div class="field"><textarea id="about" placeholder="নিজের সম্পর্কে সংক্ষেপে লিখুন"></textarea></div></section>
+<section class="section"><h2>💍 জীবনসঙ্গীর পছন্দ</h2><div class="field"><textarea id="partner" placeholder="আপনার পছন্দ ও প্রত্যাশা লিখুন"></textarea></div></section>
+<div class="actions"><button class="btn" id="saveButton" type="submit">💾 Biodata সংরক্ষণ করুন</button><br><a class="back" href="profiles.html">← Profile তালিকায় যান</a><div id="status" class="status"></div></div>
+</form>
 </main>
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+import{getAuth,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+import{getFirestore,doc,getDoc,setDoc,serverTimestamp}from"https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+const firebaseConfig={apiKey:"AIzaSyDWxxu3zwThJp1fuWMhXiRig3Fswt0QARA",authDomain:"joron-d7742.firebaseapp.com",projectId:"joron-d7742",storageBucket:"joron-d7742.firebasestorage.app",messagingSenderId:"907727989078",appId:"1:907727989078:web:4fdd266e3517a862fa0ef7"};
+const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app),form=document.getElementById("biodataForm"),status=document.getElementById("status"),button=document.getElementById("saveButton");
+let currentUser=null;
+const ids=["name","age","gender","district","profession","phone","educationSystem","education","institution","subject","passingYear","about","partner"];
+const set=(id,v)=>{document.getElementById(id).value=v??""};
+async function loadUser(user){currentUser=user;try{const snap=await getDoc(doc(db,"users",user.uid));if(snap.exists()){const d=snap.data();set("name",d.name);set("gender",d.gender);set("phone",d.phone)}}catch(e){console.error(e)}}
+onAuthStateChanged(auth,user=>{if(!user){status.textContent="আপনার Login session পাওয়া যায়নি। আগে Login করুন।";status.classList.add("error");form.classList.add("hidden");return}form.classList.remove("hidden");loadUser(user)});
+form.addEventListener("submit",async e=>{e.preventDefault();if(!currentUser){status.textContent="আগে Login করুন।";return}button.disabled=true;status.textContent="Biodata সংরক্ষণ হচ্ছে...";const d={};ids.forEach(id=>d[id]=document.getElementById(id).value.trim());d.age=Number(d.age);d.passingYear=d.passingYear?Number(d.passingYear):null;d.uid=currentUser.uid;d.email=currentUser.email||"";d.updatedAt=serverTimestamp();try{await setDoc(doc(db,"biodata",currentUser.uid),{...d,createdAt:serverTimestamp()},{merge:true});await setDoc(doc(db,"users",currentUser.uid),{name:d.name,phone:d.phone,gender:d.gender,profileCompleted:true,updatedAt:serverTimestamp()},{merge:true});status.textContent="✅ Biodata সফলভাবে সংরক্ষণ হয়েছে। Profile দেখা যাচ্ছে...";setTimeout(()=>location.href="profile.html?id="+encodeURIComponent(currentUser.uid),700)}catch(err){console.error(err);status.textContent="Biodata সংরক্ষণ করা যায়নি। Firebase Permission পরীক্ষা করুন।";status.classList.add("error");button.disabled=false}});
+</script>
 </body>
 </html>

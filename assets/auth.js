@@ -42,8 +42,13 @@
     if (!email) { message("আগে আপনার ইমেইল লিখুন."); return; }
     try {
       const { auth, sendPasswordResetEmail, persistenceReady } = await firebaseClientPromise;
-      await persistenceReady; await sendPasswordResetEmail(auth, email); message("✅ পাসওয়ার্ড পরিবর্তনের লিংক ইমেইলে পাঠানো হয়েছে.", true);
-    } catch (error) { console.error(error); message("পাসওয়ার্ড রিসেট করা যায়নি."); }
+      await persistenceReady;
+      await sendPasswordResetEmail(auth, email);
+      message("✅ পাসওয়ার্ড পরিবর্তনের লিংক ইমেইলে পাঠানো হয়েছে.", true);
+    } catch (error) {
+      console.error(error);
+      message("পাসওয়ার্ড রিসেট করা যায়নি.");
+    }
   }
 
   window.resetPassword = resetPassword;
@@ -52,8 +57,18 @@
   function bind() {
     const form = document.querySelector(".login-card form");
     if (!form || form.dataset.joronBound) return;
+
+    // login.html previously had an inline onsubmit="return loginUser()".
+    // Remove it so the browser cannot submit/reload the page before our
+    // Firebase handler prevents the native form submission.
+    form.removeAttribute("onsubmit");
     form.dataset.joronBound = "1";
-    form.addEventListener("submit", (event) => { event.preventDefault(); event.stopImmediatePropagation(); doLogin(); }, true);
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      void doLogin();
+    }, true);
   }
+
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", bind); else bind();
 })();

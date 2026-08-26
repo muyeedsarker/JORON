@@ -1,0 +1,1 @@
+JORON safety marker: preserve all existing working functionality. UI/theme changes must not alter login, signup, navigation, Firebase/Firestore, interest, match, chat, or other working functions.

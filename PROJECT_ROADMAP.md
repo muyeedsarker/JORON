@@ -20,6 +20,7 @@
 - Location
 - Lifestyle
 - Voice/video introduction
+- Advanced detailed profile categories
 
 ## Match & Discovery
 - New
@@ -37,6 +38,7 @@
 - Relocation
 - Overseas/Expat
 - Ghor Jamai option
+- Country and city based matching
 
 ## Communication
 - Interest request
@@ -46,6 +48,14 @@
 - Meeting request
 - Story
 - Status
+- Live video feature (future)
+- Live voice room (future)
+
+## Special Systems
+- Advanced category system
+- Detailed user preferences
+- Privacy controls
+- User verification
 
 ## Trust & Safety
 - Verification
@@ -61,6 +71,8 @@
 ## Development Order
 1. Fix existing issues
 2. Complete login and profile base
-3. Add discovery filters
-4. Add communication features
-5. Add premium features
+3. Build main theme and pages
+4. Add discovery filters
+5. Add communication features
+6. Add live features
+7. Add premium features

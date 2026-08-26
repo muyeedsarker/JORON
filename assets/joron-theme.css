@@ -65,3 +65,24 @@ body:has(.filters) .note{padding:18px;border-radius:18px;font-size:14px;line-hei
 
 @media(max-width:600px){body{background:radial-gradient(circle at 50% 0%,rgba(255,178,226,.48),transparent 34%),linear-gradient(160deg,#fff8fc,#f4e8f8)!important}.card,.panel,.box,.form-card,.profile-card,.login-box,.signup-box{border-radius:20px!important}}
 /* Shared JORON visual language: pink/purple premium theme across active pages. */
+
+/* First safe visual polish: premium CTA/button treatment only. No links, IDs, forms, or navigation are changed. */
+.btn.primary,
+a.btn.primary,
+.actions .primary{
+  min-height:54px!important;
+  padding:0 22px!important;
+  border-radius:18px!important;
+  background:linear-gradient(135deg,#d90b62 0%,#c12b91 42%,#7a2b91 100%)!important;
+  color:#fff!important;
+  font-weight:900!important;
+  letter-spacing:.1px!important;
+  box-shadow:0 12px 28px rgba(193,43,145,.28),inset 0 1px 0 rgba(255,255,255,.24)!important;
+  transition:transform .18s ease,box-shadow .18s ease,filter .18s ease!important;
+}
+.btn.primary:hover,
+a.btn.primary:hover,
+.actions .primary:hover{transform:translateY(-2px)!important;filter:brightness(1.04)!important;box-shadow:0 16px 32px rgba(193,43,145,.32),inset 0 1px 0 rgba(255,255,255,.26)!important}
+.btn.primary:active,
+a.btn.primary:active,
+.actions .primary:active{transform:translateY(1px) scale(.985)!important;box-shadow:0 7px 16px rgba(193,43,145,.22)!important}

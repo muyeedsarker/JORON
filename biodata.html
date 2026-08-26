@@ -2,167 +2,72 @@
 <html lang="bn">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#fff7f8">
   <title>J❤️R❤️N | Biodata</title>
+  <style>
+    :root{--pink:#e91e63;--deep:#8b123d;--ink:#251b20;--muted:#756a70;--line:#ead7de;--soft:#fff7f8;--white:#fff;}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,"Noto Sans Bengali",sans-serif;color:var(--ink);background:linear-gradient(180deg,#fff7f8 0,#fff 42%,#fff7f8 100%);min-height:100vh}
+    .top{background:rgba(255,255,255,.94);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5;backdrop-filter:blur(10px)}
+    .nav{max-width:760px;margin:auto;padding:14px 18px;display:flex;align-items:center;justify-content:space-between}
+    .brand{font-family:Georgia,serif;font-size:32px;font-weight:800;letter-spacing:1px;color:#111}.brand span{color:var(--pink)}
+    .badge{font-size:12px;color:var(--deep);background:#fff0f4;border:1px solid #f4c8d6;padding:7px 11px;border-radius:999px;font-weight:700}
+    main{max-width:760px;margin:0 auto;padding:24px 16px 44px}
+    .hero{text-align:center;padding:18px 10px 22px}.heart{font-size:34px}.hero h1{margin:2px 0 8px;font-family:Georgia,serif;font-size:30px;color:var(--deep)}.hero p{margin:0;color:var(--muted);font-size:15px}
+    .card{background:rgba(255,255,255,.97);border:1px solid var(--line);border-radius:22px;padding:20px;box-shadow:0 12px 35px rgba(139,18,61,.08)}
+    .section-title{display:flex;align-items:center;gap:9px;margin:0 0 14px;font-size:18px;color:var(--deep)}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:6px}.full{grid-column:1/-1}
+    label{font-size:13px;font-weight:700;color:#5f5157}.req{color:var(--pink)}
+    input,select,textarea{width:100%;border:1px solid #dccbd1;border-radius:13px;background:#fff;padding:13px 14px;font:inherit;color:var(--ink);outline:none;transition:.2s;min-height:48px}
+    textarea{min-height:105px;resize:vertical}input:focus,select:focus,textarea:focus{border-color:var(--pink);box-shadow:0 0 0 3px rgba(233,30,99,.10)}
+    .hint{font-size:12px;color:var(--muted);margin-top:3px}
+    .actions{margin-top:18px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}.save{border:0;border-radius:14px;padding:14px 20px;background:linear-gradient(135deg,#e91e63,#a5124b);color:#fff;font-weight:800;font-size:15px;box-shadow:0 8px 18px rgba(233,30,99,.22);cursor:pointer}.save:disabled{opacity:.6;cursor:not-allowed}
+    #status{margin:0;color:var(--muted);font-size:13px;flex:1;min-width:220px}.footer{text-align:center;color:#8c7d83;font-size:12px;margin-top:18px}
+    @media(max-width:600px){main{padding:14px 12px 34px}.nav{padding:12px 14px}.brand{font-size:27px}.hero h1{font-size:25px}.card{padding:16px;border-radius:18px}.grid{grid-template-columns:1fr}.full{grid-column:auto}.actions{display:block}.save{width:100%}#status{display:block;margin-top:10px;text-align:center}}
+  </style>
 </head>
 <body>
+  <header class="top"><div class="nav"><div class="brand">J<span>❤️</span>R<span>❤️</span>N</div><div class="badge">💍 Biodata</div></div></header>
   <main>
-    <h1>J❤️R❤️N</h1>
-    <p>আপনার Biodata সম্পূর্ণ করুন বা আপডেট করুন</p>
-
-    <form id="biodataForm">
-      <input id="name" required placeholder="পূর্ণ নাম">
-      <input id="age" type="number" min="18" max="100" required placeholder="বয়স">
-      <select id="gender" required>
-        <option value="">লিঙ্গ নির্বাচন করুন</option>
-        <option value="male">পুরুষ</option>
-        <option value="female">নারী</option>
-      </select>
-      <input id="district" required placeholder="জেলা">
-      <input id="profession" placeholder="পেশা">
-      <input id="phone" type="tel" pattern="01[0-9]{9}" placeholder="মোবাইল">
-      <input id="educationSystem" placeholder="শিক্ষাব্যবস্থা">
-      <input id="education" placeholder="শিক্ষাগত যোগ্যতা">
-      <input id="institution" placeholder="প্রতিষ্ঠান">
-      <input id="subject" placeholder="বিভাগ / বিষয়">
-      <input id="passingYear" type="number" placeholder="পাশের সন">
-      <textarea id="about" placeholder="নিজের সম্পর্কে"></textarea>
-      <textarea id="partner" placeholder="জীবনসঙ্গীর পছন্দ"></textarea>
-      <button id="saveButton" type="submit">💾 Biodata সংরক্ষণ করুন</button>
-      <p id="status"></p>
-    </form>
+    <section class="hero"><div class="heart">💞</div><h1>আপনার Biodata সম্পূর্ণ করুন</h1><p>সঠিক তথ্য দিন—JORON-এ আপনার প্রোফাইল আরও সুন্দর ও বিশ্বাসযোগ্য হবে।</p></section>
+    <section class="card">
+      <h2 class="section-title">👤 ব্যক্তিগত তথ্য</h2>
+      <form id="biodataForm">
+        <div class="grid">
+          <div class="field full"><label for="name">পূর্ণ নাম <span class="req">*</span></label><input id="name" required placeholder="আপনার পূর্ণ নাম"></div>
+          <div class="field"><label for="age">বয়স <span class="req">*</span></label><input id="age" type="number" min="18" max="100" required placeholder="বয়স"></div>
+          <div class="field"><label for="gender">লিঙ্গ <span class="req">*</span></label><select id="gender" required><option value="">লিঙ্গ নির্বাচন করুন</option><option value="male">পুরুষ</option><option value="female">নারী</option></select></div>
+          <div class="field"><label for="district">জেলা <span class="req">*</span></label><input id="district" required placeholder="আপনার জেলা"></div>
+          <div class="field"><label for="profession">পেশা</label><input id="profession" placeholder="আপনার পেশা"></div>
+          <div class="field"><label for="phone">মোবাইল</label><input id="phone" type="tel" pattern="01[0-9]{9}" placeholder="01XXXXXXXXX"></div>
+          <div class="field"><label for="educationSystem">শিক্ষাব্যবস্থা</label><input id="educationSystem" placeholder="যেমন: সাধারণ / মাদ্রাসা"></div>
+          <div class="field"><label for="education">শিক্ষাগত যোগ্যতা</label><input id="education" placeholder="সর্বোচ্চ যোগ্যতা"></div>
+          <div class="field"><label for="institution">প্রতিষ্ঠান</label><input id="institution" placeholder="প্রতিষ্ঠানের নাম"></div>
+          <div class="field"><label for="subject">বিভাগ / বিষয়</label><input id="subject" placeholder="বিভাগ বা বিষয়"></div>
+          <div class="field"><label for="passingYear">পাশের সন</label><input id="passingYear" type="number" placeholder="যেমন: 2020"></div>
+          <div class="field full"><label for="about">নিজের সম্পর্কে</label><textarea id="about" placeholder="নিজের সম্পর্কে সংক্ষেপে লিখুন..."></textarea></div>
+          <div class="field full"><label for="partner">জীবনসঙ্গীর পছন্দ</label><textarea id="partner" placeholder="আপনি কেমন জীবনসঙ্গী প্রত্যাশা করেন..."></textarea></div>
+        </div>
+        <div class="actions"><button class="save" id="saveButton" type="submit">💾 Biodata সংরক্ষণ করুন</button><p id="status">আপনার তথ্য নিরাপদে সংরক্ষণের জন্য Login করা থাকতে হবে।</p></div>
+      </form>
+    </section>
+    <div class="footer">J❤️R❤️N — সুন্দর সম্পর্কের জন্য একটি বিশ্বস্ত প্ল্যাটফর্ম</div>
   </main>
 
   <script type="module">
     import { auth, db, persistenceReady } from "./assets/firebase-client.js";
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
-    import {
-      doc,
-      getDoc,
-      setDoc,
-      serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
-
-    const form = document.getElementById("biodataForm");
-    const status = document.getElementById("status");
-    const button = document.getElementById("saveButton");
-
-    const ids = [
-      "name", "age", "gender", "district", "profession", "phone",
-      "educationSystem", "education", "institution", "subject",
-      "passingYear", "about", "partner"
-    ];
-
-    let currentUser = null;
-
-    function setField(id, value) {
-      document.getElementById(id).value = value ?? "";
-    }
-
-    function setFormData(data) {
-      ids.forEach(id => setField(id, data?.[id]));
-    }
-
-    async function loadBiodata(user) {
-      const ref = doc(db, "biodata", user.uid);
-      const snap = await getDoc(ref);
-
-      if (snap.exists()) {
-        setFormData(snap.data());
-        status.textContent = "✏️ আপনার আগের Biodata পাওয়া গেছে। প্রয়োজনমতো পরিবর্তন করে সংরক্ষণ করুন।";
-        button.textContent = "💾 Biodata আপডেট করুন";
-      } else {
-        status.textContent = "নতুন Biodata তৈরি করুন।";
-        button.textContent = "💾 Biodata সংরক্ষণ করুন";
-      }
-    }
-
+    import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+    const form=document.getElementById("biodataForm"),status=document.getElementById("status"),button=document.getElementById("saveButton");
+    const ids=["name","age","gender","district","profession","phone","educationSystem","education","institution","subject","passingYear","about","partner"];
+    let currentUser=null;
+    function setField(id,value){document.getElementById(id).value=value??""}
+    function setFormData(data){ids.forEach(id=>setField(id,data?.[id]))}
+    async function loadBiodata(user){const ref=doc(db,"biodata",user.uid),snap=await getDoc(ref);if(snap.exists()){setFormData(snap.data());status.textContent="✏️ আপনার আগের Biodata পাওয়া গেছে। প্রয়োজনমতো পরিবর্তন করে সংরক্ষণ করুন।";button.textContent="💾 Biodata আপডেট করুন"}else{status.textContent="নতুন Biodata তৈরি করুন।";button.textContent="💾 Biodata সংরক্ষণ করুন"}}
     await persistenceReady;
-
-    onAuthStateChanged(auth, async user => {
-      if (!user) {
-        currentUser = null;
-        form.style.display = "none";
-        status.textContent = "আগে Login করুন।";
-        return;
-      }
-
-      currentUser = user;
-      form.style.display = "block";
-
-      try {
-        await loadBiodata(user);
-      } catch (err) {
-        console.error(err);
-        status.textContent = "Biodata লোড করা যায়নি। Firestore permission পরীক্ষা করুন।";
-      }
-    });
-
-    form.addEventListener("submit", async e => {
-      e.preventDefault();
-
-      if (!currentUser) {
-        status.textContent = "আগে Login করুন।";
-        return;
-      }
-
-      button.disabled = true;
-      status.textContent = "Biodata সংরক্ষণ হচ্ছে...";
-
-      const data = {};
-      ids.forEach(id => {
-        data[id] = document.getElementById(id).value.trim();
-      });
-
-      data.age = Number(data.age);
-      data.passingYear = data.passingYear ? Number(data.passingYear) : null;
-      data.uid = currentUser.uid;
-      data.email = currentUser.email || "";
-      data.visibility = "public";
-      data.updatedAt = serverTimestamp();
-
-      try {
-        const ref = doc(db, "biodata", currentUser.uid);
-        const old = await getDoc(ref);
-
-        await setDoc(
-          ref,
-          {
-            ...data,
-            createdAt: old.exists() && old.data().createdAt
-              ? old.data().createdAt
-              : serverTimestamp()
-          },
-          { merge: true }
-        );
-
-        await setDoc(
-          doc(db, "users", currentUser.uid),
-          {
-            name: data.name,
-            phone: data.phone,
-            gender: data.gender,
-            profileCompleted: true,
-            updatedAt: serverTimestamp()
-          },
-          { merge: true }
-        );
-
-        status.textContent = old.exists()
-          ? "✅ Biodata সফলভাবে আপডেট হয়েছে।"
-          : "✅ Biodata সফলভাবে সংরক্ষণ হয়েছে।";
-        button.textContent = "💾 Biodata আপডেট করুন";
-        button.disabled = false;
-
-        setTimeout(() => {
-          location.href = "profile.html?id=" + encodeURIComponent(currentUser.uid);
-        }, 700);
-      } catch (err) {
-        console.error(err);
-        status.textContent = "❌ Biodata সংরক্ষণ করা যায়নি। Firestore rules/permission পরীক্ষা করুন।";
-        button.disabled = false;
-      }
-    });
+    onAuthStateChanged(auth,async user=>{if(!user){currentUser=null;form.style.display="none";status.textContent="আগে Login করুন।";return}currentUser=user;form.style.display="block";try{await loadBiodata(user)}catch(err){console.error(err);status.textContent="Biodata লোড করা যায়নি। Firestore permission পরীক্ষা করুন।"}});
+    form.addEventListener("submit",async e=>{e.preventDefault();if(!currentUser){status.textContent="আগে Login করুন।";return}button.disabled=true;status.textContent="Biodata সংরক্ষণ হচ্ছে...";const data={};ids.forEach(id=>data[id]=document.getElementById(id).value.trim());data.age=Number(data.age);data.passingYear=data.passingYear?Number(data.passingYear):null;data.uid=currentUser.uid;data.email=currentUser.email||"";data.visibility="public";data.updatedAt=serverTimestamp();try{const ref=doc(db,"biodata",currentUser.uid),old=await getDoc(ref);await setDoc(ref,{...data,createdAt:old.exists()&&old.data().createdAt?old.data().createdAt:serverTimestamp()},{merge:true});await setDoc(doc(db,"users",currentUser.uid),{name:data.name,phone:data.phone,gender:data.gender,profileCompleted:true,updatedAt:serverTimestamp()},{merge:true});status.textContent=old.exists()?"✅ Biodata সফলভাবে আপডেট হয়েছে।":"✅ Biodata সফলভাবে সংরক্ষণ হয়েছে।";button.textContent="💾 Biodata আপডেট করুন";button.disabled=false;setTimeout(()=>location.href="profile.html?id="+encodeURIComponent(currentUser.uid),700)}catch(err){console.error(err);status.textContent="❌ Biodata সংরক্ষণ করা যায়নি। Firestore rules/permission পরীক্ষা করুন।";button.disabled=false}});
   </script>
 </body>
 </html>

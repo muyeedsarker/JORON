@@ -1,0 +1,16 @@
+/* JORON Home Priority Theme — visual-only, preserves existing JS/functionality. */
+:root{--home-p:#64158f;--home-k:#d90b62;--home-line:#eadfea;--home-shadow:0 14px 34px rgba(70,25,90,.12)}
+body{background:linear-gradient(145deg,#fff7fb 0%,#f5efff 55%,#edfff8 100%)!important}
+header{box-shadow:0 8px 24px rgba(70,25,90,.10)!important}
+.brand img{width:68px!important;height:68px!important}.brand strong{font-size:40px!important}
+.icon-btn,.profile-btn{width:58px!important;height:58px!important;font-size:27px!important}
+.quick{border-radius:28px!important;padding:16px!important;box-shadow:var(--home-shadow)!important}
+.quick-grid{gap:13px!important}.quick a{min-height:100px!important;border-radius:22px!important;font-weight:900!important;box-shadow:0 9px 22px rgba(70,25,90,.10)!important}
+.quick .ico{font-size:34px!important}.quick .label{font-size:16px!important}
+.hero{padding:24px 0 42px!important}.hero-card{padding:38px 26px!important;border-radius:32px!important;box-shadow:var(--home-shadow)!important}
+.hero h1{font-size:clamp(42px,10vw,62px)!important}.hero h2{font-size:clamp(21px,4.5vw,31px)!important}.hero p{font-size:15px!important}
+.actions{gap:13px!important}.btn{min-height:58px!important;border-radius:17px!important;font-size:16px!important}
+.showcase,.card,.step{box-shadow:var(--home-shadow)!important}
+.showcase{border-radius:30px!important;padding:28px!important}.showcase h3{font-size:30px!important}
+.title h2{font-size:32px!important}.card{border-radius:23px!important}
+@media(max-width:560px){.brand img{width:54px!important;height:54px!important}.brand strong{font-size:29px!important}.icon-btn,.profile-btn{width:48px!important;height:48px!important;font-size:24px!important}.quick{padding:11px!important}.quick a{min-height:90px!important;border-radius:20px!important}.quick .ico{font-size:30px!important}.quick .label{font-size:13px!important}.hero-card{padding:28px 18px!important}.hero h1{font-size:clamp(36px,10vw,50px)!important}.btn{min-height:54px!important}}

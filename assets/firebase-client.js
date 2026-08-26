@@ -4,6 +4,7 @@ import {
   onAuthStateChanged,
   signOut,
   signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
   sendPasswordResetEmail,
   setPersistence,
   browserLocalPersistence
@@ -17,7 +18,6 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
-// Keep the signed-in session across normal browser restarts.
 const persistenceReady = setPersistence(auth, browserLocalPersistence);
 
 export {
@@ -28,6 +28,7 @@ export {
   onAuthStateChanged,
   signOut,
   signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
   sendPasswordResetEmail,
   persistenceReady
 };

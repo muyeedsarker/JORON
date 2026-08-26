@@ -1,0 +1,52 @@
+name: Apply JORON Master Theme
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  theme:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Apply shared theme to active pages
+        shell: bash
+        run: |
+          set -e
+          shopt -s nullglob
+          for file in *.html; do
+            case "$file" in
+              *before-*|*backup*|*.bak) continue ;;
+            esac
+            if ! grep -q 'assets/joron-theme.css' "$file"; then
+              python3 - "$file" <<'PY'
+import sys
+from pathlib import Path
+p=Path(sys.argv[1])
+s=p.read_text(encoding='utf-8')
+link='\n<link rel="stylesheet" href="assets/joron-theme.css">\n'
+if '</head>' in s:
+    s=s.replace('</head>', link+'</head>', 1)
+    p.write_text(s, encoding='utf-8')
+PY
+            fi
+          done
+
+      - name: Commit theme links
+        shell: bash
+        run: |
+          git config user.name "JORON Theme Bot"
+          git config user.email "actions@github.com"
+          git add '*.html' assets/joron-theme.css
+          if git diff --cached --quiet; then
+            echo "Theme already applied"
+            exit 0
+          fi
+          git commit -m "Apply JORON master pink-purple theme to active pages"
+          git push

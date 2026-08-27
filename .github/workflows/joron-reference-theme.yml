@@ -10,26 +10,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Attach reference theme to every root HTML page
+      - name: Apply shared theme and universal Home/Back controls
         run: |
           python - <<'PY'
           from pathlib import Path
           marker='assets/joron-reference-theme.css'
+          nav_marker='joron-global-page-nav'
+          nav_html='''<div id="joron-global-page-nav" class="joron-global-page-nav" aria-label="JORON page navigation"><a href="index.html" class="joron-home-btn">🏠 হোম</a><button type="button" class="joron-back-btn" onclick="if(history.length>1){history.back()}else{location.href='index.html'}">↩️ Back</button></div>'''
+          nav_css='''<style id="joron-global-page-nav-style">.joron-global-page-nav{width:100%;display:flex;gap:10px;justify-content:center;align-items:center;padding:14px 0 24px;margin:0 auto;clear:both}.joron-global-page-nav a,.joron-global-page-nav button{flex:1 1 0;max-width:360px;min-height:50px;display:flex;align-items:center;justify-content:center;padding:12px 16px;border:2px solid rgba(255,255,255,.9);border-radius:15px;color:#fff;background:linear-gradient(135deg,#087b59,#10a978);font:900 15px/1.2 "Noto Sans Bengali","Hind Siliguri",system-ui,sans-serif;text-decoration:none;cursor:pointer;box-shadow:0 8px 20px rgba(70,25,90,.18),inset 0 1px 0 rgba(255,255,255,.35);transition:.2s}.joron-global-page-nav button{background:linear-gradient(135deg,#64158f,#a13bc5)}.joron-global-page-nav a:hover,.joron-global-page-nav button:hover{transform:translateY(-2px);filter:brightness(1.06)}@media(max-width:600px){.joron-global-page-nav{gap:6px;padding:12px 2px 20px}.joron-global-page-nav a,.joron-global-page-nav button{min-height:48px;padding:11px 8px;font-size:13px;border-width:1.5px;border-radius:12px}}</style>'''
+          skip={'index-backup.html','index.html.before-design','index.html.before-home-premium','index.html.before-premium','index_backup_before_new_design.html','login.html.before-design','login.html.before-premium','biodata.html.before-design','biodata.html.before-premium','payment.html.before-design','payment.html.before-premium'}
           for p in Path('.').glob('*.html'):
+              if p.name in skip or '.bak' in p.name or '.backup' in p.name: continue
               s=p.read_text(encoding='utf-8')
-              if marker in s: continue
-              tag=f'<link rel="stylesheet" href="{marker}">'
-              if '</head>' in s:
-                  p.write_text(s.replace('</head>',tag+'</head>',1),encoding='utf-8')
-          for p in Path('.').glob('TEMP_CHECK*.txt'):
-              p.unlink()
+              if marker not in s and '</head>' in s: s=s.replace('</head>',f'<link rel="stylesheet" href="{marker}"></head>',1)
+              if p.name!='index.html' and nav_marker not in s and '</body>' in s: s=s.replace('</body>',nav_css+nav_html+'</body>',1)
+              p.write_text(s,encoding='utf-8')
+          for p in Path('.').glob('TEMP_CHECK*.txt'): p.unlink()
           PY
       - name: Commit theme rollout
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add '*.html' assets/joron-reference-theme.css
+          git add '*.html' assets/joron-reference-theme.css .github/workflows/joron-reference-theme.yml
           git add -u TEMP_CHECK.txt TEMP_CHECK2.txt TEMP_CHECK3.txt || true
           if git diff --cached --quiet; then echo 'No changes needed'; exit 0; fi
-          git commit -m "Apply JORON reference theme across pages"
+          git commit -m "Add universal JORON Home and Back navigation"
           git push origin HEAD:main

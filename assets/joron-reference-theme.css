@@ -20,12 +20,8 @@ footer,.footer{background:linear-gradient(135deg,#211129,#3b1648,#8a236d)!import
 footer p,.footer p,footer a,.footer a{color:#ffe8f5!important}
 .step b,.roadmap-card b,.phase b{background:linear-gradient(135deg,var(--jr-pink),var(--jr-purple))!important;color:#fff!important}
 .cta h2,.cta h3,.cta strong,.journey-card h2,.journey-card h3{color:#fff1fa!important}.cta p,.journey-card p{color:var(--jr-muted)!important}
-/* Contrast guard: prevents pale text on pale legacy cards */
 .step *,.roadmap-card *,.feature-card *,.journey-card *,.timeline-card *,.info-card *,.phase *,.roadmap-item *{text-shadow:none!important}
 @media(max-width:560px){.step,.roadmap-card,.feature-card,.journey-card,.timeline-card,.info-card{border-radius:22px!important}.step p,.roadmap-card p,.feature-card p,.journey-card p{font-size:13px!important;line-height:1.65!important}}
-
-/* HOME PAGE OVERRIDE: the live JORON landing page uses the premium light theme.
-   Scoped by :has(.hero-card) so the reference theme remains available elsewhere. */
 body:has(.hero-card){background:radial-gradient(circle at 10% 8%,#ffe4f1 0,transparent 25%),radial-gradient(circle at 92% 18%,#e8dcff 0,transparent 24%),linear-gradient(145deg,#fff7fb 0%,#f5efff 52%,#effff8 100%)!important;color:#20202b!important}
 body:has(.hero-card) header{background:rgba(255,255,255,.96)!important;border-color:#eadfea!important;box-shadow:0 5px 20px rgba(70,25,90,.08)!important}
 body:has(.hero-card) .top{background:linear-gradient(90deg,#64158f,#d90b62,#087b59)!important;color:#fff!important}
@@ -38,15 +34,18 @@ body:has(.hero-card) .badge,body:has(.hero-card) .tag{background:#f0e3ff!importa
 body:has(.hero-card) .btn{background:#fff!important;color:#64158f!important;border:1px solid #64158f!important;box-shadow:none!important}
 body:has(.hero-card) .btn.primary{background:linear-gradient(135deg,#d90b62,#e51b76 48%,#7620ad)!important;color:#fff!important;border:0!important;box-shadow:0 10px 22px rgba(210,11,90,.22)!important}
 body:has(.hero-card) footer{background:linear-gradient(135deg,#281035,#64158f,#087b59)!important;color:#dffff3!important}
-
-/* PROFILES HEADER: J❤️R❤️N already appears in the top brand, so remove the duplicate logo image.
-   Keep the five navigation buttons on one balanced full-width row without touching Firebase/filter logic. */
-body:has(#profiles) .brand img{display:none!important}
-body:has(#profiles) .brand{gap:0!important;margin-right:4px!important}
-body:has(#profiles) .brand b{font-size:27px!important;white-space:nowrap!important}
-body:has(#profiles) .brand small{font-size:8px!important;margin-top:3px!important}
-body:has(#profiles) .nav{gap:10px!important;min-height:78px!important}
-body:has(#profiles) .navlinks{flex:1 1 auto!important;width:100%!important;display:flex!important;gap:8px!important;align-items:stretch!important}
-body:has(#profiles) .navlinks a{flex:1 1 0!important;width:0!important;min-width:0!important;padding:12px 8px!important;display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;font-size:12px!important;border-radius:14px!important}
-@media(max-width:760px){body:has(#profiles) .nav{min-height:68px!important;gap:6px!important}.brand b{font-size:22px!important}body:has(#profiles) .brand b{font-size:21px!important}body:has(#profiles) .brand small{font-size:7px!important}body:has(#profiles) .navlinks{gap:4px!important}body:has(#profiles) .navlinks a{padding:10px 4px!important;font-size:10px!important;border-radius:10px!important}}
-@media(max-width:500px){body:has(#profiles) .nav{gap:4px!important}body:has(#profiles) .brand b{font-size:17px!important}body:has(#profiles) .brand small{display:none!important}body:has(#profiles) .navlinks{gap:3px!important}body:has(#profiles) .navlinks a{padding:9px 2px!important;font-size:8px!important;border-radius:9px!important}}
+/* PROFILES HEADER FINAL: logo removed; five navigation buttons fill the whole row. */
+body:has(#profiles) .top{width:100%!important;margin:0!important;padding-left:0!important;padding-right:0!important;text-align:center!important}
+body:has(#profiles) .header{width:100%!important;margin:0!important}
+body:has(#profiles) .header .wrap{width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+body:has(#profiles) .header .nav{width:100%!important;min-height:70px!important;margin:0!important;padding:0!important;gap:0!important;display:flex!important;align-items:stretch!important}
+body:has(#profiles) .header .brand{display:none!important}
+body:has(#profiles) .header .navlinks{width:100%!important;flex:1 1 100%!important;margin:0!important;padding:0!important;gap:0!important;display:flex!important;align-items:stretch!important;justify-content:stretch!important}
+body:has(#profiles) .header .navlinks a{flex:1 1 0!important;width:20%!important;min-width:0!important;margin:0!important;padding:15px 5px!important;border-radius:0!important;border:0!important;border-left:1px solid rgba(255,255,255,.18)!important;display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;white-space:nowrap!important;font-size:clamp(10px,1.7vw,14px)!important;box-shadow:none!important}
+body:has(#profiles) .header .navlinks a:first-child{border-left:0!important;background:linear-gradient(135deg,#087b59,#0ba879)!important;color:#fff!important}
+body:has(#profiles) .header .navlinks a:nth-child(2){background:linear-gradient(135deg,#a70a51,#d90b62)!important;color:#fff!important}
+body:has(#profiles) .header .navlinks a:nth-child(3){background:linear-gradient(135deg,#64158f,#8d2bb0)!important;color:#fff!important}
+body:has(#profiles) .header .navlinks a:nth-child(4){background:linear-gradient(135deg,#4d2275,#7620ad)!important;color:#fff!important}
+body:has(#profiles) .header .navlinks a:nth-child(5){background:linear-gradient(135deg,#d90b62,#7620ad)!important;color:#fff!important}
+body:has(#profiles) .header .navlinks a:hover{filter:brightness(1.12)!important;transform:none!important}
+@media(max-width:500px){body:has(#profiles) .header .nav{min-height:58px!important}body:has(#profiles) .header .navlinks a{padding:13px 2px!important;font-size:8px!important;letter-spacing:-.15px!important}}

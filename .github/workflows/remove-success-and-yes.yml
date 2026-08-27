@@ -10,23 +10,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Remove Success and top Yes button only
+      - name: Remove only Success and top verification check
         run: |
-          python3 - <<'PY'
-          from pathlib import Path
-          p=Path('index.html')
-          s=p.read_text(encoding='utf-8')
-          s=s.replace('J❤️R❤️N <span>Success</span>', 'J❤️R❤️N', 1)
-          # Remove the green verification check attached to the brand only.
-          s=s.replace('.brand:after{content:"✓"!important}', '.brand:after{content:""!important;display:none!important}', 1)
-          s=s.replace('.brand:after{content:"✓";', '.brand:after{content:"";display:none!important;', 1)
-          p.write_text(s, encoding='utf-8')
-          PY
+          sed -i 's/J❤️R❤️N <span>Success<\/span>/J❤️R❤️N/' index.html
+          sed -i 's/\.brand:after{content:"✓"!important}/.brand:after{content:""!important;display:none!important}/' index.html
+          sed -i 's/\.brand:after{content:"✓";/.brand:after{content:"";display:none!important;/' index.html
       - name: Commit changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git diff --cached --quiet && exit 0
-          git commit -m "Remove Success and top verification button from JORON home"
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Remove Success and top verification check from JORON home"
           git push

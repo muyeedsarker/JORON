@@ -1,0 +1,35 @@
+name: Apply JORON Reference Theme
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  theme:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Attach reference theme to every root HTML page
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          marker='assets/joron-reference-theme.css'
+          for p in Path('.').glob('*.html'):
+              s=p.read_text(encoding='utf-8')
+              if marker in s: continue
+              tag=f'<link rel="stylesheet" href="{marker}">'
+              if '</head>' in s:
+                  p.write_text(s.replace('</head>',tag+'</head>',1),encoding='utf-8')
+          for p in Path('.').glob('TEMP_CHECK*.txt'):
+              p.unlink()
+          PY
+      - name: Commit theme rollout
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add '*.html' assets/joron-reference-theme.css
+          git add -u TEMP_CHECK.txt TEMP_CHECK2.txt TEMP_CHECK3.txt || true
+          if git diff --cached --quiet; then echo 'No changes needed'; exit 0; fi
+          git commit -m "Apply JORON reference theme across pages"
+          git push origin HEAD:main

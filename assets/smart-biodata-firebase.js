@@ -12,7 +12,6 @@ const ids = [
   "personality","about","prefAge","prefDistrict","top3","photoUrl","visibility"
 ];
 
-// Public/searchable fields only. Sensitive/private fields stay in privateBiodata.
 const publicIds = [
   "name","nickname","age","gender","height","marital","division","district",
   "upazila","eduSystem","education","profession","familyType","personality","photoUrl","visibility"
@@ -52,6 +51,46 @@ function publicProjection(data) {
   return out;
 }
 
+// Bangladesh's 64 districts, grouped by division. This keeps both Present District
+// and Permanent District usable without requiring a separate network/API call.
+const districtsByDivision = {
+  "ঢাকা": ["ঢাকা","ফরিদপুর","গাজীপুর","গোপালগঞ্জ","কিশোরগঞ্জ","মাদারীপুর","মানিকগঞ্জ","মুন্সিগঞ্জ","নারায়ণগঞ্জ","নরসিংদী","রাজবাড়ী","শরীয়তপুর","টাঙ্গাইল"],
+  "চট্টগ্রাম": ["বান্দরবান","ব্রাহ্মণবাড়িয়া","চাঁদপুর","চট্টগ্রাম","কুমিল্লা","কক্সবাজার","ফেনী","খাগড়াছড়ি","লক্ষ্মীপুর","নোয়াখালী","রাঙ্গামাটি"],
+  "রাজশাহী": ["বগুড়া","জয়পুরহাট","নওগাঁ","নাটোর","চাঁপাইনবাবগঞ্জ","পাবনা","রাজশাহী","সিরাজগঞ্জ"],
+  "খুলনা": ["বাগেরহাট","চুয়াডাঙ্গা","যশোর","ঝিনাইদহ","খুলনা","কুষ্টিয়া","মাগুরা","মেহেরপুর","নড়াইল","সাতক্ষীরা"],
+  "বরিশাল": ["বরগুনা","বরিশাল","ভোলা","ঝালকাঠি","পটুয়াখালী","পিরোজপুর"],
+  "সিলেট": ["হবিগঞ্জ","মৌলভীবাজার","সুনামগঞ্জ","সিলেট"],
+  "রংপুর": ["দিনাজপুর","গাইবান্ধা","কুড়িগ্রাম","লালমনিরহাট","নীলফামারী","পঞ্চগড়","রংপুর","ঠাকুরগাঁও"],
+  "ময়মনসিংহ": ["জামালপুর","ময়মনসিংহ","নেত্রকোনা","শেরপুর"]
+};
+
+function setOptions(select, placeholder, values, selected = "") {
+  if (!select) return;
+  select.innerHTML = "";
+  const first = document.createElement("option");
+  first.value = "";
+  first.textContent = placeholder;
+  select.appendChild(first);
+  values.forEach(value => {
+    const option = document.createElement("option");
+    option.value = value;
+    option.textContent = value;
+    select.appendChild(option);
+  });
+  if (selected && values.includes(selected)) select.value = selected;
+}
+
+function refreshDistricts(selectedPresent = "", selectedPermanent = "") {
+  const division = document.getElementById("division")?.value || "ঢাকা";
+  const districts = districtsByDivision[division] || [];
+  setOptions(document.getElementById("district"), "জেলা নির্বাচন করুন", districts, selectedPresent);
+  setOptions(document.getElementById("pdistrict"), "Permanent জেলা নির্বাচন করুন", districts, selectedPermanent);
+}
+
+// Populate immediately so the dropdowns are usable before any Firebase read.
+refreshDistricts();
+document.getElementById("division")?.addEventListener("change", () => refreshDistricts());
+
 await persistenceReady;
 
 onAuthStateChanged(auth, async user => {
@@ -61,13 +100,16 @@ onAuthStateChanged(auth, async user => {
   }
   try {
     const snap = await getDoc(doc(db, "privateBiodata", user.uid));
-    if (snap.exists()) fill(snap.data());
+    if (snap.exists()) {
+      const data = snap.data();
+      refreshDistricts(data.district || "", data.pdistrict || "");
+      fill(data);
+    }
   } catch (error) {
     console.error("JORON Smart Biodata load failed:", error);
   }
 });
 
-// Private data is owner-only; the public collection is a deliberately limited projection.
 form?.addEventListener("submit", async event => {
   event.preventDefault();
   event.stopImmediatePropagation();
@@ -97,7 +139,6 @@ form?.addEventListener("submit", async event => {
       { merge: true }
     );
 
-    // Never mirror full private biodata into browser storage.
     localStorage.removeItem("joronSmartBiodata");
 
     if (notice) {

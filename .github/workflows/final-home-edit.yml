@@ -1,0 +1,42 @@
+name: JORON final homepage edit
+on:
+  push:
+    paths:
+      - ".github/workflows/final-home-edit.yml"
+permissions:
+  contents: write
+jobs:
+  update-home:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply requested homepage edits
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          # Remove image logo only; keep the brand text.
+          s=s.replace('<img src="assets/joron-logo.jpg" alt="J❤️R❤️N Logo">','')
+          # Remove any brand underline pseudo-element from earlier variants.
+          s=s.replace('.brand strong:after{content:"";display:block;width:76%;height:3px;margin:7px auto 0;border-radius:99px;background:linear-gradient(90deg,#64158f,#d90b62,#087b59);box-shadow:0 2px 7px rgba(100,21,143,.2)}','')
+          # Replace the six-button quick grid with the requested 21 discovery options.
+          start=s.find('<div class="quick-grid">')
+          end=s.find('</div></nav><section class="hero">',start)
+          if start>=0 and end>=0:
+            items=[('🗓️','Meeting','meeting'),('✨','New','new'),('🎙️','Voice','voice'),('🟢','Online','online'),('💗','For You','foryou'),('📍','Nearby','nearby'),('🎲','Random','random'),('💎','Premium','premium'),('🎓','Education','education'),('💼','Profession','profession'),('🟣','Status','status'),('🆓','Free','free'),('☪️','Religion','religion'),('🔮','Astrology','astrology'),('🎂','Birthday','birthday'),('🙈','Photoless','photoless'),('📦','Relocation','relocation'),('🏠','ঘরজামাই','ghorjamai'),('📖','Story','story'),('✈️','প্রবাসী','probashi'),('🌏','ধর্মীয় বৈচিত্র্য','religious-diversity')]
+            grid='<div class="quick-grid">'+''.join(f'<a href="matching.html?filter={k}"><span class="ico">{i}</span><span class="label">{l}</span></a>' for i,l,k in items)+'</div>'
+            s=s[:start]+grid+s[end+len('</div>'):]
+          css='''<style id="joron-final-home-edit">.brand img{display:none!important}.brand strong:after{display:none!important;content:none!important}.brand{gap:6px!important}.brand strong{font-size:clamp(30px,7vw,42px)!important;line-height:1!important;letter-spacing:1.5px!important;text-shadow:0 2px 0 rgba(255,255,255,.9),0 5px 14px rgba(100,21,143,.18)}.relationship-btn{width:clamp(118px,24vw,150px)!important;min-width:clamp(118px,24vw,150px)!important;height:58px!important;border-radius:18px!important}.relationship-btn small{font-size:10px!important}.quick a{border:2px solid rgba(100,21,143,.22)!important;box-shadow:0 8px 18px rgba(70,25,90,.08),inset 0 1px 0 #fff!important}.quick a:hover{border-color:#d90b62!important}.quick-grid{gap:10px!important}@media(max-width:560px){.head{grid-template-columns:48px minmax(0,1fr) 118px!important}.brand strong{font-size:clamp(25px,7.5vw,31px)!important}.relationship-btn{width:112px!important;min-width:112px!important;height:54px!important}.relationship-btn small{font-size:9px!important}.quick-grid{grid-template-columns:repeat(3,1fr)!important;gap:9px!important}.quick a{min-height:88px!important;border-radius:20px!important}.quick .ico{font-size:28px!important}.quick .label{font-size:12px!important}}@media(max-width:390px){.head{grid-template-columns:44px minmax(0,1fr) 100px!important}.brand strong{font-size:24px!important}.relationship-btn{width:96px!important;min-width:96px!important;height:50px!important}.relationship-btn small{font-size:8px!important}.quick-grid{gap:8px!important}.quick a{min-height:82px!important}} </style>'''
+          if 'id="joron-final-home-edit"' not in s:
+            s=s.replace('</head>',css+'</head>',1)
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Commit homepage
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Apply final JORON homepage branding and button layout"
+          git push

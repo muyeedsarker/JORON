@@ -32,3 +32,5 @@ jobs:
           git diff --cached --quiet && exit 0
           git commit -m "Remove Success from JORON home heading"
           git push
+
+# Triggered update: preserve all other homepage content.

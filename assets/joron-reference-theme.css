@@ -23,3 +23,18 @@ footer p,.footer p,footer a,.footer a{color:#ffe8f5!important}
 /* Contrast guard: prevents pale text on pale legacy cards */
 .step *,.roadmap-card *,.feature-card *,.journey-card *,.timeline-card *,.info-card *,.phase *,.roadmap-item *{text-shadow:none!important}
 @media(max-width:560px){.step,.roadmap-card,.feature-card,.journey-card,.timeline-card,.info-card{border-radius:22px!important}.step p,.roadmap-card p,.feature-card p,.journey-card p{font-size:13px!important;line-height:1.65!important}}
+
+/* HOME PAGE OVERRIDE: the live JORON landing page uses the premium light theme.
+   Scoped by :has(.hero-card) so the reference theme remains available elsewhere. */
+body:has(.hero-card){background:radial-gradient(circle at 10% 8%,#ffe4f1 0,transparent 25%),radial-gradient(circle at 92% 18%,#e8dcff 0,transparent 24%),linear-gradient(145deg,#fff7fb 0%,#f5efff 52%,#effff8 100%)!important;color:#20202b!important}
+body:has(.hero-card) header{background:rgba(255,255,255,.96)!important;border-color:#eadfea!important;box-shadow:0 5px 20px rgba(70,25,90,.08)!important}
+body:has(.hero-card) .top{background:linear-gradient(90deg,#64158f,#d90b62,#087b59)!important;color:#fff!important}
+body:has(.hero-card) .quick,body:has(.hero-card) .showcase,body:has(.hero-card) .card,body:has(.hero-card) .step,body:has(.hero-card) .cta,body:has(.hero-card) .trust div{background:linear-gradient(145deg,#fff 0%,#fff7fc 52%,#f3ebff 100%)!important;color:#20202b!important;border-color:#eadfea!important;box-shadow:0 10px 28px rgba(70,25,90,.10)!important}
+body:has(.hero-card) .quick a{background:linear-gradient(145deg,#fff,#f7efff)!important;color:#20202b!important;border-color:rgba(100,21,143,.12)!important;box-shadow:0 8px 18px rgba(70,25,90,.08)!important}
+body:has(.hero-card) .hero-card{background:linear-gradient(135deg,#fff0f7,#eee5ff 56%,#e9fff5)!important;color:#20202b!important}
+body:has(.hero-card) h1,body:has(.hero-card) h2,body:has(.hero-card) h3,body:has(.hero-card) .title h2{color:#30143f!important}
+body:has(.hero-card) p,body:has(.hero-card) .card p,body:has(.hero-card) .step p,body:has(.hero-card) .showcase p,body:has(.hero-card) .cta p{color:#687078!important}
+body:has(.hero-card) .badge,body:has(.hero-card) .tag{background:#f0e3ff!important;color:#64158f!important;border-color:#d8c1ed!important}
+body:has(.hero-card) .btn{background:#fff!important;color:#64158f!important;border:1px solid #64158f!important;box-shadow:none!important}
+body:has(.hero-card) .btn.primary{background:linear-gradient(135deg,#d90b62,#e51b76 48%,#7620ad)!important;color:#fff!important;border:0!important;box-shadow:0 10px 22px rgba(210,11,90,.22)!important}
+body:has(.hero-card) footer{background:linear-gradient(135deg,#281035,#64158f,#087b59)!important;color:#dffff3!important}

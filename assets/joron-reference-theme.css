@@ -23,3 +23,16 @@ body:has(#profiles) .searchbox select:focus{border-color:#b20b4d!important;outli
 
 @media(max-width:600px){body:has(#profiles) .top{font-size:13px!important;padding:9px 0!important}body:has(#profiles) .header .wrap{padding:5px 3px!important}body:has(#profiles) .header .nav{gap:4px!important}body:has(#profiles) .header .navlinks{gap:4px!important}body:has(#profiles) .header .navlinks a{padding:12px 3px!important;font-size:11px!important;border-width:1.5px!important;border-radius:11px!important}}
 @media(max-width:420px){body:has(#profiles) .top{font-size:12px!important}body:has(#profiles) .header .wrap{padding:4px 2px!important}body:has(#profiles) .header .nav,.body:has(#profiles) .header .navlinks{gap:3px!important}body:has(#profiles) .header .navlinks a{padding:11px 2px!important;font-size:10px!important;border-radius:10px!important}}
+
+/* Global JORON premium navigation — only pages using the same 5-link .navlinks header */
+body:has(.navlinks a:nth-child(5)) .top{width:100vw!important;margin-left:calc(50% - 50vw)!important;margin-right:calc(50% - 50vw)!important;padding-left:0!important;padding-right:0!important}
+body:has(.navlinks a:nth-child(5)) .header{width:100vw!important;margin-left:calc(50% - 50vw)!important;margin-right:calc(50% - 50vw)!important}
+body:has(.navlinks a:nth-child(5)) .header .navlinks{display:flex!important;width:100%!important;flex:1 1 100%!important;gap:8px!important}
+body:has(.navlinks a:nth-child(5)) .header .navlinks a{flex:1 1 0!important;min-width:0!important;text-align:center!important;font-size:clamp(13px,1.55vw,16px)!important;font-weight:900!important;padding:13px 8px!important;border:2px solid rgba(255,255,255,.88)!important;border-radius:14px!important;color:#fff!important;box-shadow:0 8px 20px rgba(28,5,38,.24),inset 0 1px 0 rgba(255,255,255,.3)!important}
+body:has(.navlinks a:nth-child(5)) .header .navlinks a:nth-child(1){background:linear-gradient(135deg,#087b59,#10a978)!important}
+body:has(.navlinks a:nth-child(5)) .header .navlinks a:nth-child(2){background:linear-gradient(135deg,#b20b4d,#f01b72)!important}
+body:has(.navlinks a:nth-child(5)) .header .navlinks a:nth-child(3){background:linear-gradient(135deg,#64158f,#a13bc5)!important}
+body:has(.navlinks a:nth-child(5)) .header .navlinks a:nth-child(4){background:linear-gradient(135deg,#48206f,#8237b5)!important}
+body:has(.navlinks a:nth-child(5)) .header .navlinks a:nth-child(5){background:linear-gradient(135deg,#d90b62,#7620ad)!important}
+@media(max-width:600px){body:has(.navlinks a:nth-child(5)) .header .navlinks{gap:4px!important}body:has(.navlinks a:nth-child(5)) .header .navlinks a{padding:12px 3px!important;font-size:11px!important;border-width:1.5px!important;border-radius:11px!important}}
+@media(max-width:420px){body:has(.navlinks a:nth-child(5)) .header .navlinks{gap:3px!important}body:has(.navlinks a:nth-child(5)) .header .navlinks a{padding:11px 2px!important;font-size:10px!important;border-radius:10px!important}}

@@ -48,5 +48,9 @@ body:has(#profiles) .header .navlinks a:nth-child(3){background:linear-gradient(
 body:has(#profiles) .header .navlinks a:nth-child(4){background:linear-gradient(135deg,#4d2275,#7d32b0)!important;color:#fff!important}
 body:has(#profiles) .header .navlinks a:nth-child(5){background:linear-gradient(135deg,#d90b62,#7620ad)!important;color:#fff!important}
 body:has(#profiles) .header .navlinks a:hover{filter:brightness(1.1)!important;transform:translateY(-1px)!important}
+/* PROFILE SEARCH SELECT FIX: keep dropdown options readable on light Profiles search UI. */
+body:has(#profiles) .searchbox select{background:#fff!important;color:#17232b!important;border:2px solid #d9cbd6!important;color-scheme:light!important;appearance:auto!important;-webkit-appearance:menulist!important;cursor:pointer!important}
+body:has(#profiles) .searchbox select option{background:#fff!important;color:#17232b!important;font-weight:700!important}
+body:has(#profiles) .searchbox select:focus{background:#fff!important;color:#17232b!important;border-color:#b20b4d!important;box-shadow:0 0 0 3px rgba(232,23,104,.14)!important;outline:none!important}
 @media(max-width:600px){body:has(#profiles) .top{font-size:13px!important;padding:8px 4px!important}body:has(#profiles) .header .nav{padding:5px 3px!important;gap:4px!important}body:has(#profiles) .header .navlinks{gap:4px!important}body:has(#profiles) .header .navlinks a{padding:11px 4px!important;font-size:10px!important;border-width:1.5px!important;border-radius:10px!important}}
 @media(max-width:420px){body:has(#profiles) .top{font-size:12px!important;white-space:nowrap!important}body:has(#profiles) .header .nav{padding:4px 2px!important;gap:3px!important}body:has(#profiles) .header .navlinks{gap:3px!important}body:has(#profiles) .header .navlinks a{padding:10px 2px!important;font-size:9px!important;border-radius:9px!important}}

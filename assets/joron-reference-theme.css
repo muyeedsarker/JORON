@@ -38,3 +38,15 @@ body:has(.hero-card) .badge,body:has(.hero-card) .tag{background:#f0e3ff!importa
 body:has(.hero-card) .btn{background:#fff!important;color:#64158f!important;border:1px solid #64158f!important;box-shadow:none!important}
 body:has(.hero-card) .btn.primary{background:linear-gradient(135deg,#d90b62,#e51b76 48%,#7620ad)!important;color:#fff!important;border:0!important;box-shadow:0 10px 22px rgba(210,11,90,.22)!important}
 body:has(.hero-card) footer{background:linear-gradient(135deg,#281035,#64158f,#087b59)!important;color:#dffff3!important}
+
+/* PROFILES HEADER: J❤️R❤️N already appears in the top brand, so remove the duplicate logo image.
+   Keep the five navigation buttons on one balanced full-width row without touching Firebase/filter logic. */
+body:has(#profiles) .brand img{display:none!important}
+body:has(#profiles) .brand{gap:0!important;margin-right:4px!important}
+body:has(#profiles) .brand b{font-size:27px!important;white-space:nowrap!important}
+body:has(#profiles) .brand small{font-size:8px!important;margin-top:3px!important}
+body:has(#profiles) .nav{gap:10px!important;min-height:78px!important}
+body:has(#profiles) .navlinks{flex:1 1 auto!important;width:100%!important;display:flex!important;gap:8px!important;align-items:stretch!important}
+body:has(#profiles) .navlinks a{flex:1 1 0!important;width:0!important;min-width:0!important;padding:12px 8px!important;display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;font-size:12px!important;border-radius:14px!important}
+@media(max-width:760px){body:has(#profiles) .nav{min-height:68px!important;gap:6px!important}.brand b{font-size:22px!important}body:has(#profiles) .brand b{font-size:21px!important}body:has(#profiles) .brand small{font-size:7px!important}body:has(#profiles) .navlinks{gap:4px!important}body:has(#profiles) .navlinks a{padding:10px 4px!important;font-size:10px!important;border-radius:10px!important}}
+@media(max-width:500px){body:has(#profiles) .nav{gap:4px!important}body:has(#profiles) .brand b{font-size:17px!important}body:has(#profiles) .brand small{display:none!important}body:has(#profiles) .navlinks{gap:3px!important}body:has(#profiles) .navlinks a{padding:9px 2px!important;font-size:8px!important;border-radius:9px!important}}

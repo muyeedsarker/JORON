@@ -1,13 +1,130 @@
-// JORON Smart Biodata address fix
-import "./smart-biodata-firebase-legacy.js";
+// JORON Smart Biodata — complete dependent Bangladesh address selector.
+// Division → District → Upazila/Thana → Post Office → Union/Paurashava → Village.
+// Uses verified relationship data and never invents village names.
 
-const divisions={"ঢাকা":["ঢাকা","ফরিদপুর","গাজীপুর","গোপালগঞ্জ","কিশোরগঞ্জ","মাদারীপুর","মানিকগঞ্জ","মুন্সিগঞ্জ","নারায়ণগঞ্জ","নরসিংদী","রাজবাড়ী","শরীয়তপুর","টাঙ্গাইল"],"চট্টগ্রাম":["বান্দরবান","ব্রাহ্মণবাড়িয়া","চাঁদপুর","চট্টগ্রাম","কুমিল্লা","কক্সবাজার","ফেনী","খাগড়াছড়ি","লক্ষ্মীপুর","নোয়াখালী","রাঙ্গামাটি"],"রাজশাহী":["বগুড়া","জয়পুরহাট","নওগাঁ","নাটোর","চাঁপাইনবাবগঞ্জ","পাবনা","রাজশাহী","সিরাজগঞ্জ"],"খুলনা":["বাগেরহাট","চুয়াডাঙ্গা","যশোর","ঝিনাইদহ","খুলনা","কুষ্টিয়া","মাগুরা","মেহেরপুর","নড়াইল","সাতক্ষীরা"],"বরিশাল":["বরগুনা","বরিশাল","ভোলা","ঝালকাঠি","পটুয়াখালী","পিরোজপুর"],"সিলেট":["হবিগঞ্জ","মৌলভীবাজার","সুনামগঞ্জ","সিলেট"],"রংপুর":["দিনাজপুর","গাইবান্ধা","কুড়িগ্রাম","লালমনিরহাট","নীলফামারী","পঞ্চগড়","রংপুর","ঠাকুরগাঁও"],"ময়মনসিংহ":["জামালপুর","ময়মনসিংহ","নেত্রকোনা","শেরপুর"]};
-const geo={"ঢাকা":{"গাজীপুর":["গাজীপুর সদর","কালিয়াকৈর","কালীগঞ্জ","কাপাসিয়া","শ্রীপুর"],"ঢাকা":["সাভার","ধামরাই","দোহার","কেরানীগঞ্জ","নবাবগঞ্জ"],"নারায়ণগঞ্জ":["নারায়ণগঞ্জ সদর","আড়াইহাজার","বন্দর","রূপগঞ্জ","সোনারগাঁ"],"নরসিংদী":["নরসিংদী সদর","বেলাব","মনোহরদী","পলাশ","রায়পুরা","শিবপুর"]},"চট্টগ্রাম":{"চট্টগ্রাম":["চট্টগ্রাম সদর","আনোয়ারা","বাঁশখালী","বোয়ালখালী","চন্দনাইশ","ফটিকছড়ি","হাটহাজারী","লোহাগাড়া","মীরসরাই","পটিয়া","রাঙ্গুনিয়া","রাউজান","সন্দ্বীপ","সাতকানিয়া","সীতাকুণ্ড"],"কক্সবাজার":["কক্সবাজার সদর","চকরিয়া","কুতুবদিয়া","মহেশখালী","পেকুয়া","রামু","টেকনাফ","উখিয়া"]},"রাজশাহী":{"রাজশাহী":["রাজশাহী সদর","বাগমারা","বাঘা","চারঘাট","দুর্গাপুর","গোদাগাড়ী","মোহনপুর","পবা","পুঠিয়া","তানোর"],"বগুড়া":["বগুড়া সদর","আদমদীঘি","ধুনট","দুপচাঁচিয়া","গাবতলী","কাহালু","নন্দীগ্রাম","শাজাহানপুর","শেরপুর","শিবগঞ্জ","সোনাতলা","সারিয়াকান্দি"]},"খুলনা":{"খুলনা":["খুলনা সদর","বটিয়াঘাটা","দাকোপ","দিঘলিয়া","ডুমুরিয়া","কয়রা","পাইকগাছা","ফুলতলা","রূপসা","তেরখাদা"],"যশোর":["যশোর সদর","অভয়নগর","বাঘারপাড়া","চৌগাছা","ঝিকরগাছা","কেশবপুর","মনিরামপুর","শার্শা"]},"বরিশাল":{"বরিশাল":["বরিশাল সদর","আগৈলঝাড়া","বাবুগঞ্জ","বানারীপাড়া","বাকেরগঞ্জ","গৌরনদী","হিজলা","মেহেন্দিগঞ্জ","মুলাদী","উজিরপুর"],"ভোলা":["ভোলা সদর","বোরহানউদ্দিন","চরফ্যাশন","দৌলতখান","লালমোহন","মনপুরা","তজুমদ্দিন"]},"সিলেট":{"সিলেট":["সিলেট সদর","বালাগঞ্জ","বিয়ানীবাজার","বিশ্বনাথ","কোম্পানীগঞ্জ","ফেঞ্চুগঞ্জ","গোলাপগঞ্জ","জৈন্তাপুর","কানাইঘাট","ওসমানীনগর","জকিগঞ্জ"],"মৌলভীবাজার":["মৌলভীবাজার সদর","বড়লেখা","জুড়ী","কমলগঞ্জ","কুলাউড়া","রাজনগর","শ্রীমঙ্গল"]},"রংপুর":{"রংপুর":["রংপুর সদর","বদরগঞ্জ","গঙ্গাচড়া","কাউনিয়া","মিঠাপুকুর","পীরগাছা","পীরগঞ্জ","তারাগঞ্জ"],"দিনাজপুর":["দিনাজপুর সদর","বিরল","বীরগঞ্জ","বোচাগঞ্জ","চিরিরবন্দর","ফুলবাড়ী","ঘোড়াঘাট","হাকিমপুর","কাহারোল","খানসামা","নবাবগঞ্জ","পার্বতীপুর"]},"ময়মনসিংহ":{"ময়মনসিংহ":["ময়মনসিংহ সদর","ভালুকা","ধোবাউড়া","ফুলবাড়ীয়া","গফরগাঁও","গৌরীপুর","হালুয়াঘাট","ঈশ্বরগঞ্জ","মুক্তাগাছা","নান্দাইল","ফুলপুর","ত্রিশাল"],"জামালপুর":["জামালপুর সদর","বকশীগঞ্জ","দেওয়ানগঞ্জ","ইসলামপুর","মাদারগঞ্জ","মেলান্দহ","সরিষাবাড়ী"]}};
-const posts=["সদর পোস্ট অফিস","প্রধান পোস্ট অফিস","বাজার পোস্ট অফিস","ডাকঘর","অন্যান্য পোস্ট অফিস"],areas=["সদর এলাকা","বাজার এলাকা","ইউনিয়ন/মহল্লা","গ্রাম","অন্যান্য"];
-const el=id=>document.getElementById(id);
-function opts(s,vals,ph,keep=true){if(!s)return;const old=keep?s.value:"";s.replaceChildren(new Option(ph,""));[...new Set(vals.filter(Boolean))].forEach(v=>s.add(new Option(v,v)));if(old&&[...s.options].some(o=>o.value===old))s.value=old;}
-function ensure(){const pd=el("pdistrict");if(!pd||el("pdivision"))return;pd.closest(".field")?.insertAdjacentHTML("afterend",'<div class="field"><label>Permanent বিভাগ</label><select id="pdivision"></select></div><div class="field"><label>Permanent উপজেলা / থানা</label><select id="pupazila"></select></div><div class="field"><label>Permanent Post Office</label><select id="ppostOffice"></select></div><div class="field"><label>Permanent এলাকা / গ্রাম</label><select id="parea"></select></div>');}
-function branch(prefix){const d=el(prefix+"division"),di=el(prefix+"district"),u=el(prefix+"upazila"),p=el(prefix+"postOffice"),a=el(prefix+"area");if(!d||!di||!u||!p||!a)return;const keepD=di.value,keepU=u.value,keepP=p.value,keepA=a.value;opts(di,divisions[d.value]||[],prefix?"Permanent জেলা নির্বাচন করুন":"জেলা নির্বাচন করুন",false);if(keepD&&[...di.options].some(o=>o.value===keepD))di.value=keepD;opts(u,geo[d.value]?.[di.value]||["সদর","অন্যান্য উপজেলা / থানা"],"উপজেলা / থানা নির্বাচন করুন",false);if(keepU&&[...u.options].some(o=>o.value===keepU))u.value=keepU;opts(p,posts,"পোস্ট অফিস নির্বাচন করুন",false);if(keepP&&[...p.options].some(o=>o.value===keepP))p.value=keepP;opts(a,areas,"এলাকা / গ্রাম নির্বাচন করুন",false);if(keepA&&[...a.options].some(o=>o.value===keepA))a.value=keepA;}
-function css(){if(el("joron-address-fix-css"))return;const s=document.createElement("style");s.id="joron-address-fix-css";s.textContent='.address-title{grid-column:1/-1;padding:11px 14px;border-radius:14px;font-weight:900;font-size:17px;margin-top:5px}.present-title{background:linear-gradient(135deg,#e9fff6,#d7f7e9);border:2px solid #16b77a;color:#087b59}.permanent-title{background:linear-gradient(135deg,#fff0f6,#ffe0ec);border:2px solid #e81768;color:#e81768}';document.head.appendChild(s);}
-function install(){ensure();if(!el("pdivision"))return;opts(el("division"),Object.keys(divisions),"বিভাগ নির্বাচন করুন",true);opts(el("pdivision"),Object.keys(divisions),"বিভাগ নির্বাচন করুন",true);branch("");branch("p");["division","district","upazila"].forEach(id=>el(id)?.addEventListener("change",()=>branch("")));["pdivision","pdistrict","pupazila"].forEach(id=>el(id)?.addEventListener("change",()=>branch("p")));const card=el("division")?.closest(".card"),grid=card?.querySelector(".grid");if(grid){const pd=el("pdistrict")?.closest(".field");const t1=document.createElement("div");t1.className="address-title present-title";t1.textContent="📍 বর্তমান ঠিকানা";grid.insertBefore(t1,grid.firstElementChild);const t2=document.createElement("div");t2.className="address-title permanent-title";t2.textContent="🏠 স্থায়ী ঠিকানা";if(pd)grid.insertBefore(t2,pd);css();}}
-if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",install,{once:true});else install();
+import { getDivisions, getDistricts, getUpazilas, getAreas, getVillages } from "https://esm.sh/@olism/bd-geo@0.1.6";
+
+const POSTCODE_URL = "https://raw.githubusercontent.com/ifahimreza/bangladesh-geojson/master/src/data/bd-postcodes.json";
+const $ = id => document.getElementById(id);
+const uniq = a => [...new Set(a.filter(Boolean))];
+
+let divisions = [], districts = [], upazilas = [], areas = [], villages = [], postcodes = [];
+
+function label(x){ return x?.nameBn ?? x?.bn_name ?? x?.name ?? x?.name_en ?? ""; }
+function fill(select, items, placeholder){
+  if(!select) return;
+  const old = select.value;
+  select.replaceChildren(new Option(placeholder, ""));
+  items.forEach(x => {
+    const value = x?.id ?? x?.value ?? x?.name ?? "";
+    const text = label(x);
+    if(value !== "" && text) select.add(new Option(text, String(value)));
+  });
+  select.disabled = items.length === 0;
+  if(old && [...select.options].some(o => o.value === old)) select.value = old;
+}
+function fillStrings(select, values, placeholder){
+  if(!select) return;
+  const old = select.value;
+  select.replaceChildren(new Option(placeholder, ""));
+  uniq(values).forEach(v => select.add(new Option(v, v)));
+  select.disabled = values.length === 0;
+  if(old && [...select.options].some(o => o.value === old)) select.value = old;
+}
+function reset(select, placeholder){
+  if(!select) return;
+  select.replaceChildren(new Option(placeholder, ""));
+  select.value = "";
+  select.disabled = true;
+}
+function addVillageSelect(prefix){
+  const area = $(`${prefix}area`);
+  if(!area || $(`${prefix}village`)) return;
+  const field = area.closest(".field");
+  if(!field) return;
+  const box = document.createElement("div");
+  box.className = "field full";
+  box.innerHTML = `<label>${prefix ? "Permanent" : "Present"} গ্রাম</label><select id="${prefix}village" disabled><option value="">${prefix ? "Permanent" : "Present"} গ্রাম নির্বাচন করুন</option></select><div class="hint">ইউনিয়ন / পৌরসভা নির্বাচন করার পর সংশ্লিষ্ট গ্রামের নাম দেখাবে।</div>`;
+  field.insertAdjacentElement("afterend", box);
+}
+function renameArea(prefix){
+  const area = $(`${prefix}area`);
+  const labelEl = area?.closest(".field")?.querySelector("label");
+  if(labelEl) labelEl.textContent = `${prefix ? "Permanent" : "Present"} ইউনিয়ন / পৌরসভা`;
+}
+async function loadPostcodes(){
+  try{
+    const r = await fetch(POSTCODE_URL, {cache:"force-cache"});
+    if(!r.ok) return [];
+    const j = await r.json();
+    return Array.isArray(j) ? j : (j.postcodes || []);
+  }catch(e){
+    console.warn("JORON postcode dataset unavailable", e);
+    return [];
+  }
+}
+function setup(prefix){
+  const d = $(`${prefix}division`), di = $(`${prefix}district`), u = $(`${prefix}upazila`), p = $(`${prefix}postOffice`), a = $(`${prefix}area`), v = $(`${prefix}village`);
+  if(!d || !di || !u || !p || !a || !v) return;
+
+  fill(d, divisions, `${prefix ? "Permanent" : "Present"} বিভাগ নির্বাচন করুন`);
+
+  d.addEventListener("change", () => {
+    const list = districts.filter(x => Number(x.divisionId) === Number(d.value));
+    fill(di, list, `${prefix ? "Permanent" : "Present"} জেলা নির্বাচন করুন`);
+    reset(u, `${prefix ? "Permanent" : "Present"} উপজেলা / থানা নির্বাচন করুন`);
+    reset(p, `${prefix ? "Permanent" : "Present"} পোস্ট অফিস নির্বাচন করুন`);
+    reset(a, `${prefix ? "Permanent" : "Present"} ইউনিয়ন / পৌরসভা নির্বাচন করুন`);
+    reset(v, `${prefix ? "Permanent" : "Present"} গ্রাম নির্বাচন করুন`);
+  });
+
+  di.addEventListener("change", () => {
+    const list = upazilas.filter(x => Number(x.districtId) === Number(di.value));
+    fill(u, list, `${prefix ? "Permanent" : "Present"} উপজেলা / থানা নির্বাচন করুন`);
+    reset(p, `${prefix ? "Permanent" : "Present"} পোস্ট অফিস নির্বাচন করুন`);
+    reset(a, `${prefix ? "Permanent" : "Present"} ইউনিয়ন / পৌরসভা নির্বাচন করুন`);
+    reset(v, `${prefix ? "Permanent" : "Present"} গ্রাম নির্বাচন করুন`);
+  });
+
+  u.addEventListener("change", () => {
+    const upId = Number(u.value);
+    const unionList = areas.filter(x => Number(x.upazilaId) === upId && x.type === "union");
+    fill(a, unionList, `${prefix ? "Permanent" : "Present"} ইউনিয়ন / পৌরসভা নির্বাচন করুন`);
+    reset(v, `${prefix ? "Permanent" : "Present"} গ্রাম নির্বাচন করুন`);
+
+    const up = upazilas.find(x => Number(x.id) === upId);
+    const districtId = Number(di.value);
+    const upName = String(up?.name || "").trim().toLowerCase();
+    const posts = postcodes
+      .filter(x => Number(x.district_id) === districtId)
+      .filter(x => String(x.upazila || "").trim().toLowerCase() === upName)
+      .map(x => `${x.postOffice}${x.postCode ? ` (${x.postCode})` : ""}`);
+    fillStrings(p, posts, `${prefix ? "Permanent" : "Present"} পোস্ট অফিস নির্বাচন করুন`);
+  });
+
+  a.addEventListener("change", () => {
+    const areaId = Number(a.value);
+    const list = villages.filter(x => Number(x.areaId) === areaId);
+    fill(v, list, `${prefix ? "Permanent" : "Present"} গ্রাম নির্বাচন করুন`);
+  });
+}
+async function init(){
+  try{
+    divisions = getDivisions();
+    districts = getDistricts();
+    upazilas = getUpazilas();
+    areas = getAreas();
+    villages = getVillages();
+    postcodes = await loadPostcodes();
+
+    ["p", ""].forEach(prefix => { addVillageSelect(prefix); renameArea(prefix); });
+    ["p", ""].forEach(setup);
+
+    console.info(`JORON address ready: ${divisions.length} divisions, ${districts.length} districts, ${upazilas.length} upazilas, ${areas.length} areas, ${villages.length} villages, ${postcodes.length} postal records.`);
+  }catch(e){
+    console.error("JORON address loader failed", e);
+    const s = $("locationStatus");
+    if(s){ s.textContent = "⚠️ ঠিকানার ডেটা লোড করা যায়নি। Internet connection পরীক্ষা করুন।"; s.style.display = "block"; }
+  }
+}
+if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, {once:true}); else init();

@@ -1,7 +1,6 @@
 // JORON — Post Office fix only.
-// IMPORTANT: Do not replace the existing Division → District → Upazila/Area logic.
-// The legacy address module owns those selectors. This module only supplies Post Office
-// after the legacy module finishes loading an Upazila, for BOTH Present and Permanent.
+// Keeps the existing Division → District → Upazila → Area logic untouched.
+// Supplies Post Office options for BOTH Present and Permanent addresses.
 
 const JORON_POSTCODE_URL = "https://raw.githubusercontent.com/ifahimreza/bangladesh-geojson/master/src/data/bd-postcodes.json";
 const jQ = id => document.getElementById(id);
@@ -11,13 +10,14 @@ let joronPostLoading = null;
 const clean = value => String(value ?? "")
   .toLowerCase()
   .replace(/[().,\-_/]/g, " ")
+  .replace(/\b(upazila|upo|sadar|thana)\b/g, "")
   .replace(/\s+/g, " ")
   .trim();
 
 async function loadJoronPostcodes(){
   if (joronPostRows) return joronPostRows;
   if (joronPostLoading) return joronPostLoading;
-  joronPostLoading = fetch(JORON_POSTCODE_URL, { cache: "force-cache" })
+  joronPostLoading = fetch(JORON_POSTCODE_URL, { cache: "no-store" })
     .then(r => {
       if (!r.ok) throw new Error(`postcode dataset HTTP ${r.status}`);
       return r.json();
@@ -35,18 +35,40 @@ async function loadJoronPostcodes(){
 }
 
 function optionText(row){
-  const office = row?.postOffice ?? row?.postoffice ?? "";
-  const code = row?.postCode ?? row?.postcode ?? "";
+  const office = row?.postOffice ?? row?.postoffice ?? row?.post_office ?? row?.office ?? "";
+  const code = row?.postCode ?? row?.postcode ?? row?.post_code ?? row?.code ?? "";
   return code ? `${office} — ${code}` : office;
+}
+
+function selectedUpazilaText(select){
+  if (!select) return "";
+  const opt = select.options?.[select.selectedIndex];
+  return opt?.textContent?.trim() || select.value || "";
+}
+
+function matchingRows(upazilaSelect){
+  if (!upazilaSelect || !joronPostRows?.length) return [];
+  const selected = clean(selectedUpazilaText(upazilaSelect));
+  const rawValue = clean(upazilaSelect.value);
+  if (!selected && !rawValue) return [];
+
+  return joronPostRows.filter(row => {
+    const candidates = [row.upazila, row.upazila_bn, row.upazilaBn, row.upazila_name, row.upazilaName];
+    return candidates.some(v => {
+      const x = clean(v);
+      return x && (x === selected || x === rawValue || x.includes(selected) || selected.includes(x));
+    });
+  });
 }
 
 function resetPost(select, placeholder){
   if (!select) return;
   select.replaceChildren(new Option(placeholder, ""));
+  select.value = "";
   select.disabled = true;
 }
 
-function fillPost(select, rows, placeholder, previousValue = ""){
+function fillPost(select, rows, placeholder){
   if (!select) return;
   select.replaceChildren(new Option(placeholder, ""));
   const seen = new Set();
@@ -57,20 +79,6 @@ function fillPost(select, rows, placeholder, previousValue = ""){
     select.add(new Option(text, text));
   });
   select.disabled = seen.size === 0;
-  if (previousValue && [...select.options].some(o => o.value === previousValue)) {
-    select.value = previousValue;
-  }
-}
-
-function matchingRows(upazilaValue){
-  const q = clean(upazilaValue);
-  if (!q || !joronPostRows?.length) return [];
-  return joronPostRows.filter(row => {
-    const u = clean(row.upazila);
-    if (!u) return false;
-    // Handle common "UPO" / "Sadar" spelling differences.
-    return u === q || u.replace(/\s+upo$/, "") === q || q.replace(/\s+upo$/, "") === u;
-  });
 }
 
 async function updatePostOffice(prefix){
@@ -79,27 +87,27 @@ async function updatePostOffice(prefix){
   const label = prefix ? "Permanent" : "Present";
   if (!upazila || !post) return;
 
-  const old = post.value;
   resetPost(post, `${label} পোস্ট অফিস লোড হচ্ছে...`);
-  const rows = matchingRows(upazila.value);
-  fillPost(post, rows, rows.length ? `${label} পোস্ট অফিস নির্বাচন করুন` : `${label} পোস্ট অফিস পাওয়া যায়নি`, old);
+  const rows = matchingRows(upazila);
+  fillPost(post, rows, rows.length ? `${label} পোস্ট অফিস নির্বাচন করুন` : `${label} পোস্ট অফিস পাওয়া যায়নি`);
 
-  const status = jQ("locationStatus");
-  if (status && rows.length) {
-    status.textContent = `✅ ${label} পোস্ট অফিসের ${rows.length}টি অপশন প্রস্তুত।`;
-    status.style.display = "block";
-  }
+  console.info(`JORON ${label} Post Office`, {
+    upazila: selectedUpazilaText(upazila),
+    count: rows.length
+  });
 }
 
 function bindPostOffice(prefix){
   const upazila = jQ(prefix ? "pupazila" : "upazila");
   if (!upazila || upazila.dataset.joronPostBound === "1") return;
   upazila.dataset.joronPostBound = "1";
-  upazila.addEventListener("change", () => updatePostOffice(prefix));
+  upazila.addEventListener("change", () => {
+    // Wait one tick so the legacy module has finished clearing its dependent fields.
+    setTimeout(() => updatePostOffice(prefix), 0);
+  });
 }
 
 async function initJoronPostOffice(){
-  // Do NOT clone or replace any address select. That was causing the previous conflict.
   bindPostOffice("");
   bindPostOffice("p");
   await loadJoronPostcodes();

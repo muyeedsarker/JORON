@@ -7,7 +7,6 @@ on:
     paths:
       - "*.html"
       - "assets/**"
-      - ".github/workflows/apply-master-theme.yml"
   workflow_dispatch:
 
 permissions:
@@ -20,8 +19,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Apply shared JORON theme
         shell: bash
@@ -29,7 +26,7 @@ jobs:
           set -e
 
           if [ ! -f "assets/joron-theme.css" ]; then
-            echo "assets/joron-theme.css not found."
+            echo "Theme CSS not found. Nothing to do."
             exit 0
           fi
 
@@ -70,7 +67,7 @@ PY
         run: |
           git status --short
 
-      - name: Commit and push changes
+      - name: Commit theme changes
         shell: bash
         run: |
           set -e
@@ -81,10 +78,9 @@ PY
           git add "*.html"
 
           if git diff --cached --quiet; then
-            echo "No HTML changes to commit."
+            echo "No changes to commit."
             exit 0
           fi
 
           git commit -m "Apply JORON master theme"
-
           git push

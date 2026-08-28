@@ -1,0 +1,4 @@
+JORON Biodata code-side repair marker
+Current canonical Smart Biodata: smart-biodata.html
+Address engine: assets/smart-biodata-address-fix.js
+Firebase client: assets/firebase-client.js

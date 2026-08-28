@@ -1,30 +1,29 @@
 // JORON Smart Biodata runtime bridge.
-// The page keeps its existing local draft/save logic.
-// This bridge loads the verified Address FINAL v11 engine after the page is ready.
-// It intentionally does not overwrite form/Firebase listeners.
+// Load the active Firebase save/restore implementation after the page is ready.
+// The legacy file contains the existing Firestore save/restore flow.
 
-const loadJoronAddressEngine = () => {
-  if (window.__JORON_ADDRESS_ENGINE_LOADING || window.__JORON_ADDRESS_ENGINE_LOADED) return;
-  window.__JORON_ADDRESS_ENGINE_LOADING = true;
+const loadSmartBiodataFirebase = () => {
+  if (window.__JORON_BIODATA_FIREBASE_LOADING || window.__JORON_BIODATA_FIREBASE_LOADED) return;
+  window.__JORON_BIODATA_FIREBASE_LOADING = true;
 
   const script = document.createElement('script');
-  script.src = 'assets/smart-biodata-address-fix.js';
-  script.async = false;
+  script.type = 'module';
+  script.src = 'assets/smart-biodata-firebase-legacy.js';
   script.onload = () => {
-    window.__JORON_ADDRESS_ENGINE_LOADED = true;
-    window.__JORON_ADDRESS_ENGINE_LOADING = false;
+    window.__JORON_BIODATA_FIREBASE_LOADED = true;
+    window.__JORON_BIODATA_FIREBASE_LOADING = false;
   };
   script.onerror = () => {
-    window.__JORON_ADDRESS_ENGINE_LOADING = false;
-    console.error('JORON Address engine failed to load.');
+    window.__JORON_BIODATA_FIREBASE_LOADING = false;
+    console.error('JORON Smart Biodata Firebase engine failed to load.');
   };
   document.head.appendChild(script);
 };
 
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', loadJoronAddressEngine, { once: true });
+  document.addEventListener('DOMContentLoaded', loadSmartBiodataFirebase, { once: true });
 } else {
-  loadJoronAddressEngine();
+  loadSmartBiodataFirebase();
 }
 
 export {};

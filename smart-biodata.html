@@ -4,380 +4,137 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#087b59">
-
 <title>J❤️R❤️N | Smart Biodata</title>
 
 <style>
 :root{
-  --p:#e81768;
-  --g:#087b59;
-  --g2:#16b77a;
-  --ink:#18242b;
-  --muted:#66737b;
-  --line:#e4e7e8;
+ --p:#e81768;
+ --g:#087b59;
+ --g2:#16b77a;
+ --ink:#18242b;
+ --muted:#66737b;
+ --line:#e4e7e8;
 }
-
-*{
-  box-sizing:border-box;
-}
-
+*{box-sizing:border-box}
 body{
-  margin:0;
-  font-family:"Noto Sans Bengali","Hind Siliguri",system-ui,sans-serif;
-  background:linear-gradient(135deg,#fff4f9,#effff7);
-  color:var(--ink);
-  line-height:1.6;
+ margin:0;
+ font-family:"Noto Sans Bengali","Hind Siliguri",system-ui,sans-serif;
+ background:linear-gradient(135deg,#fff4f9,#effff7);
+ color:var(--ink);
+ line-height:1.6;
 }
-
-.wrap{
-  width:min(980px,94%);
-  margin:auto;
-}
-
+.wrap{width:min(980px,94%);margin:auto}
 .top{
-  background:linear-gradient(90deg,#064f3d,#087b59);
-  color:#fff;
-  padding:9px;
-  text-align:center;
-  font-weight:800;
-  font-size:13px;
+ background:linear-gradient(90deg,#064f3d,#087b59);
+ color:#fff;padding:9px;text-align:center;
+ font-weight:800;font-size:13px
 }
-
 .head{
-  background:#fff;
-  border-top:3px solid var(--p);
-  box-shadow:0 8px 24px #0000000d;
-  position:sticky;
-  top:0;
-  z-index:20;
+ background:#fff;border-top:3px solid var(--p);
+ box-shadow:0 8px 24px #0000000d;
+ position:sticky;top:0;z-index:20
 }
-
 .headin{
-  min-height:78px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
+ min-height:78px;display:flex;align-items:center;
+ justify-content:space-between;gap:12px
 }
-
-.brand{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  text-decoration:none;
-}
-
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
 .brand img{
-  width:54px;
-  height:54px;
-  border-radius:50%;
-  object-fit:cover;
+ width:54px;height:54px;border-radius:50%;object-fit:cover
 }
-
 .brand b{
-  font:700 31px Georgia,serif;
-  color:var(--g);
-  letter-spacing:1px;
+ font:700 31px Georgia,serif;color:var(--g);letter-spacing:1px
 }
-
 .brand small{
-  display:block;
-  font-weight:800;
-  color:#46534f;
-  font-size:10px;
+ display:block;font-weight:800;color:#46534f;font-size:10px
 }
-
-.back{
-  color:var(--g);
-  font-weight:900;
-  text-decoration:none;
-}
-
-.hero{
-  padding:26px 0 18px;
-  text-align:center;
-}
-
+.back{color:var(--g);font-weight:900;text-decoration:none}
+.hero{padding:26px 0 18px;text-align:center}
 .hero h1{
-  margin:4px 0;
-  color:var(--p);
-  font-size:clamp(30px,6vw,48px);
-  line-height:1.15;
+ margin:4px 0;color:var(--p);
+ font-size:clamp(30px,6vw,48px);line-height:1.15
 }
-
-.hero p{
-  margin:4px auto;
-  color:var(--muted);
-  max-width:700px;
-}
-
+.hero p{margin:4px auto;color:var(--muted);max-width:700px}
 .progress{
-  height:10px;
-  background:#dcece6;
-  border-radius:20px;
-  overflow:hidden;
-  margin:18px auto 8px;
-  max-width:700px;
+ height:10px;background:#dcece6;border-radius:20px;
+ overflow:hidden;margin:18px auto 8px;max-width:700px
 }
-
 .bar{
-  height:100%;
-  width:12.5%;
-  background:linear-gradient(90deg,var(--p),var(--g2));
+ height:100%;width:12.5%;
+ background:linear-gradient(90deg,var(--p),var(--g2))
 }
-
 .steps{
-  display:flex;
-  justify-content:space-between;
-  gap:5px;
-  max-width:700px;
-  margin:auto;
-  font-size:10px;
-  color:#65716f;
-  font-weight:800;
+ display:flex;justify-content:space-between;gap:5px;
+ max-width:700px;margin:auto;font-size:10px;
+ color:#65716f;font-weight:800
 }
-
 .card{
-  background:#fff;
-  border:1px solid var(--line);
-  border-radius:24px;
-  padding:24px;
-  margin:16px 0;
-  box-shadow:0 18px 45px #1d332b10;
+ background:#fff;border:1px solid var(--line);
+ border-radius:24px;padding:24px;margin:16px 0;
+ box-shadow:0 18px 45px #1d332b10
 }
-
-.card h2{
-  margin:0 0 5px;
-  color:var(--g);
-  font-size:23px;
-}
-
-.sub{
-  color:var(--muted);
-  font-size:13px;
-  margin-bottom:18px;
-}
-
+.card h2{margin:0 0 5px;color:var(--g);font-size:23px}
+.sub{color:var(--muted);font-size:13px;margin-bottom:18px}
 .grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:13px;
+ display:grid;grid-template-columns:repeat(2,1fr);gap:13px
 }
-
 .field label{
-  display:block;
-  font-weight:900;
-  font-size:14px;
-  margin-bottom:6px;
+ display:block;font-weight:900;font-size:14px;margin-bottom:6px
 }
-
-.field.full{
-  grid-column:1/-1;
+.field.full{grid-column:1/-1}
+input,select,textarea{
+ width:100%;min-height:48px;border:1px solid #d7dddd;
+ border-radius:13px;padding:10px 12px;font:inherit;
+ background:#fff;outline:none
 }
-
-input,
-select,
-textarea{
-  width:100%;
-  min-height:48px;
-  border:1px solid #d7dddd;
-  border-radius:13px;
-  padding:10px 12px;
-  font:inherit;
-  background:#fff;
-  outline:none;
+select:disabled{
+ background:#f0f3f3;color:#899394;cursor:not-allowed
 }
-
-input:focus,
-select:focus,
-textarea:focus{
-  border-color:var(--g);
-  box-shadow:0 0 0 3px #087b5914;
+textarea{min-height:105px;resize:vertical}
+input:focus,select:focus,textarea:focus{
+ border-color:var(--g);box-shadow:0 0 0 3px #087b5914
 }
-
-select:disabled,
-input:disabled{
-  background:#f0f3f3;
-  color:#899394;
-  cursor:not-allowed;
-}
-
-textarea{
-  min-height:105px;
-  resize:vertical;
-}
-
-.hint{
-  font-size:11px;
-  color:#7a8588;
-  margin-top:4px;
-}
-
-.privacy{
-  background:#effaf6;
-  border:1px solid #c8ebdc;
-  padding:14px;
-  border-radius:16px;
-}
-
-.privacy b{
-  color:var(--g);
-}
-
-.address-title{
-  color:var(--p);
-  font-weight:900;
-  font-size:18px;
-}
-
-.present-title{
-  color:var(--g);
-  font-weight:900;
-  font-size:18px;
-}
-
+.hint{font-size:11px;color:#7a8588;margin-top:4px}
+.address-title{color:var(--p);font-weight:900;font-size:18px}
+.present-title{color:var(--g);font-weight:900;font-size:18px}
 .address-line{
-  border:0;
-  border-top:1px solid var(--line);
-  margin:25px 0;
+ border:0;border-top:1px solid var(--line);margin:25px 0
 }
-
 .location-status{
-  display:none;
-  padding:10px 12px;
-  border-radius:12px;
-  background:#effaf6;
-  border:1px solid #c8ebdc;
-  color:var(--g);
-  font-size:12px;
-  font-weight:800;
-  margin-top:12px;
+ display:none;padding:10px 12px;border-radius:12px;
+ background:#effaf6;border:1px solid #c8ebdc;color:var(--g);
+ font-size:12px;font-weight:800;margin-top:12px
 }
-
 .actions{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-  margin:20px 0 35px;
+ display:grid;grid-template-columns:1fr 1fr;
+ gap:10px;margin:20px 0 35px
 }
-
 .btn{
-  min-height:55px;
-  border-radius:15px;
-  border:1px solid var(--p);
-  background:#fff;
-  color:#a8004a;
-  font:900 16px inherit;
-  cursor:pointer;
+ min-height:55px;border-radius:15px;border:1px solid var(--p);
+ background:#fff;color:#a8004a;font:900 16px inherit;cursor:pointer
 }
-
 .primary{
-  border:0;
-  background:linear-gradient(105deg,var(--p),#ff4c8c,var(--g2));
-  color:#fff;
-  box-shadow:0 7px 0 #c7195f;
+ border:0;background:linear-gradient(105deg,var(--p),#ff4c8c,var(--g2));
+ color:#fff;box-shadow:0 7px 0 #c7195f
 }
-
 .notice{
-  display:none;
-  padding:14px;
-  border-radius:14px;
-  background:#eaf9f3;
-  border:1px solid #b9e7d5;
-  color:var(--g);
-  font-weight:800;
-  text-align:center;
-  margin-bottom:16px;
+ display:none;padding:14px;border-radius:14px;
+ background:#eaf9f3;border:1px solid #b9e7d5;color:var(--g);
+ font-weight:800;text-align:center;margin-bottom:16px
 }
-
 footer{
-  background:#064f3d;
-  color:#dff9ef;
-  padding:30px 0;
-  text-align:center;
-  font-size:12px;
+ background:#064f3d;color:#dff9ef;padding:30px 0;
+ text-align:center;font-size:12px
 }
-
-.joron-global-page-nav{
-  width:100%;
-  display:flex;
-  gap:10px;
-  justify-content:center;
-  align-items:center;
-  padding:14px 2px 24px;
-}
-
-.joron-global-page-nav a,
-.joron-global-page-nav button{
-  flex:1 1 0;
-  max-width:360px;
-  min-height:50px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:12px 16px;
-  border:2px solid #fff;
-  border-radius:15px;
-  color:#fff;
-  background:linear-gradient(135deg,#087b59,#10a978);
-  font:900 15px/1.2 "Noto Sans Bengali","Hind Siliguri",system-ui,sans-serif;
-  text-decoration:none;
-  cursor:pointer;
-}
-
-.joron-global-page-nav button{
-  background:linear-gradient(135deg,#64158f,#a13bc5);
-}
-
 @media(max-width:620px){
-
-  .headin{
-    min-height:70px;
-  }
-
-  .brand b{
-    font-size:27px;
-  }
-
-  .brand img{
-    width:48px;
-    height:48px;
-  }
-
-  .grid{
-    grid-template-columns:1fr;
-  }
-
-  .field.full{
-    grid-column:auto;
-  }
-
-  .card{
-    padding:19px;
-  }
-
-  .actions{
-    grid-template-columns:1fr;
-  }
-
-  .steps{
-    font-size:9px;
-  }
-
-  .hero{
-    padding-top:20px;
-  }
-
-  .joron-global-page-nav{
-    gap:6px;
-  }
-
-  .joron-global-page-nav a,
-  .joron-global-page-nav button{
-    min-height:48px;
-    padding:11px 8px;
-    font-size:13px;
-  }
+ .headin{min-height:70px}
+ .brand b{font-size:27px}
+ .brand img{width:48px;height:48px}
+ .grid{grid-template-columns:1fr}
+ .field.full{grid-column:auto}
+ .card{padding:19px}
+ .actions{grid-template-columns:1fr}
+ .steps{font-size:9px}
 }
 </style>
 
@@ -387,7 +144,7 @@ footer{
 <body>
 
 <div class="top">
-❤️ J❤️R❤️N Smart Biodata • আপনার তথ্য, আপনার নিয়ন্ত্রণ
+ ❤️ J❤️R❤️N Smart Biodata • আপনার তথ্য, আপনার নিয়ন্ত্রণ
 </div>
 
 <header class="head">
@@ -395,16 +152,13 @@ footer{
 
 <a class="brand" href="index.html">
 <img src="assets/joron-logo.jpg" alt="J❤️R❤️N Master Logo">
-
 <div>
 <b>J❤️R❤️N</b>
 <small>সম্পর্ক জুড়ে দেয় জোড়ন</small>
 </div>
 </a>
 
-<a class="back" href="dashboard.html">
-← Dashboard
-</a>
+<a class="back" href="dashboard.html">← Dashboard</a>
 
 </div>
 </header>
@@ -412,9 +166,7 @@ footer{
 <main class="wrap">
 
 <section class="hero">
-
 <h1>📝 আপনার Smart Biodata</h1>
-
 <p>
 ধাপে ধাপে তথ্য দিন। প্রয়োজনীয় তথ্যই নেব,
 সংবেদনশীল তথ্যের Privacy আপনি নির্ধারণ করবেন।
@@ -432,26 +184,19 @@ footer{
 <span>৫ Family</span>
 <span>৬ Lifestyle</span>
 <span>৭ Preference</span>
-<span>৮ Complete</span>
+<span>৮ Photo</span>
 </div>
-
 </section>
 
 <div id="notice" class="notice">
-❤️ আপনার Smart Biodata এই ডিভাইসে নিরাপদভাবে সংরক্ষিত হয়েছে।
+❤️ আপনার Smart Biodata সংরক্ষিত হয়েছে।
 </div>
 
 <form id="form">
 
-<!-- PERSONAL -->
-
 <section class="card">
-
 <h2>👤 ১. ব্যক্তিগত তথ্য</h2>
-
-<div class="sub">
-জন্মতারিখ থেকে বয়স স্বয়ংক্রিয়ভাবে হিসাব করা হবে।
-</div>
+<div class="sub">জন্মতারিখ থেকে বয়স স্বয়ংক্রিয়ভাবে হিসাব হবে।</div>
 
 <div class="grid">
 
@@ -472,7 +217,7 @@ footer{
 
 <div class="field">
 <label>স্বয়ংক্রিয় বয়স</label>
-<input id="age" readonly placeholder="জন্মতারিখ দিন">
+<input id="age" readonly>
 </div>
 
 <div class="field">
@@ -487,32 +232,15 @@ footer{
 <div class="field">
 <label>উচ্চতা</label>
 <select id="height">
-<option value="">উচ্চতা নির্বাচন করুন</option>
-<option>৪'৬"</option>
-<option>৪'৭"</option>
-<option>৪'৮"</option>
-<option>৪'৯"</option>
-<option>৪'১০"</option>
-<option>৪'১১"</option>
-<option>৫'০"</option>
-<option>৫'১"</option>
-<option>৫'২"</option>
-<option>৫'৩"</option>
-<option>৫'৪"</option>
-<option>৫'৫"</option>
-<option>৫'৬"</option>
-<option>৫'৭"</option>
-<option>৫'৮"</option>
-<option>৫'৯"</option>
-<option>৫'১০"</option>
-<option>৫'১১"</option>
-<option>৬'০"</option>
-<option>৬'১"</option>
-<option>৬'২"</option>
-<option>৬'৩"</option>
-<option>৬'৪"</option>
-<option>৬'৫"</option>
-<option>৬'৬"</option>
+<option value="">নির্বাচন করুন</option>
+<option>৪'৬"</option><option>৪'৭"</option><option>৪'৮"</option>
+<option>৪'৯"</option><option>৪'১০"</option><option>৪'১১"</option>
+<option>৫'০"</option><option>৫'১"</option><option>৫'২"</option>
+<option>৫'৩"</option><option>৫'৪"</option><option>৫'৫"</option>
+<option>৫'৬"</option><option>৫'৭"</option><option>৫'৮"</option>
+<option>৫'৯"</option><option>৫'১০"</option><option>৫'১১"</option>
+<option>৬'০"</option><option>৬'১"</option><option>৬'২"</option>
+<option>৬'৩"</option><option>৬'৪"</option>
 </select>
 </div>
 
@@ -520,14 +248,10 @@ footer{
 <label>রক্তের গ্রুপ</label>
 <select id="blood">
 <option>প্রকাশ করতে চাই না</option>
-<option>A+</option>
-<option>A-</option>
-<option>B+</option>
-<option>B-</option>
-<option>AB+</option>
-<option>AB-</option>
-<option>O+</option>
-<option>O-</option>
+<option>A+</option><option>A-</option>
+<option>B+</option><option>B-</option>
+<option>AB+</option><option>AB-</option>
+<option>O+</option><option>O-</option>
 </select>
 </div>
 
@@ -553,24 +277,18 @@ footer{
 <div class="field">
 <label>মাতৃভাষা</label>
 <select id="language">
-<option>বাংলা</option>
-<option>ইংরেজি</option>
-<option>আরবি</option>
-<option>হিন্দি</option>
-<option>অন্যান্য</option>
-<option>প্রকাশ করতে চাই না</option>
+<option>বাংলা</option><option>ইংরেজি</option>
+<option>আরবি</option><option>হিন্দি</option>
+<option>অন্যান্য</option><option>প্রকাশ করতে চাই না</option>
 </select>
 </div>
 
 <div class="field">
 <label>ধর্ম</label>
 <select id="religion">
-<option>ইসলাম</option>
-<option>হিন্দু</option>
-<option>খ্রিস্টান</option>
-<option>বৌদ্ধ</option>
-<option>অন্যান্য</option>
-<option>প্রকাশ করতে চাই না</option>
+<option>ইসলাম</option><option>হিন্দু</option>
+<option>খ্রিস্টান</option><option>বৌদ্ধ</option>
+<option>অন্যান্য</option><option>প্রকাশ করতে চাই না</option>
 </select>
 </div>
 
@@ -578,10 +296,8 @@ footer{
 <label>ধর্মীয় অনুশীলন</label>
 <select id="practice">
 <option>নির্বাচন করুন</option>
-<option>নিয়মিত</option>
-<option>মাঝারি</option>
-<option>কম</option>
-<option>প্রযোজ্য নয়</option>
+<option>নিয়মিত</option><option>মাঝারি</option>
+<option>কম</option><option>প্রযোজ্য নয়</option>
 <option>প্রকাশ করতে চাই না</option>
 </select>
 </div>
@@ -590,116 +306,99 @@ footer{
 </section>
 
 
-<!-- ADDRESS -->
-
 <section class="card">
 
 <h2>📍 ২. ঠিকানা</h2>
-
 <div class="sub">
-বিভাগ → জেলা → উপজেলা / থানা → Post Office → Postal Code নির্বাচন করুন।
+বিভাগ → জেলা → উপজেলা/থানা → Post Office → Postal Code নির্বাচন করুন।
 </div>
 
-<div class="address-title">
-🏠 স্থায়ী ঠিকানা
-</div>
+<div class="address-title">🏠 স্থায়ী ঠিকানা</div>
 
 <div class="grid">
 
 <div class="field">
 <label>Permanent বিভাগ *</label>
 <select id="pdivision" required>
-<option value="">Permanent বিভাগ নির্বাচন করুন</option>
+<option value="">বিভাগ নির্বাচন করুন</option>
 </select>
 </div>
 
 <div class="field">
 <label>Permanent জেলা *</label>
 <select id="pdistrict" required disabled>
-<option value="">Permanent জেলা নির্বাচন করুন</option>
+<option value="">জেলা নির্বাচন করুন</option>
 </select>
 </div>
 
 <div class="field">
 <label>Permanent উপজেলা / থানা *</label>
 <select id="pupazila" required disabled>
-<option value="">Permanent উপজেলা / থানা নির্বাচন করুন</option>
+<option value="">উপজেলা / থানা নির্বাচন করুন</option>
 </select>
 </div>
 
 <div class="field">
 <label>Permanent Post Office *</label>
 <select id="ppostOffice" required disabled>
-<option value="">Permanent পোস্ট অফিস নির্বাচন করুন</option>
+<option value="">Post Office নির্বাচন করুন</option>
 </select>
 </div>
 
 <div class="field">
 <label>Permanent Postal Code</label>
-<input
-id="ppostalCode"
-readonly
-placeholder="Post Office নির্বাচন করুন">
+<input id="ppostalCode" readonly placeholder="Post Office নির্বাচন করুন">
 </div>
 
 <div class="field full">
 <label>Permanent এলাকা / গ্রাম</label>
-<input
-id="parea"
-placeholder="এলাকা / গ্রাম লিখুন">
+<input id="parea" placeholder="এলাকা / গ্রামের নাম লিখুন">
 </div>
 
 </div>
 
 <hr class="address-line">
 
-<div class="present-title">
-📍 বর্তমান ঠিকানা
-</div>
+<div class="present-title">📍 বর্তমান ঠিকানা</div>
 
 <div class="grid">
 
 <div class="field">
 <label>Present বিভাগ</label>
 <select id="division">
-<option value="">Present বিভাগ নির্বাচন করুন</option>
+<option value="">বিভাগ নির্বাচন করুন</option>
 </select>
 </div>
 
 <div class="field">
 <label>Present জেলা</label>
 <select id="district" disabled>
-<option value="">Present জেলা নির্বাচন করুন</option>
+<option value="">জেলা নির্বাচন করুন</option>
 </select>
 </div>
 
 <div class="field">
 <label>Present উপজেলা / থানা</label>
 <select id="upazila" disabled>
-<option value="">Present উপজেলা / থানা নির্বাচন করুন</option>
+<option value="">উপজেলা / থানা নির্বাচন করুন</option>
 </select>
 </div>
 
 <div class="field">
 <label>Present Post Office</label>
 <select id="postOffice" disabled>
-<option value="">Present পোস্ট অফিস নির্বাচন করুন</option>
+<option value="">Post Office নির্বাচন করুন</option>
 </select>
 </div>
 
 <div class="field">
 <label>Present Postal Code</label>
-<input
-id="postalCode"
-readonly
-placeholder="Post Office নির্বাচন করুন">
+<input id="postalCode" readonly placeholder="Post Office নির্বাচন করুন">
 </div>
 
 <div class="field">
 <label>Present এলাকা / গ্রাম</label>
-<input
-id="area"
-placeholder="এলাকা / গ্রাম লিখুন">
+<input id="area" placeholder="এলাকা / গ্রামের নাম লিখুন">
 </div>
 
 <div class="field">
@@ -713,21 +412,14 @@ placeholder="এলাকা / গ্রাম লিখুন">
 
 </div>
 
-<div id="locationStatus" class="location-status">
-📍 Location data প্রস্তুত হচ্ছে...
-</div>
+<div id="locationStatus" class="location-status"></div>
 
 </section>
 
 
-<!-- EDUCATION -->
-
 <section class="card">
-
 <h2>🎓 ৩. শিক্ষা</h2>
-
 <div class="grid">
-
 <div class="field">
 <label>শিক্ষাব্যবস্থা</label>
 <select id="eduSystem">
@@ -745,53 +437,35 @@ placeholder="এলাকা / গ্রাম লিখুন">
 <div class="field">
 <label>সর্বোচ্চ যোগ্যতা</label>
 <select id="education">
-<option>SSC</option>
-<option>HSC</option>
-<option>Diploma</option>
-<option>Bachelor</option>
-<option>Masters</option>
-<option>Doctorate</option>
-<option>আলিম</option>
-<option>ফাজিল</option>
-<option>কামিল</option>
+<option>SSC</option><option>HSC</option><option>Diploma</option>
+<option>Bachelor</option><option>Masters</option>
+<option>Doctorate</option><option>আলিম</option>
+<option>ফাজিল</option><option>কামিল</option>
 <option>অন্যান্য</option>
 </select>
 </div>
-
 </div>
 </section>
 
 
-<!-- PROFESSION -->
-
 <section class="card">
-
 <h2>💼 ৪. পেশা</h2>
-
 <div class="grid">
-
 <div class="field">
 <label>পেশা</label>
 <input id="profession">
 </div>
-
 <div class="field">
 <label>কর্মস্থল</label>
 <input id="workplace">
 </div>
-
 </div>
 </section>
 
 
-<!-- FAMILY -->
-
 <section class="card">
-
 <h2>👨‍👩‍👧 ৫. পরিবার</h2>
-
 <div class="grid">
-
 <div class="field">
 <label>পরিবারের ধরন</label>
 <select id="familyType">
@@ -801,30 +475,17 @@ placeholder="এলাকা / গ্রাম লিখুন">
 <option>অন্যান্য</option>
 </select>
 </div>
-
 <div class="field">
 <label>সন্তান সংখ্যা</label>
 <input id="childCount" type="number" min="0">
 </div>
-
 </div>
-
-<div class="privacy">
-<b>Child Privacy:</b>
-সন্তানের নাম, ছবি, স্কুল বা ফোন নম্বর এখানে সংগ্রহ করা হবে না।
-</div>
-
 </section>
 
 
-<!-- LIFESTYLE -->
-
 <section class="card">
-
 <h2>🌿 ৬. জীবনধারা</h2>
-
 <div class="grid">
-
 <div class="field">
 <label>ধূমপান</label>
 <select id="smoking">
@@ -833,7 +494,6 @@ placeholder="এলাকা / গ্রাম লিখুন">
 <option>হ্যাঁ</option>
 </select>
 </div>
-
 <div class="field">
 <label>ব্যক্তিত্ব</label>
 <select id="personality">
@@ -844,62 +504,40 @@ placeholder="এলাকা / গ্রাম লিখুন">
 <option>অন্যান্য</option>
 </select>
 </div>
-
 <div class="field full">
 <label>নিজের সম্পর্কে</label>
 <textarea id="about"></textarea>
 </div>
-
 </div>
 </section>
 
 
-<!-- PREFERENCE -->
-
 <section class="card">
-
 <h2>💍 ৭. জীবনসঙ্গী পছন্দ</h2>
-
 <div class="grid">
-
 <div class="field">
 <label>পছন্দের বয়স</label>
 <input id="prefAge" placeholder="যেমন ২৫-৩২">
 </div>
-
 <div class="field">
 <label>পছন্দের জেলা</label>
 <input id="prefDistrict">
 </div>
-
 <div class="field full">
 <label>শীর্ষ ৩ অগ্রাধিকার</label>
-<textarea
-id="top3"
-placeholder="যেমন মূল্যবোধ, শিক্ষা, পরিবার">
-</textarea>
+<textarea id="top3" placeholder="যেমন মূল্যবোধ, শিক্ষা, পরিবার"></textarea>
 </div>
-
 </div>
 </section>
 
 
-<!-- PHOTO -->
-
 <section class="card">
-
 <h2>📷 ৮. ছবি ও Privacy</h2>
-
 <div class="grid">
-
 <div class="field">
 <label>Profile Photo URL</label>
-<input
-id="photoUrl"
-type="url"
-placeholder="https://...">
+<input id="photoUrl" type="url" placeholder="https://...">
 </div>
-
 <div class="field">
 <label>Profile visibility</label>
 <select id="visibility">
@@ -909,30 +547,20 @@ placeholder="https://...">
 <option>Only me</option>
 </select>
 </div>
-
 </div>
 </section>
 
 
 <div class="actions">
-
-<button
-type="button"
-class="btn"
-id="draftBtn">
+<button type="button" class="btn" id="draftBtn">
 💾 Draft সংরক্ষণ
 </button>
-
-<button
-type="submit"
-class="btn primary">
+<button type="submit" class="btn primary">
 ❤️ Smart Biodata সংরক্ষণ
 </button>
-
 </div>
 
 </form>
-
 </main>
 
 <footer>
@@ -940,15 +568,640 @@ J❤️R❤️N • সম্পর্ক জুড়ে দিই
 </footer>
 
 
-<!-- PAGE NAV -->
+<script>
 
-<div
-class="joron-global-page-nav"
-aria-label="JORON page navigation">
+/* ==============================
+   BASIC
+============================== */
 
-<a href="index.html">
-🏠 হোম
-</a>
+const $ = id => document.getElementById(id);
+
+
+/* ==============================
+   AGE
+============================== */
+
+$('dob').addEventListener('change',()=>{
+
+ const value=$('dob').value;
+
+ if(!value){
+   $('age').value='';
+   return;
+ }
+
+ const birth=new Date(value+'T00:00:00');
+ const today=new Date();
+
+ let age=today.getFullYear()-birth.getFullYear();
+
+ if(
+   today.getMonth()<birth.getMonth() ||
+   (
+    today.getMonth()===birth.getMonth() &&
+    today.getDate()<birth.getDate()
+   )
+ ){
+   age--;
+ }
+
+ $('age').value=age>=0?age:'';
+
+});
+
+
+/* ==============================
+   POSTCODE DATABASE
+============================== */
+
+/*
+  Bangladesh postal code database.
+  Source dataset contains:
+  Division
+  District
+  Thana/Upazila
+  Sub-office/Post Office
+  Postal Code
+*/
+
+const POSTCODE_URL =
+'https://raw.githubusercontent.com/TanjidulIslamToha/bangladesh-postal-codes-database/main/postcodes-pretty.json';
+
+let postalData=[];
+
+
+/* ==============================
+   STATUS
+============================== */
+
+function status(message){
+
+ const box=$('locationStatus');
+
+ box.textContent=message;
+ box.style.display='block';
+
+}
+
+
+/* ==============================
+   SELECT RESET
+============================== */
+
+function resetSelect(id,text){
+
+ const el=$(id);
+
+ el.innerHTML=
+ `<option value="">${text}</option>`;
+
+ el.disabled=true;
+
+}
+
+
+/* ==============================
+   ADD OPTIONS
+============================== */
+
+function addOptions(id,values,text){
+
+ const el=$(id);
+
+ el.innerHTML=
+ `<option value="">${text}</option>`;
+
+ [...new Set(values)]
+ .filter(Boolean)
+ .sort((a,b)=>a.localeCompare(b,'bn'))
+ .forEach(value=>{
+
+   const op=document.createElement('option');
+
+   op.value=value;
+   op.textContent=value;
+
+   el.appendChild(op);
+
+ });
+
+ el.disabled=values.length===0;
+
+}
+
+
+/* ==============================
+   LOAD POSTAL DATABASE
+============================== */
+
+async function loadPostalDatabase(){
+
+ try{
+
+   status('📍 ঠিকানার ডেটা লোড হচ্ছে...');
+
+   const response=await fetch(
+     POSTCODE_URL,
+     {cache:'no-store'}
+   );
+
+   if(!response.ok)
+     throw new Error('Postal database failed');
+
+   const json=await response.json();
+
+   postalData=[];
+
+   Object.values(json).forEach(item=>{
+
+     if(item && item.bn){
+
+       postalData.push({
+
+         division:item.bn.division || '',
+         district:item.bn.district || '',
+         thana:item.bn.thana || '',
+         postOffice:item.bn.suboffice || '',
+         postcode:item.bn.postcode || ''
+
+       });
+
+     }
+
+   });
+
+   if(!postalData.length)
+     throw new Error('No postal data');
+
+   buildDivisions();
+
+   status('✅ ঠিকানার তালিকা প্রস্তুত। বিভাগ নির্বাচন করুন।');
+
+ }catch(error){
+
+   console.error(error);
+
+   status(
+    '⚠️ ঠিকানার ডেটা লোড হয়নি। Internet connection পরীক্ষা করুন।'
+   );
+
+ }
+
+}
+
+
+/* ==============================
+   DIVISIONS
+============================== */
+
+function buildDivisions(){
+
+ const divisions=
+   postalData.map(x=>x.division);
+
+ addOptions(
+   'pdivision',
+   divisions,
+   'Permanent বিভাগ নির্বাচন করুন'
+ );
+
+ addOptions(
+   'division',
+   divisions,
+   'Present বিভাগ নির্বাচন করুন'
+ );
+
+}
+
+
+/* ==============================
+   PERMANENT DISTRICT
+============================== */
+
+$('pdivision').addEventListener('change',()=>{
+
+ resetSelect(
+  'pdistrict',
+  'Permanent জেলা নির্বাচন করুন'
+ );
+
+ resetSelect(
+  'pupazila',
+  'Permanent উপজেলা / থানা নির্বাচন করুন'
+ );
+
+ resetSelect(
+  'ppostOffice',
+  'Permanent Post Office নির্বাচন করুন'
+ );
+
+ $('ppostalCode').value='';
+
+ const division=$('pdivision').value;
+
+ if(!division) return;
+
+ const rows=
+   postalData.filter(x=>x.division===division);
+
+ addOptions(
+  'pdistrict',
+  rows.map(x=>x.district),
+  'Permanent জেলা নির্বাচন করুন'
+ );
+
+});
+
+
+/* ==============================
+   PERMANENT UPAZILA
+============================== */
+
+$('pdistrict').addEventListener('change',()=>{
+
+ resetSelect(
+  'pupazila',
+  'Permanent উপজেলা / থানা নির্বাচন করুন'
+ );
+
+ resetSelect(
+  'ppostOffice',
+  'Permanent Post Office নির্বাচন করুন'
+ );
+
+ $('ppostalCode').value='';
+
+ const rows=
+   postalData.filter(x=>
+    x.division===$('pdivision').value &&
+    x.district===$('pdistrict').value
+   );
+
+ addOptions(
+  'pupazila',
+  rows.map(x=>x.thana),
+  'Permanent উপজেলা / থানা নির্বাচন করুন'
+ );
+
+});
+
+
+/* ==============================
+   PERMANENT POST OFFICE
+============================== */
+
+$('pupazila').addEventListener('change',()=>{
+
+ resetSelect(
+  'ppostOffice',
+  'Permanent Post Office নির্বাচন করুন'
+ );
+
+ $('ppostalCode').value='';
+
+ const rows=
+   postalData.filter(x=>
+    x.division===$('pdivision').value &&
+    x.district===$('pdistrict').value &&
+    x.thana===$('pupazila').value
+   );
+
+ addOptions(
+  'ppostOffice',
+  rows.map(x=>x.postOffice),
+  'Permanent Post Office নির্বাচন করুন'
+ );
+
+});
+
+
+/* ==============================
+   PERMANENT POST CODE
+============================== */
+
+$('ppostOffice').addEventListener('change',()=>{
+
+ const row=
+   postalData.find(x=>
+    x.division===$('pdivision').value &&
+    x.district===$('pdistrict').value &&
+    x.thana===$('pupazila').value &&
+    x.postOffice===$('ppostOffice').value
+   );
+
+ $('ppostalCode').value=
+   row ? row.postcode : '';
+
+});
+
+
+/* ==============================
+   PRESENT DISTRICT
+============================== */
+
+$('division').addEventListener('change',()=>{
+
+ resetSelect(
+  'district',
+  'Present জেলা নির্বাচন করুন'
+ );
+
+ resetSelect(
+  'upazila',
+  'Present উপজেলা / থানা নির্বাচন করুন'
+ );
+
+ resetSelect(
+  'postOffice',
+  'Present Post Office নির্বাচন করুন'
+ );
+
+ $('postalCode').value='';
+
+ const division=$('division').value;
+
+ if(!division) return;
+
+ const rows=
+   postalData.filter(x=>x.division===division);
+
+ addOptions(
+  'district',
+  rows.map(x=>x.district),
+  'Present জেলা নির্বাচন করুন'
+ );
+
+});
+
+
+/* ==============================
+   PRESENT UPAZILA
+============================== */
+
+$('district').addEventListener('change',()=>{
+
+ resetSelect(
+  'upazila',
+  'Present উপজেলা / থানা নির্বাচন করুন'
+ );
+
+ resetSelect(
+  'postOffice',
+  'Present Post Office নির্বাচন করুন'
+ );
+
+ $('postalCode').value='';
+
+ const rows=
+   postalData.filter(x=>
+    x.division===$('division').value &&
+    x.district===$('district').value
+   );
+
+ addOptions(
+  'upazila',
+  rows.map(x=>x.thana),
+  'Present উপজেলা / থানা নির্বাচন করুন'
+ );
+
+});
+
+
+/* ==============================
+   PRESENT POST OFFICE
+============================== */
+
+$('upazila').addEventListener('change',()=>{
+
+ resetSelect(
+  'postOffice',
+  'Present Post Office নির্বাচন করুন'
+ );
+
+ $('postalCode').value='';
+
+ const rows=
+   postalData.filter(x=>
+    x.division===$('division').value &&
+    x.district===$('district').value &&
+    x.thana===$('upazila').value
+   );
+
+ addOptions(
+  'postOffice',
+  rows.map(x=>x.postOffice),
+  'Present Post Office নির্বাচন করুন'
+ );
+
+});
+
+
+/* ==============================
+   PRESENT POST CODE
+============================== */
+
+$('postOffice').addEventListener('change',()=>{
+
+ const row=
+   postalData.find(x=>
+    x.division===$('division').value &&
+    x.district===$('district').value &&
+    x.thana===$('upazila').value &&
+    x.postOffice===$('postOffice').value
+   );
+
+ $('postalCode').value=
+   row ? row.postcode : '';
+
+});
+
+
+/* ==============================
+   LOCAL STORAGE
+============================== */
+
+const ids=[
+
+'name','nickname','dob','age','gender','height',
+'blood','marital','nationality','language','religion',
+'practice',
+
+'pdivision','pdistrict','pupazila','ppostOffice',
+'ppostalCode','parea',
+
+'division','district','upazila','postOffice',
+'postalCode','area','addressPrivacy',
+
+'eduSystem','education','profession','workplace',
+'familyType','childCount','smoking','personality',
+'about','prefAge','prefDistrict','top3',
+'photoUrl','visibility'
+
+];
+
+
+/* ==============================
+   SAVE
+============================== */
+
+function save(){
+
+ const data={};
+
+ ids.forEach(id=>{
+
+   const el=$(id);
+
+   if(el)
+     data[id]=el.value || '';
+
+ });
+
+ data.savedAt=new Date().toISOString();
+
+ localStorage.setItem(
+  'joronSmartBiodata',
+  JSON.stringify(data)
+ );
+
+ $('notice').style.display='block';
+
+ setTimeout(()=>{
+   $('notice').style.display='none';
+ },3000);
+
+}
+
+
+/* ==============================
+   LOAD
+============================== */
+
+function loadSaved(){
+
+ try{
+
+   const data=
+     JSON.parse(
+      localStorage.getItem(
+       'joronSmartBiodata'
+      ) || '{}'
+     );
+
+   ids.forEach(id=>{
+
+     if(
+       $(id) &&
+       data[id] != null &&
+       ![
+        'pdivision','pdistrict','pupazila',
+        'ppostOffice','division','district',
+        'upazila','postOffice'
+       ].includes(id)
+     ){
+
+       $(id).value=data[id];
+
+     }
+
+   });
+
+   if(data.dob)
+     $('dob').dispatchEvent(
+      new Event('change')
+     );
+
+ }catch(error){
+
+   console.warn(error);
+
+ }
+
+}
+
+
+/* ==============================
+   BUTTONS
+============================== */
+
+$('draftBtn').addEventListener(
+ 'click',
+ save
+);
+
+$('form').addEventListener(
+ 'submit',
+ e=>{
+
+   e.preventDefault();
+
+   if(!$('form').checkValidity()){
+
+     $('form').reportValidity();
+     return;
+
+   }
+
+   save();
+
+ }
+);
+
+
+/* ==============================
+   START
+============================== */
+
+loadSaved();
+loadPostalDatabase();
+
+</script>
+
+<script
+type="module"
+src="assets/smart-biodata-firebase.js">
+</script>
+
+
+<style>
+
+.joron-global-page-nav{
+ width:100%;
+ display:flex;
+ gap:10px;
+ justify-content:center;
+ align-items:center;
+ padding:14px 4% 24px;
+}
+
+.joron-global-page-nav a,
+.joron-global-page-nav button{
+ flex:1;
+ max-width:360px;
+ min-height:50px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ padding:12px 16px;
+ border:2px solid #fff;
+ border-radius:15px;
+ color:#fff;
+ background:linear-gradient(135deg,#087b59,#10a978);
+ font:900 15px/1.2
+ "Noto Sans Bengali","Hind Siliguri",system-ui,sans-serif;
+ text-decoration:none;
+ cursor:pointer;
+}
+
+.joron-global-page-nav button{
+ background:linear-gradient(135deg,#64158f,#a13bc5);
+}
+
+</style>
+
+<div class="joron-global-page-nav">
+
+<a href="index.html">🏠 হোম</a>
 
 <button
 type="button"
@@ -957,1143 +1210,6 @@ onclick="if(history.length>1){history.back()}else{location.href='index.html'}">
 </button>
 
 </div>
-
-
-<script>
-
-/* =====================================================
-   BASIC
-===================================================== */
-
-const $ = id =>
-  document.getElementById(id);
-
-
-/* =====================================================
-   AGE
-===================================================== */
-
-function calcAge(){
-
-  const dob = $('dob');
-
-  if(!dob.value){
-
-    $('age').value = '';
-
-    return;
-  }
-
-  const d =
-    new Date(
-      dob.value + 'T00:00:00'
-    );
-
-  const n =
-    new Date();
-
-  let age =
-    n.getFullYear() -
-    d.getFullYear();
-
-  if(
-    n.getMonth() < d.getMonth() ||
-    (
-      n.getMonth() === d.getMonth() &&
-      n.getDate() < d.getDate()
-    )
-  ){
-    age--;
-  }
-
-  $('age').value =
-    age >= 0 ? age : '';
-
-}
-
-$('dob').addEventListener(
-  'change',
-  calcAge
-);
-
-
-/* =====================================================
-   ADDRESS API
-===================================================== */
-
-const GEO_API =
-  'https://bdapis.pro.bd/geo/v2.0';
-
-
-/*
-  Bangladesh Post Office + Postal Code dataset.
-*/
-const POSTCODE_URL =
-'https://raw.githubusercontent.com/ifahimreza/bangladesh-geojson/master/src/data/bd-postcodes.json';
-
-
-let postcodeData = [];
-
-
-/* =====================================================
-   STATUS
-===================================================== */
-
-function locationMessage(text){
-
-  const box =
-    $('locationStatus');
-
-  if(!box)
-    return;
-
-  box.textContent =
-    text;
-
-  box.style.display =
-    'block';
-
-}
-
-
-/* =====================================================
-   CLEAR SELECT
-===================================================== */
-
-function clearSelect(
-  select,
-  placeholder
-){
-
-  if(!select)
-    return;
-
-  select.innerHTML =
-    `<option value="">${placeholder}</option>`;
-
-  select.disabled =
-    true;
-
-}
-
-
-/* =====================================================
-   NORMALIZE
-===================================================== */
-
-function normalizeList(data){
-
-  if(Array.isArray(data))
-    return data;
-
-  if(Array.isArray(data?.data))
-    return data.data;
-
-  if(Array.isArray(data?.divisions))
-    return data.divisions;
-
-  if(Array.isArray(data?.districts))
-    return data.districts;
-
-  if(Array.isArray(data?.upazilas))
-    return data.upazilas;
-
-  if(Array.isArray(data?.unions))
-    return data.unions;
-
-  return [];
-
-}
-
-
-/* =====================================================
-   API GET
-===================================================== */
-
-async function apiGet(url){
-
-  const response =
-    await fetch(url);
-
-  if(!response.ok){
-
-    throw new Error(
-      'HTTP '+response.status
-    );
-
-  }
-
-  return response.json();
-
-}
-
-
-/* =====================================================
-   FILL SELECT
-===================================================== */
-
-function fillSelect(
-  select,
-  items,
-  placeholder
-){
-
-  select.innerHTML =
-    `<option value="">${placeholder}</option>`;
-
-  items.forEach(item => {
-
-    const option =
-      document.createElement('option');
-
-    option.value =
-      item.id ??
-      item.value ??
-      item.name ??
-      item.bn_name ??
-      '';
-
-    option.textContent =
-      item.bn_name ??
-      item.name ??
-      item.title ??
-      item.label ??
-      '';
-
-    /*
-      English name পরে Post Office
-      matching-এর জন্য সংরক্ষণ করছি।
-    */
-
-    option.dataset.name =
-      item.name ??
-      '';
-
-    select.appendChild(
-      option
-    );
-
-  });
-
-  select.disabled =
-    items.length === 0;
-
-}
-
-
-/* =====================================================
-   LOAD DIVISIONS
-===================================================== */
-
-async function loadDivisions(){
-
-  try{
-
-    locationMessage(
-      '📍 বিভাগগুলোর তালিকা লোড হচ্ছে...'
-    );
-
-    const data =
-      await apiGet(
-        GEO_API + '/divisions'
-      );
-
-    const divisions =
-      normalizeList(data);
-
-    fillSelect(
-      $('pdivision'),
-      divisions,
-      'Permanent বিভাগ নির্বাচন করুন'
-    );
-
-    fillSelect(
-      $('division'),
-      divisions,
-      'Present বিভাগ নির্বাচন করুন'
-    );
-
-    locationMessage(
-      '✅ বিভাগ নির্বাচন করুন।'
-    );
-
-  }catch(error){
-
-    console.error(error);
-
-    locationMessage(
-      '⚠️ বিভাগ লোড করা যায়নি।'
-    );
-
-  }
-
-}
-
-
-/* =====================================================
-   LOAD DISTRICTS
-===================================================== */
-
-async function loadDistricts(
-  divisionId,
-  target
-){
-
-  const permanent =
-    target.id === 'pdistrict';
-
-  clearSelect(
-    target,
-    permanent
-      ? 'Permanent জেলা নির্বাচন করুন'
-      : 'Present জেলা নির্বাচন করুন'
-  );
-
-  if(!divisionId)
-    return;
-
-  try{
-
-    const data =
-      await apiGet(
-        GEO_API +
-        '/districts/' +
-        encodeURIComponent(
-          divisionId
-        )
-      );
-
-    const list =
-      normalizeList(data);
-
-    fillSelect(
-      target,
-      list,
-      permanent
-        ? 'Permanent জেলা নির্বাচন করুন'
-        : 'Present জেলা নির্বাচন করুন'
-    );
-
-  }catch(error){
-
-    console.error(error);
-
-    locationMessage(
-      '⚠️ জেলা লোড করা যায়নি।'
-    );
-
-  }
-
-}
-
-
-/* =====================================================
-   LOAD UPAZILAS
-===================================================== */
-
-async function loadUpazilas(
-  districtId,
-  target
-){
-
-  const permanent =
-    target.id === 'pupazila';
-
-  clearSelect(
-    target,
-    permanent
-      ? 'Permanent উপজেলা / থানা নির্বাচন করুন'
-      : 'Present উপজেলা / থানা নির্বাচন করুন'
-  );
-
-  if(!districtId)
-    return;
-
-  try{
-
-    const data =
-      await apiGet(
-        GEO_API +
-        '/upazilas/' +
-        encodeURIComponent(
-          districtId
-        )
-      );
-
-    const list =
-      normalizeList(data);
-
-    fillSelect(
-      target,
-      list,
-      permanent
-        ? 'Permanent উপজেলা / থানা নির্বাচন করুন'
-        : 'Present উপজেলা / থানা নির্বাচন করুন'
-    );
-
-  }catch(error){
-
-    console.error(error);
-
-    locationMessage(
-      '⚠️ উপজেলা/থানা লোড করা যায়নি।'
-    );
-
-  }
-
-}
-
-
-/* =====================================================
-   LOAD POSTCODE DATABASE
-===================================================== */
-
-async function loadPostcodes(){
-
-  try{
-
-    locationMessage(
-      '📮 Post Office ও Postal Code লোড হচ্ছে...'
-    );
-
-    const response =
-      await fetch(
-        POSTCODE_URL
-      );
-
-    if(!response.ok)
-      throw new Error(
-        'Postcode load failed'
-      );
-
-    const data =
-      await response.json();
-
-    /*
-      Dataset structure:
-
-      {
-        postcodes: [...]
-      }
-    */
-
-    postcodeData =
-      Array.isArray(data)
-        ? data
-        : Array.isArray(
-            data.postcodes
-          )
-          ? data.postcodes
-          : [];
-
-    if(postcodeData.length){
-
-      locationMessage(
-        '✅ Post Office ও Postal Code প্রস্তুত।'
-      );
-
-    }
-
-  }catch(error){
-
-    console.error(
-      'Postcode error:',
-      error
-    );
-
-    locationMessage(
-      '⚠️ Post Office database লোড করা যায়নি।'
-    );
-
-  }
-
-}
-
-
-/* =====================================================
-   GET SELECTED UPAZILA ENGLISH NAME
-===================================================== */
-
-function getUpazilaName(
-  selectId
-){
-
-  const select =
-    $(selectId);
-
-  if(!select)
-    return '';
-
-  const option =
-    select.options[
-      select.selectedIndex
-    ];
-
-  if(!option)
-    return '';
-
-  return (
-    option.dataset.name ||
-    option.textContent ||
-    ''
-  ).trim();
-
-}
-
-
-/* =====================================================
-   LOAD POST OFFICES
-===================================================== */
-
-function loadPostOffices(
-  divisionId,
-  districtId,
-  upazilaSelectId,
-  postOfficeSelectId,
-  postalCodeId
-){
-
-  const postOffice =
-    $(postOfficeSelectId);
-
-  const postalCode =
-    $(postalCodeId);
-
-  clearSelect(
-    postOffice,
-    postOfficeSelectId === 'ppostOffice'
-      ? 'Permanent পোস্ট অফিস নির্বাচন করুন'
-      : 'Present পোস্ট অফিস নির্বাচন করুন'
-  );
-
-  postalCode.value = '';
-
-  if(
-    !districtId ||
-    !upazilaSelectId
-  ){
-
-    return;
-
-  }
-
-  const upazilaName =
-    getUpazilaName(
-      upazilaSelectId
-    );
-
-  const selected =
-    postcodeData.filter(item => {
-
-      const itemDistrict =
-        String(
-          item.district_id ?? ''
-        );
-
-      const itemUpazila =
-        String(
-          item.upazila ?? ''
-        ).trim().toLowerCase();
-
-      return (
-        itemDistrict ===
-          String(districtId)
-        &&
-        (
-          itemUpazila ===
-            upazilaName.toLowerCase()
-          ||
-          itemUpazila.includes(
-            upazilaName.toLowerCase()
-          )
-          ||
-          upazilaName
-            .toLowerCase()
-            .includes(itemUpazila)
-        )
-      );
-
-    });
-
-
-  /*
-    Duplicate Post Office বাদ।
-  */
-
-  const unique =
-    new Map();
-
-  selected.forEach(item => {
-
-    const office =
-      item.postOffice ??
-      '';
-
-    const code =
-      item.postCode ??
-      '';
-
-    if(
-      office &&
-      code
-    ){
-
-      unique.set(
-        office + '|' + code,
-        {
-          office,
-          code
-        }
-      );
-
-    }
-
-  });
-
-
-  [...unique.values()]
-    .sort(
-      (a,b) =>
-        a.office.localeCompare(
-          b.office
-        )
-    )
-    .forEach(item => {
-
-      const option =
-        document.createElement(
-          'option'
-        );
-
-      option.value =
-        item.office;
-
-      option.textContent =
-        item.office +
-        ' — ' +
-        item.code;
-
-      option.dataset.postalCode =
-        item.code;
-
-      postOffice.appendChild(
-        option
-      );
-
-    });
-
-
-  postOffice.disabled =
-    postOffice.options.length <= 1;
-
-
-  if(
-    postOffice.options.length <= 1
-  ){
-
-    locationMessage(
-      '⚠️ এই উপজেলা/থানার Post Office পাওয়া যায়নি।'
-    );
-
-  }else{
-
-    locationMessage(
-      '📮 Post Office নির্বাচন করুন — Postal Code অটো আসবে।'
-    );
-
-  }
-
-}
-
-
-/* =====================================================
-   POST OFFICE → POSTAL CODE
-===================================================== */
-
-function setPostalCode(
-  postOfficeId,
-  postalCodeId
-){
-
-  const postOffice =
-    $(postOfficeId);
-
-  const postalCode =
-    $(postalCodeId);
-
-  const option =
-    postOffice.options[
-      postOffice.selectedIndex
-    ];
-
-  if(
-    !option ||
-    !option.dataset.postalCode
-  ){
-
-    postalCode.value =
-      '';
-
-    return;
-
-  }
-
-  postalCode.value =
-    option.dataset.postalCode;
-
-}
-
-
-/* =====================================================
-   PERMANENT DIVISION
-===================================================== */
-
-$('pdivision')
-.addEventListener(
-  'change',
-  async function(){
-
-    clearSelect(
-      $('pdistrict'),
-      'Permanent জেলা নির্বাচন করুন'
-    );
-
-    clearSelect(
-      $('pupazila'),
-      'Permanent উপজেলা / থানা নির্বাচন করুন'
-    );
-
-    clearSelect(
-      $('ppostOffice'),
-      'Permanent পোস্ট অফিস নির্বাচন করুন'
-    );
-
-    $('ppostalCode').value =
-      '';
-
-    await loadDistricts(
-      this.value,
-      $('pdistrict')
-    );
-
-  }
-);
-
-
-/* =====================================================
-   PERMANENT DISTRICT
-===================================================== */
-
-$('pdistrict')
-.addEventListener(
-  'change',
-  async function(){
-
-    clearSelect(
-      $('pupazila'),
-      'Permanent উপজেলা / থানা নির্বাচন করুন'
-    );
-
-    clearSelect(
-      $('ppostOffice'),
-      'Permanent পোস্ট অফিস নির্বাচন করুন'
-    );
-
-    $('ppostalCode').value =
-      '';
-
-    await loadUpazilas(
-      this.value,
-      $('pupazila')
-    );
-
-  }
-);
-
-
-/* =====================================================
-   PERMANENT UPAZILA
-===================================================== */
-
-$('pupazila')
-.addEventListener(
-  'change',
-  function(){
-
-    loadPostOffices(
-      $('pdivision').value,
-      $('pdistrict').value,
-      'pupazila',
-      'ppostOffice',
-      'ppostalCode'
-    );
-
-  }
-);
-
-
-/* =====================================================
-   PERMANENT POST OFFICE
-===================================================== */
-
-$('ppostOffice')
-.addEventListener(
-  'change',
-  function(){
-
-    setPostalCode(
-      'ppostOffice',
-      'ppostalCode'
-    );
-
-  }
-);
-
-
-/* =====================================================
-   PRESENT DIVISION
-===================================================== */
-
-$('division')
-.addEventListener(
-  'change',
-  async function(){
-
-    clearSelect(
-      $('district'),
-      'Present জেলা নির্বাচন করুন'
-    );
-
-    clearSelect(
-      $('upazila'),
-      'Present উপজেলা / থানা নির্বাচন করুন'
-    );
-
-    clearSelect(
-      $('postOffice'),
-      'Present পোস্ট অফিস নির্বাচন করুন'
-    );
-
-    $('postalCode').value =
-      '';
-
-    await loadDistricts(
-      this.value,
-      $('district')
-    );
-
-  }
-);
-
-
-/* =====================================================
-   PRESENT DISTRICT
-===================================================== */
-
-$('district')
-.addEventListener(
-  'change',
-  async function(){
-
-    clearSelect(
-      $('upazila'),
-      'Present উপজেলা / থানা নির্বাচন করুন'
-    );
-
-    clearSelect(
-      $('postOffice'),
-      'Present পোস্ট অফিস নির্বাচন করুন'
-    );
-
-    $('postalCode').value =
-      '';
-
-    await loadUpazilas(
-      this.value,
-      $('upazila')
-    );
-
-  }
-);
-
-
-/* =====================================================
-   PRESENT UPAZILA
-===================================================== */
-
-$('upazila')
-.addEventListener(
-  'change',
-  function(){
-
-    loadPostOffices(
-      $('division').value,
-      $('district').value,
-      'upazila',
-      'postOffice',
-      'postalCode'
-    );
-
-  }
-);
-
-
-/* =====================================================
-   PRESENT POST OFFICE
-===================================================== */
-
-$('postOffice')
-.addEventListener(
-  'change',
-  function(){
-
-    setPostalCode(
-      'postOffice',
-      'postalCode'
-    );
-
-  }
-);
-
-
-/* =====================================================
-   SAVE IDS
-===================================================== */
-
-const ids = [
-
-'name',
-'nickname',
-'dob',
-'age',
-'gender',
-'height',
-'blood',
-'marital',
-'nationality',
-'language',
-'religion',
-'practice',
-
-'pdivision',
-'pdistrict',
-'pupazila',
-'ppostOffice',
-'ppostalCode',
-'parea',
-
-'division',
-'district',
-'upazila',
-'postOffice',
-'postalCode',
-'area',
-
-'addressPrivacy',
-
-'eduSystem',
-'education',
-'profession',
-'workplace',
-'familyType',
-'childCount',
-'smoking',
-'personality',
-'about',
-'prefAge',
-'prefDistrict',
-'top3',
-'photoUrl',
-'visibility'
-
-];
-
-
-/* =====================================================
-   SAVE DATA
-===================================================== */
-
-function values(){
-
-  const data = {};
-
-  ids.forEach(id => {
-
-    const element =
-      $(id);
-
-    if(element){
-
-      data[id] =
-        element.value || '';
-
-    }
-
-  });
-
-  data.savedAt =
-    new Date().toISOString();
-
-  return data;
-
-}
-
-
-/* =====================================================
-   LOAD NORMAL DATA
-===================================================== */
-
-function loadSaved(){
-
-  try{
-
-    const saved =
-      JSON.parse(
-        localStorage.getItem(
-          'joronSmartBiodata'
-        ) || '{}'
-      );
-
-    ids.forEach(id => {
-
-      if(
-        [
-          'pdivision',
-          'pdistrict',
-          'pupazila',
-          'ppostOffice',
-          'ppostalCode',
-          'division',
-          'district',
-          'upazila',
-          'postOffice',
-          'postalCode'
-        ].includes(id)
-      ){
-
-        return;
-
-      }
-
-      if(
-        $(id) &&
-        saved[id] != null
-      ){
-
-        $(id).value =
-          saved[id];
-
-      }
-
-    });
-
-    calcAge();
-
-  }catch(error){
-
-    console.warn(
-      'Saved data error:',
-      error
-    );
-
-  }
-
-}
-
-
-/* =====================================================
-   SAVE
-===================================================== */
-
-function save(){
-
-  localStorage.setItem(
-    'joronSmartBiodata',
-    JSON.stringify(
-      values()
-    )
-  );
-
-  $('notice').style.display =
-    'block';
-
-  setTimeout(
-    () => {
-
-      $('notice').style.display =
-        'none';
-
-    },
-    3000
-  );
-
-}
-
-
-/* =====================================================
-   DRAFT
-===================================================== */
-
-$('draftBtn')
-.addEventListener(
-  'click',
-  save
-);
-
-
-/* =====================================================
-   SUBMIT
-===================================================== */
-
-$('form')
-.addEventListener(
-  'submit',
-  function(e){
-
-    e.preventDefault();
-
-    if(!this.checkValidity()){
-
-      this.reportValidity();
-
-      return;
-
-    }
-
-    save();
-
-  }
-);
-
-
-/* =====================================================
-   START
-===================================================== */
-
-loadSaved();
-
-Promise.all([
-  loadDivisions(),
-  loadPostcodes()
-]).then(() => {
-
-  locationMessage(
-    '✅ ঠিকানা নির্বাচন করার জন্য প্রস্তুত।'
-  );
-
-});
-
-</script>
-
-
-<!-- =====================================================
-     FIREBASE
-===================================================== -->
-
-<script
-type="module"
-src="assets/smart-biodata-firebase.js">
-</script>
 
 </body>
 </html>

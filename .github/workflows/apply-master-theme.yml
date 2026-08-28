@@ -11,39 +11,69 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Apply theme
+      - name: Apply JORON reference theme
         shell: bash
         run: |
           set -e
 
-          if [ ! -f "assets/joron-theme.css" ]; then
-            echo "assets/joron-theme.css not found"
+          if [ ! -f "assets/joron-reference-theme.css" ]; then
+            echo "JORON reference theme CSS not found."
             exit 0
           fi
+
+          shopt -s nullglob
 
           for file in *.html; do
-            [ -f "$file" ] || continue
+            case "$file" in
+              *before-*|*backup*|*.bak)
+                echo "Skipping: $file"
+                continue
+                ;;
+            esac
 
-            if ! grep -q 'assets/joron-theme.css' "$file"; then
-              sed -i 's#</head>#<link rel="stylesheet" href="assets/joron-theme.css">\n</head>#' "$file"
+            if grep -q 'assets/joron-reference-theme.css' "$file"; then
+              echo "Already applied: $file"
+              continue
             fi
+
+            python3 - "$file" <<'PY'
+import sys
+from pathlib import Path
+
+file_path = Path(sys.argv[1])
+text = file_path.read_text(encoding="utf-8")
+theme = '<link rel="stylesheet" href="assets/joron-reference-theme.css">'
+
+if theme not in text and "</head>" in text:
+    text = text.replace("</head>", "\n" + theme + "\n</head>", 1)
+    file_path.write_text(text, encoding="utf-8")
+    print(f"Theme added: {file_path}")
+else:
+    print(f"No change needed: {file_path}")
+PY
           done
 
-      - name: Save changes
+      - name: Check changes
+        shell: bash
+        run: git status --short
+
+      - name: Commit changes
         shell: bash
         run: |
+          set -e
           git config user.name "JORON Theme Bot"
           git config user.email "actions@github.com"
-
-          git add "*.html"
+          git add '*.html'
 
           if git diff --cached --quiet; then
-            echo "No changes needed"
+            echo "No changes to commit."
             exit 0
           fi
 
-          git commit -m "Apply JORON master theme"
+          git commit -m "Apply JORON reference theme"
           git push

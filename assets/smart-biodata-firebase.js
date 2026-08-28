@@ -1,13 +1,12 @@
 // JORON final address compatibility layer.
-// The legacy address script may be present, but this module is the authoritative final initializer.
-// Firebase save/load remains in biodata.html; parea/area receive a complete human-readable address summary.
+// Firebase save/load remains in biodata.html. Existing parea/area fields receive a complete address summary.
 
 const $=id=>document.getElementById(id);
 const GEO="https://esm.sh/@olism/bd-geo@0.1.6?bundle";
 const POST="https://raw.githubusercontent.com/ifahimreza/bangladesh-geojson/master/src/data/bd-postcodes.json";
 let D=[],Z=[],U=[],A=[],V=[],P=[];
 const bn=x=>String(x?.nameBn||x?.bn_name||x?.name||"").trim();
-const office=x=>String(x?.postOffice??x?.postoffice??x?.suboffice??x?.post_office??x?.name||"").trim();
+const office=x=>String((x?.postOffice??x?.postoffice??x?.suboffice??x?.post_office??x?.name??"")).trim();
 const code=x=>String(x?.postCode??x?.postcode??x?.post_code??x?.postalCode??x?.postal_code??"").trim();
 const postText=x=>{const o=office(x),c=code(x);return o?(c?`${o} — ${c}`:o):""};
 function reset(e,t){if(!e)return;e.replaceChildren(new Option(t,""));e.value="";e.disabled=true;}
@@ -26,8 +25,8 @@ function initSide(prefix){
  const updateSummary=()=>{const parts=[];for(const [e,k] of [[union,"ইউনিয়ন/পৌরসভা"],[ward,"ওয়ার্ড"],[village,"গ্রাম/মহল্লা"]]){const t=e.selectedOptions?.[0]?.textContent?.trim();if(t&&e.selectedIndex>0)parts.push(`${k}: ${t}`);}if(summary)summary.value=parts.join(" | ");};
  dv.addEventListener("change",()=>{reset(dz,ph.d);reset(up,ph.u);reset(union,ph.a);reset(ward,ph.w);reset(village,ph.v);reset(po,ph.p);if(pc)pc.value="";if(summary)summary.value="";const d=D.find(x=>String(x.id)===String(dv.value));fill(dz,Z.filter(x=>String(x.divisionId)===String(d?.id)),ph.d);});
  dz.addEventListener("change",()=>{reset(up,ph.u);reset(union,ph.a);reset(ward,ph.w);reset(village,ph.v);reset(po,ph.p);if(pc)pc.value="";if(summary)summary.value="";const d=Z.find(x=>String(x.id)===String(dz.value));fill(up,U.filter(x=>String(x.districtId)===String(d?.id)),ph.u);});
- up.addEventListener("change",()=>{reset(union,ph.a);reset(ward,ph.w);reset(village,ph.v);reset(po,ph.p);if(pc)pc.value="";if(summary)summary.value="";const u=U.find(x=>String(x.id)===String(up.value));if(!u)return;const aa=A.filter(x=>String(x.upazilaId)===String(u.id));fill(union,aa.filter(x=>x.type==="union"),ph.a);fill(ward,aa.filter(x=>x.type==="ward"),ph.w);const names=[u.name,u.nameBn].filter(Boolean).map(String);fill(po,P.filter(x=>names.includes(String(x.upazila??x.upazila_name??x.upazila_bn??"").trim())),ph.p,postText);});
- union.addEventListener("change",()=>{reset(village,ph.v);const u=A.find(x=>String(x.id)===String(union.value)&&x.type==="union");if(u)fill(village,V.filter(x=>String(x.areaId)===String(u.id)),ph.v);updateSummary();});
+ up.addEventListener("change",()=>{reset(union,ph.a);reset(ward,ph.w);reset(village,ph.v);reset(po,ph.p);if(pc)pc.value="";if(summary)summary.value="";const u=U.find(x=>String(x.id)===String(up.value));if(!u)return;const aa=A.filter(x=>String(x.upazilaId)===String(u.id));fill(union,aa.filter(x=>x.type==="union"),ph.a);reset(ward,ph.w);const names=[u.name,u.nameBn].filter(Boolean).map(String);fill(po,P.filter(x=>names.includes(String(x.upazila??x.upazila_name??x.upazila_bn??"").trim())),ph.p,postText);});
+ union.addEventListener("change",()=>{reset(ward,ph.w);reset(village,ph.v);const u=A.find(x=>String(x.id)===String(union.value)&&x.type==="union");if(u){const upId=String(u.upazilaId);fill(ward,A.filter(x=>String(x.upazilaId)===upId&&x.type==="ward"),ph.w);fill(village,V.filter(x=>String(x.areaId)===String(u.id)),ph.v);}updateSummary();});
  ward.addEventListener("change",updateSummary);
  village.addEventListener("change",updateSummary);
  po.addEventListener("change",()=>{const row=P.find(x=>postText(x)===po.options[po.selectedIndex]?.textContent);if(pc)pc.value=row?code(row):"";updateSummary();});

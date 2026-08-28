@@ -1,35 +1,50 @@
-// JORON Smart Biodata runtime bridge.
-// Load the existing Firebase save/restore implementation and the repaired Address runtime.
+// JORON Smart Biodata — reliable Save/Restore bridge
+import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+import { auth, db, onAuthStateChanged, persistenceReady } from "./firebase-client.js";
 
-const loadSmartBiodataRuntime = () => {
-  if (window.__JORON_BIODATA_RUNTIME_LOADING || window.__JORON_BIODATA_RUNTIME_LOADED) return;
-  window.__JORON_BIODATA_RUNTIME_LOADING = true;
+const form = document.getElementById("form");
+const notice = document.getElementById("notice");
+const IDS = ["name","nickname","dob","age","gender","height","blood","marital","nationality","language","religion","practice","division","district","upazila","postOffice","postalCode","area","pdistrict","pdivision","pupazila","ppostOffice","ppostalCode","parea","addressPrivacy","eduSystem","education","profession","workplace","familyType","childCount","smoking","personality","about","prefAge","prefDistrict","top3","photoUrl","visibility"];
+const PUBLIC_IDS = ["name","nickname","age","gender","height","marital","division","district","upazila","postOffice","postalCode","eduSystem","education","profession","familyType","personality","photoUrl","visibility"];
 
-  const load = (src) => new Promise((resolve, reject) => {
-    const script = document.createElement('script');
-    script.type = 'module';
-    script.src = src;
-    script.onload = resolve;
-    script.onerror = () => reject(new Error('Failed to load '+src));
-    document.head.appendChild(script);
-  });
+const collect = () => Object.fromEntries(IDS.map(id => [id, document.getElementById(id)?.value ?? ""]));
+const localData = () => { try { return JSON.parse(localStorage.getItem("joronSmartBiodata") || "{}"); } catch { return {}; } };
+const show = (msg, ok=true) => { if (!notice) return; notice.textContent=msg; notice.style.display="block"; notice.style.background=ok?"#eaf9f3":"#fff1f1"; notice.style.color=ok?"#087b59":"#a80000"; setTimeout(()=>notice.style.display="none",4500); };
+const saveLocal = data => localStorage.setItem("joronSmartBiodata", JSON.stringify({...data,savedAt:new Date().toISOString()}));
+const fill = data => { IDS.forEach(id=>{const el=document.getElementById(id); if(el && data[id]!==undefined && data[id]!==null) el.value=data[id];}); document.getElementById("dob")?.dispatchEvent(new Event("change")); };
+const publicProjection = data => Object.fromEntries(PUBLIC_IDS.filter(id=>data[id]!==undefined).map(id=>[id,data[id]]));
 
-  Promise.all([
-    load('assets/smart-biodata-firebase-legacy.js'),
-    load('assets/smart-biodata-address-v12.js')
-  ]).then(() => {
-    window.__JORON_BIODATA_RUNTIME_LOADED = true;
-  }).catch(e => {
-    console.error('JORON Smart Biodata runtime failed to load.', e);
-  }).finally(() => {
-    window.__JORON_BIODATA_RUNTIME_LOADING = false;
-  });
-};
-
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', loadSmartBiodataRuntime, { once: true });
-} else {
-  loadSmartBiodataRuntime();
+async function restore(user){
+  const local=localData();
+  if(Object.keys(local).length) fill(local);
+  try { const snap=await getDoc(doc(db,"privateBiodata",user.uid)); if(snap.exists()){const data=snap.data(); fill(data); saveLocal(data);} }
+  catch(e){ console.warn("Firebase restore failed; local draft retained",e); }
 }
 
-export {};
+async function save(){
+  const data=collect();
+  saveLocal(data); // Always keep a local copy first.
+  const user=auth.currentUser;
+  if(!user){ show("💾 Draft সংরক্ষিত হয়েছে। Smart Biodata-এর জন্য আগে Login করুন।"); return; }
+  try{
+    await setDoc(doc(db,"privateBiodata",user.uid),{...data,uid:user.uid,email:user.email||"",updatedAt:serverTimestamp()},{merge:true});
+    await setDoc(doc(db,"biodata",user.uid),{...publicProjection(data),uid:user.uid,updatedAt:serverTimestamp()},{merge:true});
+    show("❤️ আপনার Smart Biodata সফলভাবে সংরক্ষিত হয়েছে।");
+  }catch(e){
+    console.error("JORON Firebase save failed",e);
+    show("💾 তথ্য ফোনে সংরক্ষিত হয়েছে, কিন্তু Firebase-এ Save হয়নি। আবার চেষ্টা করুন।",false);
+  }
+}
+
+await persistenceReady;
+onAuthStateChanged(auth,user=>{ if(user) restore(user); });
+
+if(form && !window.__JORON_SAVE_BOUND){
+  window.__JORON_SAVE_BOUND=true;
+  form.addEventListener("submit",async e=>{e.preventDefault();e.stopImmediatePropagation();if(!form.checkValidity()){form.reportValidity();return;}await save();},true);
+}
+const draft=document.getElementById("draftBtn");
+if(draft && !window.__JORON_DRAFT_BOUND){
+  window.__JORON_DRAFT_BOUND=true;
+  draft.addEventListener("click",()=>{saveLocal(collect());show("💾 Draft সংরক্ষিত হয়েছে।");},true);
+}

@@ -13,30 +13,31 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Apply JORON reference theme
+      - name: Check theme CSS
+        run: |
+          if [ ! -f "assets/joron-theme.css" ]; then
+            echo "Theme CSS file not found."
+            exit 0
+          fi
+
+      - name: Apply theme to HTML pages
         shell: bash
         run: |
           set -e
 
-          if [ ! -f "assets/joron-reference-theme.css" ]; then
-            echo "JORON reference theme CSS not found."
-            exit 0
-          fi
-
-          shopt -s nullglob
+          changed=0
 
           for file in *.html; do
+            [ -f "$file" ] || continue
+
             case "$file" in
               *before-*|*backup*|*.bak)
-                echo "Skipping: $file"
                 continue
                 ;;
             esac
 
-            if grep -q 'assets/joron-reference-theme.css' "$file"; then
+            if grep -q 'assets/joron-theme.css' "$file"; then
               echo "Already applied: $file"
               continue
             fi
@@ -45,35 +46,51 @@ jobs:
 import sys
 from pathlib import Path
 
-file_path = Path(sys.argv[1])
-text = file_path.read_text(encoding="utf-8")
-theme = '<link rel="stylesheet" href="assets/joron-reference-theme.css">'
+path = Path(sys.argv[1])
+text = path.read_text(encoding="utf-8")
+
+theme = '<link rel="stylesheet" href="assets/joron-theme.css">'
 
 if theme not in text and "</head>" in text:
-    text = text.replace("</head>", "\n" + theme + "\n</head>", 1)
-    file_path.write_text(text, encoding="utf-8")
-    print(f"Theme added: {file_path}")
-else:
-    print(f"No change needed: {file_path}")
+    text = text.replace(
+        "</head>",
+        "\n" + theme + "\n</head>",
+        1
+    )
+    path.write_text(text, encoding="utf-8")
+    print("Theme added:", path)
+    sys.exit(10)
+
+print("No change needed:", path)
 PY
+
+            code=$?
+
+            if [ "$code" -eq 10 ]; then
+              changed=1
+            elif [ "$code" -ne 0 ]; then
+              exit "$code"
+            fi
           done
 
-      - name: Check changes
-        shell: bash
-        run: git status --short
+          echo "changed=$changed" >> "$GITHUB_ENV"
 
       - name: Commit changes
-        shell: bash
+        if: env.changed == '1'
         run: |
-          set -e
           git config user.name "JORON Theme Bot"
           git config user.email "actions@github.com"
+
           git add '*.html'
 
           if git diff --cached --quiet; then
-            echo "No changes to commit."
+            echo "Nothing to commit."
             exit 0
           fi
 
-          git commit -m "Apply JORON reference theme"
+          git commit -m "Apply JORON master theme"
           git push
+
+      - name: Finish
+        run: |
+          echo "JORON Master Theme workflow completed."

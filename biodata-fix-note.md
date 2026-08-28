@@ -1,0 +1,1 @@
+The active Biodata implementation is smart-biodata.html; biodata.html is being aligned with it.

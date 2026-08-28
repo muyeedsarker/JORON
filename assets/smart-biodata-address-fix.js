@@ -2,18 +2,20 @@
 // Keeps existing Division → District → Upazila → Area logic untouched.
 // Supplies Post Office + Village for BOTH Present and Permanent addresses.
 
-import { getVillages } from "https://esm.sh/@olism/bd-geo@0.1.6";
+import { getVillages, getUpazilas } from "https://esm.sh/@olism/bd-geo@0.1.6";
 
 const JORON_POSTCODE_URL = "https://raw.githubusercontent.com/ifahimreza/bangladesh-geojson/master/src/data/bd-postcodes.json";
 const jQ = id => document.getElementById(id);
 let joronPostRows = null;
 let joronPostLoading = null;
 let joronVillages = [];
+let joronUpazilas = [];
 
 const clean = value => String(value ?? "")
   .toLowerCase()
   .replace(/[().,\-_/]/g, " ")
   .replace(/\b(upazila|upo|sadar|thana)\b/g, "")
+  .replace(/উপজেলা|থানা|সদর/g, "")
   .replace(/\s+/g, " ")
   .trim();
 
@@ -43,23 +45,36 @@ function optionText(row){
   return code ? `${office} — ${code}` : office;
 }
 
-function selectedUpazilaText(select){
-  if (!select) return "";
+function selectedUpazilaCandidates(select){
+  if (!select) return [];
   const opt = select.options?.[select.selectedIndex];
-  return opt?.textContent?.trim() || select.value || "";
+  const text = opt?.textContent?.trim() || "";
+  const rawValue = select.value || "";
+  const candidates = [text, rawValue];
+
+  const matched = joronUpazilas.find(u => {
+    const en = clean(u?.name);
+    const bn = clean(u?.nameBn);
+    return (en && (en === clean(text) || en === clean(rawValue))) ||
+           (bn && (bn === clean(text) || bn === clean(rawValue)));
+  });
+
+  if (matched) {
+    candidates.push(matched.name, matched.nameBn);
+  }
+
+  return [...new Set(candidates.filter(Boolean).map(clean))];
 }
 
 function matchingRows(upazilaSelect){
   if (!upazilaSelect || !joronPostRows?.length) return [];
-  const selected = clean(selectedUpazilaText(upazilaSelect));
-  const rawValue = clean(upazilaSelect.value);
-  if (!selected && !rawValue) return [];
+  const candidates = selectedUpazilaCandidates(upazilaSelect);
+  if (!candidates.length) return [];
+
   return joronPostRows.filter(row => {
-    const candidates = [row.upazila, row.upazila_bn, row.upazilaBn, row.upazila_name, row.upazilaName];
-    return candidates.some(v => {
-      const x = clean(v);
-      return x && (x === selected || x === rawValue || x.includes(selected) || selected.includes(x));
-    });
+    const rowUpazila = clean(row?.upazila ?? row?.upazila_bn ?? row?.upazilaBn ?? row?.upazila_name ?? row?.upazilaName);
+    if (!rowUpazila) return false;
+    return candidates.some(x => x === rowUpazila || x.includes(rowUpazila) || rowUpazila.includes(x));
   });
 }
 
@@ -163,6 +178,7 @@ async function initJoronAddressFix(){
   bindVillage("");
   bindVillage("p");
 
+  try { joronUpazilas = getUpazilas() || []; } catch(e) { console.warn("JORON upazila dataset unavailable", e); }
   try { joronVillages = getVillages() || []; } catch(e) { console.warn("JORON village dataset unavailable", e); }
   await loadJoronPostcodes();
 

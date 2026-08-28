@@ -1,4 +1,4 @@
-// JORON Smart Biodata — reliable Save/Restore bridge
+import "./smart-biodata-save-guard.js";
 import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 import { auth, db, onAuthStateChanged, persistenceReady } from "./firebase-client.js";
 
@@ -23,7 +23,7 @@ async function restore(user){
 
 async function save(){
   const data=collect();
-  saveLocal(data); // Always keep a local copy first.
+  saveLocal(data);
   const user=auth.currentUser;
   if(!user){ show("💾 Draft সংরক্ষিত হয়েছে। Smart Biodata-এর জন্য আগে Login করুন।"); return; }
   try{

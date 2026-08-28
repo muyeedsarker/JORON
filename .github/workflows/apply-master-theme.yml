@@ -1,8 +1,17 @@
+জি ভাই, এখন আসল কারণটা পেয়েছি। ❤️
+আপনি যে apply-master-theme.yml কোড দিয়েছেন, সেখানে Workflow-এর মূল কাঠামো ঠিক আছে। কিন্তু git add '*.html' assets/joron-theme.css লাইনে assets/joron-theme.css ফাইলটি যদি repository-তে না থাকে, অথবা Git-এর বর্তমান অবস্থার সঙ্গে মেলে না, তাহলে Workflow ব্যর্থ হতে পারে।
+আরও গুরুত্বপূর্ণ: Workflow-টি নিজেই git push করছে। ফলে push trigger-এর কারণে নিজেকেই আবার চালাতে পারে, যা অপ্রয়োজনীয় সমস্যা তৈরি করতে পারে।
+আমি এটাকে নিরাপদভাবে ঠিক করার জন্য নিচের সম্পূর্ণ কোডটি ব্যবহার করতে বলছি।
+Writing
 name: Apply JORON Master Theme
 
 on:
   push:
     branches: [main]
+    paths:
+      - "*.html"
+      - "assets/**"
+      - ".github/workflows/apply-master-theme.yml"
   workflow_dispatch:
 
 permissions:
@@ -11,42 +20,80 @@ permissions:
 jobs:
   theme:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Apply shared theme to active pages
         shell: bash
         run: |
           set -e
+
           shopt -s nullglob
+
+          changed=0
+
           for file in *.html; do
+
             case "$file" in
-              *before-*|*backup*|*.bak) continue ;;
+              *before-*|*backup*|*.bak)
+                continue
+                ;;
             esac
-            if ! grep -q 'assets/joron-theme.css' "$file"; then
-              python3 - "$file" <<'PY'
+
+            if grep -q 'assets/joron-theme.css' "$file"; then
+              echo "Already applied: $file"
+              continue
+            fi
+
+            python3 - "$file" <<'PY'
 import sys
 from pathlib import Path
-p=Path(sys.argv[1])
-s=p.read_text(encoding='utf-8')
-link='\n<link rel="stylesheet" href="assets/joron-theme.css">\n'
-if '</head>' in s:
-    s=s.replace('</head>', link+'</head>', 1)
-    p.write_text(s, encoding='utf-8')
+
+p = Path(sys.argv[1])
+
+s = p.read_text(encoding="utf-8")
+
+link = '\n<link rel="stylesheet" href="assets/joron-theme.css">\n'
+
+if "</head>" in s:
+    s = s.replace("</head>", link + "</head>", 1)
+    p.write_text(s, encoding="utf-8")
+    print("Updated:", p)
+else:
+    print("Skipped (no </head>):", p)
 PY
-            fi
+
+            changed=1
           done
 
-      - name: Commit theme links
+          echo "Theme processing completed."
+          echo "Changed flag: $changed"
+
+      - name: Commit changes if needed
         shell: bash
         run: |
+          set -e
+
           git config user.name "JORON Theme Bot"
           git config user.email "actions@github.com"
-          git add '*.html' assets/joron-theme.css
+
+          git add -- '*.html'
+
           if git diff --cached --quiet; then
-            echo "Theme already applied"
+            echo "No HTML changes required."
             exit 0
           fi
-          git commit -m "Apply JORON master pink-purple theme to active pages"
+
+          git commit -m "Apply JORON master theme"
+
           git push
+এখন আপনার কাজ মাত্র ৩টি
+১. apply-master-theme.yml-এর পুরোনো পুরো কোড মুছে ফেলবেন।
+২. উপরের পুরো কোডটি পেস্ট করবেন।
+৩. Commit changes চাপবেন।
+এরপর নতুন Actions Run তৈরি হবে। পুরোনো #144 নিয়ে আর কাজ করবেন না।
+নতুন Run-এ যদি সবুজ ✅ হয়, তখন আমরা Address system-এর বিভাগ → জেলা → উপজেলা/থানা → ইউনিয়ন/পৌরসভা → ওয়ার্ড → গ্রাম অংশটি ফাইনাল করব। ❤️🚀

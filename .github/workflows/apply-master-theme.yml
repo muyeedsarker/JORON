@@ -1,12 +1,6 @@
 name: Apply JORON Master Theme
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - "*.html"
-      - "assets/**"
   workflow_dispatch:
 
 permissions:
@@ -17,68 +11,37 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Apply shared JORON theme
+      - name: Apply theme
         shell: bash
         run: |
           set -e
 
           if [ ! -f "assets/joron-theme.css" ]; then
-            echo "Theme CSS not found. Nothing to do."
+            echo "assets/joron-theme.css not found"
             exit 0
           fi
 
-          shopt -s nullglob
-
           for file in *.html; do
-            case "$file" in
-              *before-*|*backup*|*.bak)
-                continue
-                ;;
-            esac
+            [ -f "$file" ] || continue
 
-            python3 - "$file" <<'PY'
-import sys
-from pathlib import Path
-
-file_path = Path(sys.argv[1])
-text = file_path.read_text(encoding="utf-8")
-
-theme = '<link rel="stylesheet" href="assets/joron-theme.css">'
-
-if theme not in text and "</head>" in text:
-    text = text.replace(
-        "</head>",
-        "\n" + theme + "\n</head>",
-        1
-    )
-    file_path.write_text(text, encoding="utf-8")
-    print(f"Theme added: {file_path}")
-else:
-    print(f"No change needed: {file_path}")
-PY
-
+            if ! grep -q 'assets/joron-theme.css' "$file"; then
+              sed -i 's#</head>#<link rel="stylesheet" href="assets/joron-theme.css">\n</head>#' "$file"
+            fi
           done
 
-      - name: Check changes
+      - name: Save changes
         shell: bash
         run: |
-          git status --short
-
-      - name: Commit theme changes
-        shell: bash
-        run: |
-          set -e
-
           git config user.name "JORON Theme Bot"
           git config user.email "actions@github.com"
 
           git add "*.html"
 
           if git diff --cached --quiet; then
-            echo "No changes to commit."
+            echo "No changes needed"
             exit 0
           fi
 

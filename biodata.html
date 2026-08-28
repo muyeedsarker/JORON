@@ -1,70 +1,17 @@
 <!doctype html>
 <html lang="bn">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#64158f"><title>J❤️R❤️N | Smart Biodata</title>
-<link rel="stylesheet" href="./assets/style.css">
-<style>
-.biodata-page{min-height:100vh;padding:30px 0 50px}.profile-hero{position:relative;text-align:center;padding:34px 22px;margin-bottom:22px;border-radius:30px;overflow:hidden;background:linear-gradient(120deg,#64158f,#8b3fc0 45%,#e81768);color:#fff;box-shadow:0 20px 55px #64158f33}.profile-hero h1{font-size:clamp(30px,6vw,46px);margin:0 0 8px;font-family:Georgia,serif}.profile-hero p{margin:0;color:#ffeaf4}.progress-wrap{margin:20px auto 0;max-width:480px}.progress{height:9px;background:#ffffff30;border-radius:99px;overflow:hidden}.progress i{display:block;width:35%;height:100%;background:#fff;border-radius:99px}.section-card{margin-top:18px}.section-title{color:#64158f!important}.privacy-note{display:flex;gap:10px;align-items:center;margin-top:16px;padding:12px 14px;border-radius:14px;background:#fff3f8;border:1px solid #f3ccdf;color:#704f61;font-size:13px}.address-head{font-size:20px;font-weight:900;color:#087b59;margin:8px 0 14px}.address-divider{border:0;border-top:1px solid #e4e7e8;margin:24px 0}.location-status{padding:11px 14px;border-radius:14px;background:#effaf6;border:1px solid #c8ebdc;color:#087b59;font-size:13px;font-weight:800;margin-top:16px}.field.full{grid-column:1/-1}select:disabled{background:#f0f3f3;color:#899394;cursor:not-allowed}.required-note{text-align:center;color:#8b7480;font-size:12px;margin-top:10px}@media(max-width:600px){.biodata-page{padding:18px 0 35px}.profile-hero{padding:28px 16px;border-radius:24px}.profile-hero h1{font-size:29px}.field.full{grid-column:auto}}
-</style>
-<link rel="stylesheet" href="assets/joron-reference-theme.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#087b59">
+<title>J❤️R❤️N | Smart Biodata</title>
+<meta http-equiv="refresh" content="0; url=smart-biodata.html">
+<script>
+location.replace('smart-biodata.html');
+</script>
 </head>
 <body>
-<header class="header"><div class="container nav"><a class="logo" href="index.html">J<span>❤️</span>R<span>❤️</span>N</a><nav class="navlinks"><a href="index.html">হোম</a><a href="profile.html">প্রোফাইল</a></nav></div></header>
-<main class="biodata-page"><div class="container">
-<section class="profile-hero"><div style="font-size:44px">💞</div><h1>প্রোফাইল তৈরি করুন</h1><p>আপনার সুন্দর পরিচয়টি J❤️R❤️N-এ সম্পূর্ণ করুন</p><div class="progress-wrap"><div style="display:flex;justify-content:space-between;font-size:12px;font-weight:800;margin-bottom:7px"><span>প্রোফাইল সম্পূর্ণতা</span><span>35%</span></div><div class="progress"><i></i></div></div></section>
-<section class="card section-card"><h2 class="section-title"><span>👤</span> ব্যক্তিগত তথ্য</h2>
-<form id="biodataForm"><div class="grid">
-<div class="field full"><label for="name">পূর্ণ নাম <span class="req">*</span></label><input id="name" required placeholder="আপনার পূর্ণ নাম"></div>
-<div class="field"><label for="age">বয়স <span class="req">*</span></label><input id="age" type="number" min="18" max="100" required placeholder="বয়স"></div>
-<div class="field"><label for="gender">লিঙ্গ <span class="req">*</span></label><select id="gender" required><option value="">লিঙ্গ নির্বাচন করুন</option><option value="male">পুরুষ</option><option value="female">নারী</option></select></div>
-<div class="field"><label for="profession">পেশা</label><input id="profession" placeholder="আপনার পেশা"></div>
-<div class="field"><label for="phone">মোবাইল</label><input id="phone" type="tel" pattern="01[0-9]{9}" placeholder="01XXXXXXXXX"></div>
-<div class="field"><label for="educationSystem">শিক্ষাব্যবস্থা</label><input id="educationSystem" placeholder="সাধারণ / মাদ্রাসা / অন্যান্য"></div>
-<div class="field"><label for="education">শিক্ষাগত যোগ্যতা</label><input id="education" placeholder="সর্বোচ্চ যোগ্যতা"></div>
-<div class="field"><label for="institution">প্রতিষ্ঠান</label><input id="institution" placeholder="প্রতিষ্ঠানের নাম"></div>
-<div class="field"><label for="subject">বিভাগ / বিষয়</label><input id="subject" placeholder="বিভাগ বা বিষয়"></div>
-<div class="field"><label for="passingYear">পাশের সন</label><input id="passingYear" type="number" placeholder="যেমন: 2020"></div>
-
-<div class="field full"><h3 class="address-head">📍 ২. ঠিকানা — সম্পূর্ণ Dependent Dropdown</h3><p style="margin-top:0;color:#66737b;font-size:13px">বিভাগ → জেলা → উপজেলা / থানা → Post Office → Postal Code → ইউনিয়ন / পৌরসভা / ওয়ার্ড। Permanent ও Present দুটোই একই নির্ভরশীল সিস্টেমে চলবে।</p></div>
-<div class="field full"><div class="address-head">🏠 স্থায়ী ঠিকানা</div></div>
-<div class="field"><label for="pdivision">Permanent বিভাগ <span class="req">*</span></label><select id="pdivision" required><option value="">Permanent বিভাগ নির্বাচন করুন</option></select></div>
-<div class="field"><label for="pdistrict">Permanent জেলা <span class="req">*</span></label><select id="pdistrict" required disabled><option value="">Permanent জেলা নির্বাচন করুন</option></select></div>
-<div class="field"><label for="pupazila">Permanent উপজেলা / থানা <span class="req">*</span></label><select id="pupazila" required disabled><option value="">Permanent উপজেলা / থানা নির্বাচন করুন</option></select></div>
-<div class="field"><label for="ppostOffice">Permanent Post Office <span class="req">*</span></label><select id="ppostOffice" required disabled><option value="">Permanent পোস্ট অফিস নির্বাচন করুন</option></select></div>
-<div class="field"><label for="ppostalCode">Permanent Postal Code</label><input id="ppostalCode" readonly placeholder="Post Office নির্বাচন করুন"></div>
-<div class="field"><label for="parea">Permanent এলাকা / ইউনিয়ন / পৌরসভা / ওয়ার্ড</label><select id="parea" disabled><option value="">Permanent এলাকা নির্বাচন করুন</option></select></div>
-<hr class="address-divider">
-<div class="field full"><div class="address-head">📍 বর্তমান ঠিকানা</div></div>
-<div class="field"><label for="division">Present বিভাগ <span class="req">*</span></label><select id="division" required><option value="">Present বিভাগ নির্বাচন করুন</option></select></div>
-<div class="field"><label for="district">Present জেলা <span class="req">*</span></label><select id="district" required disabled><option value="">Present জেলা নির্বাচন করুন</option></select></div>
-<div class="field"><label for="upazila">Present উপজেলা / থানা <span class="req">*</span></label><select id="upazila" required disabled><option value="">Present উপজেলা / থানা নির্বাচন করুন</option></select></div>
-<div class="field"><label for="postOffice">Present Post Office <span class="req">*</span></label><select id="postOffice" required disabled><option value="">Present পোস্ট অফিস নির্বাচন করুন</option></select></div>
-<div class="field"><label for="postalCode">Present Postal Code</label><input id="postalCode" readonly placeholder="Post Office নির্বাচন করুন"></div>
-<div class="field"><label for="area">Present এলাকা / ইউনিয়ন / পৌরসভা / ওয়ার্ড</label><select id="area" disabled><option value="">Present এলাকা নির্বাচন করুন</option></select></div>
-<div class="field"><label for="addressPrivacy">বর্তমান ঠিকানা প্রকাশ</label><select id="addressPrivacy"><option value="Login User">Login User</option><option value="Approved Person">Approved Person</option><option value="শুধু আমি">শুধু আমি</option></select></div>
-<div class="field full"><div id="locationStatus" class="location-status">📍 Bangladesh address data লোড হচ্ছে...</div></div>
-
-<div class="field full"><label for="about">নিজের সম্পর্কে</label><textarea id="about" placeholder="নিজের সম্পর্কে সংক্ষেপে লিখুন..."></textarea></div>
-<div class="field full"><label for="partner">জীবনসঙ্গীর পছন্দ</label><textarea id="partner" placeholder="আপনি কেমন জীবনসঙ্গী প্রত্যাশা করেন..."></textarea></div>
-</div><div class="privacy-note">🔒 <span>আপনার তথ্য নিরাপদে সংরক্ষণ করা হবে। প্রকাশযোগ্য তথ্য আপনার নিয়ন্ত্রণে থাকবে।</span></div><div class="actions"><button class="btn pink save" id="saveButton" type="submit">💾 প্রোফাইল সংরক্ষণ করুন</button><p id="status">আপনার তথ্য সংরক্ষণ করতে Login করা থাকতে হবে।</p></div><div class="required-note">* চিহ্নিত তথ্যগুলো অবশ্যই পূরণ করুন</div></form></section>
-<footer class="footer">J❤️R❤️N — সুন্দর সম্পর্কের জন্য একটি বিশ্বস্ত প্ল্যাটফর্ম</footer>
-</div></main>
-
-<script src="./assets/smart-biodata-address-fix.js"></script>
-<script type="module">
-import {auth,db,persistenceReady} from "./assets/firebase-client.js";
-import{onAuthStateChanged}from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
-import{doc,getDoc,setDoc,serverTimestamp}from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
-const form=document.getElementById("biodataForm"),status=document.getElementById("status"),button=document.getElementById("saveButton");
-const ids=["name","age","gender","profession","phone","educationSystem","education","institution","subject","passingYear","pdivision","pdistrict","pupazila","ppostOffice","ppostalCode","parea","division","district","upazila","postOffice","postalCode","area","addressPrivacy","about","partner"];
-let currentUser=null;
-function setField(id,value){const e=document.getElementById(id);if(e)e.value=value??""}
-function setFormData(data){ids.forEach(id=>setField(id,data?.[id]))}
-async function loadBiodata(user){const ref=doc(db,"biodata",user.uid),snap=await getDoc(ref);if(snap.exists()){setFormData(snap.data());status.textContent="✏️ আপনার আগের প্রোফাইল পাওয়া গেছে—প্রয়োজনমতো পরিবর্তন করে সংরক্ষণ করুন।";button.textContent="💾 প্রোফাইল আপডেট করুন"}else{status.textContent="আপনার সুন্দর প্রোফাইল তৈরি করা শুরু করুন।";button.textContent="💾 প্রোফাইল সংরক্ষণ করুন"}}
-await persistenceReady;
-onAuthStateChanged(auth,async user=>{if(!user){currentUser=null;form.style.display="none";status.textContent="আগে Login করুন।";return}currentUser=user;form.style.display="block";try{await loadBiodata(user)}catch(err){console.error(err);status.textContent="প্রোফাইল লোড করা যায়নি। Firestore permission পরীক্ষা করুন।"}});
-form.addEventListener("submit",async e=>{e.preventDefault();if(!currentUser){status.textContent="আগে Login করুন।";return}if(!form.checkValidity()){form.reportValidity();return}button.disabled=true;status.textContent="প্রোফাইল সংরক্ষণ হচ্ছে...";const data={};ids.forEach(id=>{const el=document.getElementById(id);data[id]=el?el.value.trim():""});data.age=Number(data.age);data.passingYear=data.passingYear?Number(data.passingYear):null;data.uid=currentUser.uid;data.email=currentUser.email||"";data.visibility="public";data.updatedAt=serverTimestamp();try{const ref=doc(db,"biodata",currentUser.uid),old=await getDoc(ref);await setDoc(ref,{...data,createdAt:old.exists()&&old.data().createdAt?old.data().createdAt:serverTimestamp()},{merge:true});await setDoc(doc(db,"users",currentUser.uid),{name:data.name,phone:data.phone,gender:data.gender,profileCompleted:true,updatedAt:serverTimestamp()},{merge:true});status.textContent=old.exists()?"✅ প্রোফাইল সফলভাবে আপডেট হয়েছে।":"✅ প্রোফাইল সফলভাবে সংরক্ষণ হয়েছে।";button.textContent="💾 প্রোফাইল আপডেট করুন";button.disabled=false;setTimeout(()=>location.href="profile.html?id="+encodeURIComponent(currentUser.uid),700)}catch(err){console.error(err);status.textContent="❌ প্রোফাইল সংরক্ষণ করা যায়নি। Firestore rules/permission পরীক্ষা করুন।";button.disabled=false}});
-</script>
-<style id="joron-global-page-nav-style">.joron-global-page-nav{width:100%;display:flex;gap:10px;justify-content:center;align-items:center;padding:14px 0 24px;margin:0 auto;clear:both}.joron-global-page-nav a,.joron-global-page-nav button{flex:1 1 0;max-width:360px;min-height:50px;display:flex;align-items:center;justify-content:center;padding:12px 16px;border:2px solid rgba(255,255,255,.9);border-radius:15px;color:#fff;background:linear-gradient(135deg,#087b59,#10a978);font:900 15px/1.2 "Noto Sans Bengali","Hind Siliguri",system-ui,sans-serif;text-decoration:none;cursor:pointer;box-shadow:0 8px 20px rgba(70,25,90,.18),inset 0 1px 0 rgba(255,255,255,.35);transition:.2s}.joron-global-page-nav button{background:linear-gradient(135deg,#64158f,#a13bc5)}.joron-global-page-nav a:hover,.joron-global-page-nav button:hover{transform:translateY(-2px);filter:brightness(1.06)}@media(max-width:600px){.joron-global-page-nav{gap:6px;padding:12px 2px 20px}.joron-global-page-nav a,.joron-global-page-nav button{min-height:48px;padding:11px 8px;font-size:13px;border-width:1.5px;border-radius:12px}}</style>
-<div id="joron-global-page-nav" class="joron-global-page-nav" aria-label="JORON page navigation"><a href="index.html" class="joron-home-btn">🏠 হোম</a><button type="button" class="joron-back-btn" onclick="if(history.length>1){history.back()}else{location.href='index.html'}">↩️ Back</button></div>
-</body></html>
+<p>J❤️R❤️N Smart Biodata খুলছে...</p>
+<p><a href="smart-biodata.html">Smart Biodata খুলুন</a></p>
+</body>
+</html>

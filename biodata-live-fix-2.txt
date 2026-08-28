@@ -1,1 +1,0 @@
-Biodata canonical page repair: biodata.html must use smart-biodata.html as the active implementation.

@@ -1,4 +1,6 @@
 // JORON Smart Biodata Firebase compatibility wrapper.
-// Preserve the previous Firebase implementation and load the isolated address fix after it.
-import "./smart-biodata-firebase-legacy.js";
-import "./smart-biodata-address-fix.js";
+// Firebase save/load is handled by biodata.html itself.
+// Address handling is loaded once by biodata.html through smart-biodata-address-fix.js.
+// The previous legacy import caused duplicate Firebase/address listeners and could overwrite
+// dependent dropdown selections. Keep this file intentionally side-effect free.
+export {};

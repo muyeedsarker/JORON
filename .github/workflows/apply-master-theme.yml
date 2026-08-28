@@ -2,6 +2,12 @@ name: Apply JORON Master Theme
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "*.html"
+      - "assets/**"
 
 permissions:
   contents: write
@@ -14,22 +20,21 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Check theme CSS
-        run: |
-          if [ ! -f "assets/joron-theme.css" ]; then
-            echo "Theme CSS file not found."
-            exit 0
-          fi
-
-      - name: Apply theme to HTML pages
+      - name: Apply JORON theme
         shell: bash
         run: |
           set -e
 
+          if [ ! -f "assets/joron-theme.css" ]; then
+            echo "JORON theme CSS not found. Nothing to do."
+            exit 0
+          fi
+
           changed=0
 
+          shopt -s nullglob
+
           for file in *.html; do
-            [ -f "$file" ] || continue
 
             case "$file" in
               *before-*|*backup*|*.bak)
@@ -58,39 +63,30 @@ if theme not in text and "</head>" in text:
         1
     )
     path.write_text(text, encoding="utf-8")
-    print("Theme added:", path)
-    sys.exit(10)
-
-print("No change needed:", path)
+    print(f"Theme added: {path}")
 PY
 
-            code=$?
+            changed=1
 
-            if [ "$code" -eq 10 ]; then
-              changed=1
-            elif [ "$code" -ne 0 ]; then
-              exit "$code"
-            fi
           done
 
-          echo "changed=$changed" >> "$GITHUB_ENV"
+          echo "Theme application finished."
+          echo "Changed: $changed"
 
-      - name: Commit changes
-        if: env.changed == '1'
+      - name: Commit theme changes
+        shell: bash
         run: |
+          set -e
+
           git config user.name "JORON Theme Bot"
           git config user.email "actions@github.com"
 
-          git add '*.html'
+          git add "*.html"
 
           if git diff --cached --quiet; then
-            echo "Nothing to commit."
+            echo "No changes needed."
             exit 0
           fi
 
           git commit -m "Apply JORON master theme"
           git push
-
-      - name: Finish
-        run: |
-          echo "JORON Master Theme workflow completed."

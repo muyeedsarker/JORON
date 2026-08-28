@@ -64,20 +64,8 @@ function setup(pre){
  const clearLower=()=>{reset(un,L+' ইউনিয়ন / পৌরসভা নির্বাচন করুন');reset(wd,L+' ওয়ার্ড নির্বাচন করুন');if(vl)vl.value='';if(ar)ar.value='';reset(po,L+' Post Office নির্বাচন করুন');if(pc)pc.value='';if(legacy)legacy.value='';};
  dv.addEventListener('change',()=>{reset(di,L+' জেলা নির্বাচন করুন');reset(up,L+' উপজেলা / থানা নির্বাচন করুন');clearLower();fill(di,findDivision(dv.value)?.districts||[],L+' জেলা নির্বাচন করুন');});
  di.addEventListener('change',()=>{reset(up,L+' উপজেলা / থানা নির্বাচন করুন');clearLower();fill(up,findDistrict(di.value)?.upazilas||[],L+' উপজেলা / থানা নির্বাচন করুন');});
- up.addEventListener('change',()=>{
-  clearLower();
-  const u=findUpazila(up.value);
-  fill(un,unionRows(u),L+' ইউনিয়ন / পৌরসভা নির্বাচন করুন');
-  const rows=P.filter(x=>same(x?.upazila??x?.upazila_name??'',u));
-  fill(po,rows.map(x=>({name:postName(x),bn_name:postName(x)})).filter(x=>x.name),L+' Post Office নির্বাচন করুন');
- });
- un.addEventListener('change',()=>{
-  const u=findUpazila(up.value), selected=un.options[un.selectedIndex]?.textContent||'';
-  const unionObj=unionRows(u).find(x=>same(selected,x)||same(un.value,x));
-  const rows=wardRows(u,unionObj);
-  if(rows.length)fill(wd,rows,L+' ওয়ার্ড নির্বাচন করুন');else wardsFallback(wd);
-  sync();
- });
+ up.addEventListener('change',()=>{clearLower();const u=findUpazila(up.value);fill(un,unionRows(u),L+' ইউনিয়ন / পৌরসভা নির্বাচন করুন');const rows=P.filter(x=>same(x?.upazila??x?.upazila_name??'',u));fill(po,rows.map(x=>({name:postName(x),bn_name:postName(x)})).filter(x=>x.name),L+' Post Office নির্বাচন করুন');});
+ un.addEventListener('change',()=>{const u=findUpazila(up.value),selected=un.options[un.selectedIndex]?.textContent||'';const unionObj=unionRows(u).find(x=>same(selected,x)||same(un.value,x));const rows=wardRows(u,unionObj);if(rows.length)fill(wd,rows,L+' ওয়ার্ড নির্বাচন করুন');else wardsFallback(wd);sync();});
  wd.addEventListener('change',sync);vl.addEventListener('input',sync);ar.addEventListener('input',sync);
  po.addEventListener('change',()=>{const t=po.selectedOptions[0]?.textContent?.trim()||'',r=P.find(x=>postName(x)===t);if(pc)pc.value=r?postCode(r):'';sync();});
  return {un,wd,vl,ar,legacy};
@@ -107,5 +95,7 @@ async function init(){
   let tries=0;const timer=setInterval(()=>{restore(true);restore(false);if(++tries>=40)clearInterval(timer);},250);
  }catch(e){console.error('JORON address error:',e);stat('❌ ঠিকানার তালিকা লোড হয়নি। Internet চালু করে Refresh করুন।',true);}
 }
+// Firebase may finish loading after the address dataset. Re-run the address restore when biodata arrives.
+window.addEventListener('joronBiodataLoaded',()=>{setTimeout(()=>{restore(true);restore(false);},50);});
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();

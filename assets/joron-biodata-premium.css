@@ -1,0 +1,22 @@
+/* JORON Smart Biodata — Premium + Fast enhancement layer */
+.bio-wrap{max-width:980px!important;padding:24px 14px 56px!important}
+.bio-wrap .hero{background:linear-gradient(145deg,rgba(74,28,91,.96),rgba(35,14,48,.98))!important;border:1px solid rgba(255,184,224,.28)!important;border-radius:24px!important;padding:28px 20px!important;box-shadow:0 14px 38px rgba(8,2,16,.28)!important}
+.bio-wrap .hero h1{margin:0 0 8px!important;color:#fff!important;text-shadow:0 0 20px rgba(232,23,104,.2)}
+.bio-wrap .hero p{color:#f0d8e7!important;margin:0!important}
+.bio-wrap .bio-card{background:linear-gradient(145deg,rgba(58,25,70,.96),rgba(35,16,46,.98))!important;border:1px solid rgba(255,184,224,.26)!important;border-radius:22px!important;padding:22px!important;box-shadow:0 14px 38px rgba(8,2,16,.28)!important}
+.bio-wrap .bio-card h2{color:#ff9ac2!important;margin-bottom:6px!important}
+.bio-wrap .bio-card p{color:#e7d4e4!important}
+.bio-wrap .grid{gap:14px!important}
+.bio-wrap .field label{display:block!important;margin:0 0 7px!important;color:#ffe8f2!important;font-size:13px!important;font-weight:800!important}
+.bio-wrap .field input,.bio-wrap .field select,.bio-wrap .field textarea{width:100%!important;box-sizing:border-box!important;min-height:50px!important;padding:11px 13px!important;background:#fff!important;color:#251a29!important;border:2px solid #d8c8d7!important;border-radius:14px!important;transition:border-color .15s,box-shadow .15s!important}
+.bio-wrap .field textarea{min-height:125px!important;resize:vertical!important}
+.bio-wrap .field input:focus,.bio-wrap .field select:focus,.bio-wrap .field textarea:focus{border-color:#e81768!important;box-shadow:0 0 0 4px rgba(232,23,104,.13)!important}
+.bio-wrap .field input:invalid:not(:placeholder-shown),.bio-wrap .field select:invalid{border-color:#d9154f!important}
+.bio-wrap .field input:valid:not([readonly]):not(:placeholder-shown),.bio-wrap .field select:valid{border-color:#15966f!important}
+.bio-wrap .progress{height:10px!important;margin:20px 0 0!important;background:#4b3a4d!important}
+.bio-wrap .progress div{background:linear-gradient(90deg,#7a2b91,#e81768,#ff4fa3)!important}
+.bio-wrap .actions{display:grid!important;grid-template-columns:1fr 1.5fr!important;gap:12px!important;margin-top:6px!important}
+.bio-wrap .actions .btn{width:100%!important;min-height:52px!important;margin:0!important}
+.bio-wrap .actions .btn.pink{background:linear-gradient(135deg,#e81768,#b52bb0,#7a2b91)!important}
+#notice.status{min-height:24px!important;margin:8px 0!important;padding:8px 12px!important;color:#ffeaf3!important;text-align:center!important}
+@media(max-width:620px){.bio-wrap{padding:14px 9px 42px!important}.bio-wrap .hero{padding:22px 15px!important;border-radius:20px!important}.bio-wrap .bio-card{padding:17px!important;border-radius:18px!important}.bio-wrap .actions{grid-template-columns:1fr!important}.bio-wrap .field input,.bio-wrap .field select,.bio-wrap .field textarea{min-height:50px!important}}

@@ -29,11 +29,7 @@
       const mm = String(today.getMonth() + 1).padStart(2, '0');
       const dd = String(today.getDate()).padStart(2, '0');
       dob.max = `${yyyy}-${mm}-${dd}`;
-      if (dob.value && dob.value > dob.max) {
-        dob.setCustomValidity('ভবিষ্যতের জন্মতারিখ দেওয়া যাবে না।');
-      } else {
-        dob.setCustomValidity('');
-      }
+      dob.setCustomValidity(dob.value && dob.value > dob.max ? 'ভবিষ্যতের জন্মতারিখ দেওয়া যাবে না।' : '');
     };
     dob.addEventListener('change', updateAgeLimit);
     updateAgeLimit();
@@ -43,17 +39,17 @@
     required.forEach(mark);
     if (!form.checkValidity()) {
       e.preventDefault();
+      e.stopImmediatePropagation();
       const first = required.find(el => !el.checkValidity());
       if (first) {
         first.focus();
         first.scrollIntoView({behavior:'smooth', block:'center'});
       }
-      if (notice) notice.textContent = '⚠️ অনুগ্রহ করে লাল চিহ্নিত প্রয়োজনীয় তথ্যগুলো ঠিক করুন।';
+      if (notice) notice.textContent = '⚠️ অনুগ্রহ করে প্রয়োজনীয় তথ্যগুলো ঠিক করুন।';
       return;
     }
     if (submit) {
       submit.disabled = true;
-      submit.dataset.originalText = submit.textContent;
       submit.textContent = '⏳ সংরক্ষণ হচ্ছে...';
     }
     if (notice) notice.textContent = '⏳ আপনার Biodata নিরাপদে সংরক্ষণ করা হচ্ছে...';

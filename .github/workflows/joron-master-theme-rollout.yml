@@ -1,0 +1,42 @@
+name: Roll out JORON Master Theme
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  theme:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add master theme to every active HTML page
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          marker='assets/joron-master-theme.css'
+          skip={
+            'index-backup.html','index.html.before-design','index.html.before-home-premium',
+            'index.html.before-premium','index_backup_before_new_design.html',
+            'login.html.before-design','login.html.before-premium',
+            'biodata.html.before-design','biodata.html.before-premium',
+            'payment.html.before-design','payment.html.before-premium'
+          }
+          for p in Path('.').glob('*.html'):
+              if p.name in skip or '.bak' in p.name or '.backup' in p.name:
+                  continue
+              s=p.read_text(encoding='utf-8')
+              tag=f'<link rel="stylesheet" href="{marker}">'
+              if marker not in s and '</head>' in s:
+                  s=s.replace('</head>',tag+'</head>',1)
+                  p.write_text(s,encoding='utf-8')
+          PY
+      - name: Commit rollout
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add '*.html' assets/joron-master-theme.css .github/workflows/joron-master-theme-rollout.yml
+          if git diff --cached --quiet; then echo 'No rollout changes needed'; exit 0; fi
+          git commit -m "Apply JORON master theme across all active pages"
+          git push origin HEAD:main

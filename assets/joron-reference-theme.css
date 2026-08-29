@@ -83,3 +83,15 @@ body:has(#form) #form>section.card:nth-of-type(n+9):nth-of-type(-n+12){display:n
 body:has(#form) .joron-address-v18{background:#fbfffd!important;border:1px solid #d9eee6!important;border-radius:14px!important;padding:10px!important;margin:0!important}
 body:has(#form) .joron-address-v18 label{color:#087b59!important}
 @media(max-width:620px){body:has(#form) .card{padding:17px!important;border-radius:20px!important}body:has(#form) .hero h1{font-size:27px!important;padding:9px 13px!important}.steps{overflow:hidden!important}.steps span{white-space:nowrap!important}.actions{grid-template-columns:1fr!important}.headin{padding:0 3px!important}.back{font-size:12px!important}}
+
+/* JORON Global Brand — equal visual scale on every page */
+.joron-brand-equal,.brand,.brand div,.headin .brand{font-family:"Noto Sans Bengali","Hind Siliguri",system-ui,sans-serif!important}
+.joron-brand-equal{display:inline-flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:2px!important;text-align:center!important;line-height:1.08!important}
+.joron-brand-equal .joron-name,.joron-brand-equal .joron-tagline{font-size:clamp(17px,4.4vw,27px)!important;font-weight:900!important;line-height:1.08!important;margin:0!important;padding:0!important;letter-spacing:.2px!important}
+.joron-brand-equal .joron-name{color:#087b59!important}
+.joron-brand-equal .joron-tagline{color:#087b59!important}
+.joron-brand-equal .heart{color:#e81768!important}
+/* Existing common header markup: keep name and slogan equal instead of a tiny slogan. */
+.brand small,.brand .tagline,.brand span,.brand p{font-size:inherit!important;font-weight:900!important;line-height:1.08!important}
+.brand small{color:#087b59!important;display:block!important;margin:0!important}
+@media(max-width:600px){.joron-brand-equal .joron-name,.joron-brand-equal .joron-tagline{font-size:18px!important}.brand small{font-size:inherit!important}}

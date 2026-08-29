@@ -1,4 +1,4 @@
-name: Apply JORON Master Theme
+name: Check JORON Master Theme
 
 on:
   workflow_dispatch:
@@ -7,86 +7,51 @@ on:
       - main
     paths:
       - "*.html"
-      - "assets/**"
+      - "assets/joron-reference-theme.css"
+      - ".github/workflows/apply-master-theme.yml"
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  theme:
+  theme-check:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Apply JORON theme
+      - name: Check JORON theme file
         shell: bash
         run: |
           set -e
 
-          if [ ! -f "assets/joron-theme.css" ]; then
-            echo "JORON theme CSS not found. Nothing to do."
-            exit 0
+          if [ ! -f "assets/joron-reference-theme.css" ]; then
+            echo "ERROR: assets/joron-reference-theme.css not found."
+            exit 1
           fi
 
-          changed=0
+          echo "OK: JORON theme CSS exists."
 
-          shopt -s nullglob
+      - name: Check HTML theme links
+        shell: bash
+        run: |
+          set -e
+
+          found=0
 
           for file in *.html; do
+            [ -f "$file" ] || continue
 
-            case "$file" in
-              *before-*|*backup*|*.bak)
-                continue
-                ;;
-            esac
-
-            if grep -q 'assets/joron-theme.css' "$file"; then
-              echo "Already applied: $file"
-              continue
+            if grep -q 'assets/joron-reference-theme.css' "$file"; then
+              echo "OK: $file uses JORON reference theme."
+              found=1
             fi
-
-            python3 - "$file" <<'PY'
-import sys
-from pathlib import Path
-
-path = Path(sys.argv[1])
-text = path.read_text(encoding="utf-8")
-
-theme = '<link rel="stylesheet" href="assets/joron-theme.css">'
-
-if theme not in text and "</head>" in text:
-    text = text.replace(
-        "</head>",
-        "\n" + theme + "\n</head>",
-        1
-    )
-    path.write_text(text, encoding="utf-8")
-    print(f"Theme added: {path}")
-PY
-
-            changed=1
-
           done
 
-          echo "Theme application finished."
-          echo "Changed: $changed"
-
-      - name: Commit theme changes
-        shell: bash
-        run: |
-          set -e
-
-          git config user.name "JORON Theme Bot"
-          git config user.email "actions@github.com"
-
-          git add "*.html"
-
-          if git diff --cached --quiet; then
-            echo "No changes needed."
-            exit 0
+          if [ "$found" -eq 0 ]; then
+            echo "ERROR: No HTML page is linked to the JORON reference theme."
+            exit 1
           fi
 
-          git commit -m "Apply JORON master theme"
-          git push
+          echo "JORON theme check completed successfully."

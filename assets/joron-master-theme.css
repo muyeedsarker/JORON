@@ -1,11 +1,13 @@
-/* JORON MASTER THEME — unified site-wide UI layer
-   Based on the supplied JORON Button Samples reference.
-   Visual-only layer: does not change application logic, Firebase calls or data. */
+/* JORON MASTER THEME — Premium + Fast site-wide UI layer
+   Inspired by common matrimonial UX patterns: strong profile cards, advanced discovery,
+   verification/trust cues, privacy-first presentation and clear premium CTAs.
+   Visual layer only: does not change Firebase calls, data structure or application logic. */
 :root{
   --jr-bg:#21102c;--jr-bg2:#32143f;--jr-panel:rgba(49,22,60,.88);
   --jr-pink:#e81768;--jr-pink2:#ff4fa3;--jr-purple:#7a2b91;--jr-purple2:#b52bb0;
   --jr-text:#fff7fc;--jr-muted:#e7d4e4;--jr-line:rgba(255,184,224,.26);
   --jr-shadow:0 14px 38px rgba(8,2,16,.28);--jr-glow:0 0 24px rgba(232,23,104,.22);
+  --jr-radius:22px;--jr-fast:180ms;
 }
 html{scroll-behavior:smooth}
 body{background:radial-gradient(circle at 8% 0,rgba(232,23,104,.20),transparent 28%),radial-gradient(circle at 92% 4%,rgba(122,43,145,.24),transparent 30%),linear-gradient(145deg,var(--jr-bg),#281232 48%,#180b21)!important;color:var(--jr-text)!important}
@@ -15,21 +17,21 @@ header,.header,.head,.topbar,.navbar,.nav{background:rgba(30,12,40,.94)!importan
 .top,.topbar{background:linear-gradient(90deg,#5b126f,#e81768,#7a2b91)!important;color:#fff!important;border-bottom:1px solid rgba(255,255,255,.16)!important}
 .brand strong,.brand b,.brand .name,.logo,.site-title{color:#fff!important;text-shadow:0 3px 18px rgba(232,23,104,.25)}
 .brand small,.brand .tagline{color:#ffd5e8!important}
-nav a,.nav a,.navlinks a,.menu a,.desktop-menu a{border-color:var(--jr-line)!important;color:#fff!important;background:rgba(255,255,255,.055)!important;border-radius:14px!important;font-weight:800!important}
+nav a,.nav a,.navlinks a,.menu a,.desktop-menu a{border-color:var(--jr-line)!important;color:#fff!important;background:rgba(255,255,255,.055)!important;border-radius:14px!important;font-weight:800!important;transition:transform var(--jr-fast) ease,background var(--jr-fast) ease,box-shadow var(--jr-fast) ease}
 nav a:hover,.nav a:hover,.navlinks a:hover,.menu a:hover,.desktop-menu a:hover{background:linear-gradient(135deg,#7a2b91,#e81768)!important;box-shadow:var(--jr-glow)!important;transform:translateY(-1px)}
 main,.container,.wrap,.page,.content{color:var(--jr-text)}
-.card,.panel,.box,.section-card,.profile-card,.form-card,.searchbox,.quick,.modal,.dialog,.sheet,.table-wrap,.stats-card,.feature-card,.step,.cta,.empty,.notice{background:linear-gradient(145deg,rgba(58,25,70,.94),rgba(35,16,46,.96))!important;color:var(--jr-text)!important;border:1px solid var(--jr-line)!important;box-shadow:var(--jr-shadow)!important;border-radius:22px!important}
+.card,.panel,.box,.section-card,.profile-card,.form-card,.searchbox,.quick,.modal,.dialog,.sheet,.table-wrap,.stats-card,.feature-card,.step,.cta,.empty,.notice{background:linear-gradient(145deg,rgba(58,25,70,.94),rgba(35,16,46,.96))!important;color:var(--jr-text)!important;border:1px solid var(--jr-line)!important;box-shadow:var(--jr-shadow)!important;border-radius:var(--jr-radius)!important}
 h1,h2,h3,h4,h5,h6,.title,.heading{color:#fff!important}
 p,.muted,.sub,.description,.hint,.help-text{color:var(--jr-muted)!important}
 .badge,.tag,.chip,.pill{background:linear-gradient(135deg,rgba(122,43,145,.34),rgba(232,23,104,.25))!important;color:#ffe9f4!important;border:1px solid rgba(255,180,220,.30)!important;border-radius:999px!important}
 button,.btn,input[type=button],input[type=submit],input[type=reset]{min-height:48px;border-radius:15px!important;font-weight:900!important;cursor:pointer}
-button,.btn{border:1px solid rgba(255,255,255,.45)!important;color:#fff!important;background:linear-gradient(135deg,#7a2b91,#e81768)!important;box-shadow:0 8px 20px rgba(232,23,104,.18)!important}
-button:hover,.btn:hover{filter:brightness(1.08)!important;box-shadow:0 10px 26px rgba(232,23,104,.28)!important}
+button,.btn{border:1px solid rgba(255,255,255,.45)!important;color:#fff!important;background:linear-gradient(135deg,#7a2b91,#e81768)!important;box-shadow:0 8px 20px rgba(232,23,104,.18)!important;transition:transform var(--jr-fast) ease,filter var(--jr-fast) ease,box-shadow var(--jr-fast) ease}
+button:hover,.btn:hover{filter:brightness(1.08)!important;box-shadow:0 10px 26px rgba(232,23,104,.28)!important;transform:translateY(-1px)}
 .btn.primary,.primary,.save,.submit,.action-primary{background:linear-gradient(135deg,#e81768,#b52bb0,#7a2b91)!important;color:#fff!important;border:0!important}
 .btn.secondary,.secondary,.outline,.outline-btn{background:transparent!important;color:#ff8fbd!important;border:2px solid #e81768!important;box-shadow:none!important}
 .btn.success,.success{background:linear-gradient(135deg,#15966f,#e81768)!important;color:#fff!important}
 .btn.danger,.danger,.delete{background:linear-gradient(135deg,#d9154f,#9b164f)!important;color:#fff!important}
-.btn:disabled,button:disabled,.disabled{background:#55485a!important;color:#b9acba!important;border-color:#796c7b!important;box-shadow:none!important;opacity:.7!important}
+.btn:disabled,button:disabled,.disabled{background:#55485a!important;color:#b9acba!important;border-color:#796c7b!important;box-shadow:none!important;opacity:.7!important;transform:none!important}
 input,select,textarea{background:#fff!important;color:#251a29!important;border:2px solid #d8c8d7!important;border-radius:14px!important;min-height:48px;outline:none!important}
 input::placeholder,textarea::placeholder{color:#847384!important}
 input:focus,select:focus,textarea:focus{border-color:#e81768!important;box-shadow:0 0 0 4px rgba(232,23,104,.14),0 8px 22px rgba(232,23,104,.08)!important}
@@ -48,10 +50,36 @@ footer a,.footer a{color:#ff9ac2!important}
 .alert,.notice,.message{border-color:var(--jr-line)!important;background:rgba(70,30,78,.72)!important;color:#ffeaf3!important}
 .loading,.spinner{color:#ff78ad!important}
 .progress{background:#4b3a4d!important;border-color:var(--jr-line)!important}.progress .bar,.bar{background:linear-gradient(90deg,#7a2b91,#e81768,#ff4fa3)!important}
-/* Keep native light controls readable on dark panels. */
 option{background:#fff!important;color:#21182a!important}
-/* Full-width JORON CTA / relationship button */
 .joron-cta,.relationship-btn,.full-width-btn{background:linear-gradient(90deg,#7a2b91,#e81768,#b52bb0)!important;color:#fff!important;border:1px solid rgba(255,255,255,.45)!important;box-shadow:0 10px 28px rgba(232,23,104,.24)!important}
+/* Profile discovery / trust patterns */
+.profile-card,.profiles .card,.match-card{overflow:hidden;position:relative}
+.profile-card .hero-card,.profiles .card .cardtop{background:linear-gradient(145deg,rgba(122,43,145,.32),rgba(232,23,104,.20),rgba(255,255,255,.03))!important}
+.profile-card .profile-photo,.profiles .avatar{border:3px solid rgba(255,255,255,.95)!important;background:linear-gradient(135deg,#7a2b91,#e81768)!important}
+.profile-card .tag,.profiles .tag,.verified,.verification-badge{display:inline-flex;align-items:center;gap:5px}
+.verified,.verification-badge{background:linear-gradient(135deg,#15966f,#087b59)!important;color:#fff!important;border:1px solid rgba(255,255,255,.35)!important;border-radius:999px!important;padding:6px 10px!important;font-weight:900!important}
+.profile-meta,.quick-facts,.profile-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.profile-meta>*,.quick-facts>*,.profile-facts>*{padding:10px;border:1px solid var(--jr-line);border-radius:13px;background:rgba(255,255,255,.045)}
+.profile-section,.bio-section,.match-section{margin-top:16px;padding:18px;border:1px solid var(--jr-line);border-radius:18px;background:rgba(255,255,255,.035)}
+.match-section{background:linear-gradient(145deg,rgba(232,23,104,.10),rgba(122,43,145,.14))!important}
+/* Multi-step forms */
+.step-indicator,.steps,.progress-steps{display:flex;gap:8px;align-items:center;overflow-x:auto;padding:4px 2px 12px;scrollbar-width:none}
+.step-indicator::-webkit-scrollbar,.steps::-webkit-scrollbar,.progress-steps::-webkit-scrollbar{display:none}
+.step-indicator>* ,.steps>* ,.progress-steps>*{flex:1 0 auto;min-width:42px;text-align:center}
+.step-indicator .active,.steps .active,.progress-steps .active{background:linear-gradient(135deg,#e81768,#7a2b91)!important;color:#fff!important;box-shadow:var(--jr-glow)!important}
+.form-section{padding:18px;border:1px solid var(--jr-line);border-radius:18px;background:rgba(255,255,255,.035);margin-bottom:14px}
+.form-actions{display:flex;gap:10px;justify-content:space-between;position:sticky;bottom:10px;z-index:5;padding:10px;border-radius:18px;background:rgba(33,16,44,.88);backdrop-filter:blur(10px);border:1px solid var(--jr-line)}
+.form-actions>*{flex:1}
+/* Discovery/filter UX */
+.searchbox{backdrop-filter:blur(8px)}
+.filters{display:grid;gap:10px}
+.filter-count,.result-count{font-weight:900;color:#ffd5e8!important}
+/* Privacy / safety */
+.privacy-note,.safety-note{padding:12px 14px;border-radius:14px;background:rgba(8,123,89,.13)!important;border:1px solid rgba(87,214,176,.25)!important;color:#d9fff2!important}
+/* Premium cards */
+.plan-card,.premium-card{position:relative;overflow:hidden}
+.plan-card.popular,.premium-card.popular{border-color:#ff78ad!important;box-shadow:0 14px 40px rgba(232,23,104,.22)!important}
+.plan-card.popular::before,.premium-card.popular::before{content:"POPULAR";position:absolute;top:12px;right:-34px;transform:rotate(35deg);background:#e81768;color:#fff;padding:5px 36px;font-size:10px;font-weight:900}
 @media(max-width:760px){
  body{font-size:14px!important}
  .wrap,.container{width:calc(100% - 24px)!important}
@@ -59,9 +87,12 @@ option{background:#fff!important;color:#21182a!important}
  .actions{grid-template-columns:1fr!important;gap:9px!important}
  button,.btn,input[type=button],input[type=submit]{min-height:50px!important}
  table{font-size:12px!important}
+ .profile-meta,.quick-facts,.profile-facts{grid-template-columns:1fr}
+ .form-actions{bottom:6px}
 }
 @media(max-width:420px){
  .wrap,.container{width:calc(100% - 18px)!important}
  h1{font-size:clamp(25px,8vw,38px)!important}
  h2{font-size:clamp(21px,6vw,30px)!important}
 }
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}

@@ -1,0 +1,11 @@
+/* JORON Final QA polish: shared safe, mobile-first UX layer. */
+:root{--joron-purple:#64158f;--joron-pink:#e81768;--joron-green:#087b59;--joron-text:#302633}
+html{scroll-behavior:smooth}
+body{overflow-x:hidden}
+button,a,input,select,textarea{touch-action:manipulation}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #e81768;outline-offset:2px}
+img{max-width:100%;height:auto}
+input,select,textarea,button{font:inherit}
+button,a{min-height:44px}
+@media(max-width:600px){.container,.wrap{width:min(94%,680px);margin-inline:auto}.card{border-radius:20px}.btn,button,.view,.cta a{min-height:48px}.navlinks,.links{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}.navlinks::-webkit-scrollbar,.links::-webkit-scrollbar{display:none}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}

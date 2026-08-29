@@ -1,0 +1,10 @@
+/* JORON Profiles mobile/layout fix */
+body:has(#profiles) .hero{display:flex!important;flex-direction:column!important;align-items:center!important;width:100%!important}
+body:has(#profiles) .hero h1{display:block!important;width:max-content!important;max-width:100%!important;margin:15px auto!important;text-align:center!important}
+body:has(#profiles) .hero p{display:block!important;width:100%!important;max-width:760px!important;margin:8px auto 18px!important;text-align:center!important}
+body:has(#profiles) .searchbox{display:block!important;width:100%!important;max-width:1100px!important;margin:0 auto!important}
+body:has(#profiles) .searchline{width:100%!important}
+body:has(#profiles) .filters{width:100%!important}
+body:has(#profiles) .profiles{width:100%!important}
+@media(max-width:700px){body:has(#profiles) .hero{display:flex!important;flex-direction:column!important}.container{width:min(1100px,94%)!important}.searchline{flex-direction:column!important}.searchline input,.searchline button{width:100%!important}.filters{grid-template-columns:1fr 1fr!important}.profiles{grid-template-columns:1fr 1fr!important}}
+@media(max-width:450px){body:has(#profiles) .hero h1{font-size:22px!important;padding:8px 10px!important;white-space:normal!important}.filters{grid-template-columns:1fr!important}.profiles{grid-template-columns:1fr!important}}

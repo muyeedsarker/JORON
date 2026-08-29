@@ -1,0 +1,67 @@
+/* JORON MASTER THEME — unified site-wide UI layer
+   Based on the supplied JORON Button Samples reference.
+   Visual-only layer: does not change application logic, Firebase calls or data. */
+:root{
+  --jr-bg:#21102c;--jr-bg2:#32143f;--jr-panel:rgba(49,22,60,.88);
+  --jr-pink:#e81768;--jr-pink2:#ff4fa3;--jr-purple:#7a2b91;--jr-purple2:#b52bb0;
+  --jr-text:#fff7fc;--jr-muted:#e7d4e4;--jr-line:rgba(255,184,224,.26);
+  --jr-shadow:0 14px 38px rgba(8,2,16,.28);--jr-glow:0 0 24px rgba(232,23,104,.22);
+}
+html{scroll-behavior:smooth}
+body{background:radial-gradient(circle at 8% 0,rgba(232,23,104,.20),transparent 28%),radial-gradient(circle at 92% 4%,rgba(122,43,145,.24),transparent 30%),linear-gradient(145deg,var(--jr-bg),#281232 48%,#180b21)!important;color:var(--jr-text)!important}
+body,button,input,select,textarea{font-family:"Noto Sans Bengali","Hind Siliguri",system-ui,sans-serif}
+a{color:inherit}
+header,.header,.head,.topbar,.navbar,.nav{background:rgba(30,12,40,.94)!important;color:var(--jr-text)!important;border-color:var(--jr-line)!important;box-shadow:0 8px 28px rgba(0,0,0,.20)!important}
+.top,.topbar{background:linear-gradient(90deg,#5b126f,#e81768,#7a2b91)!important;color:#fff!important;border-bottom:1px solid rgba(255,255,255,.16)!important}
+.brand strong,.brand b,.brand .name,.logo,.site-title{color:#fff!important;text-shadow:0 3px 18px rgba(232,23,104,.25)}
+.brand small,.brand .tagline{color:#ffd5e8!important}
+nav a,.nav a,.navlinks a,.menu a,.desktop-menu a{border-color:var(--jr-line)!important;color:#fff!important;background:rgba(255,255,255,.055)!important;border-radius:14px!important;font-weight:800!important}
+nav a:hover,.nav a:hover,.navlinks a:hover,.menu a:hover,.desktop-menu a:hover{background:linear-gradient(135deg,#7a2b91,#e81768)!important;box-shadow:var(--jr-glow)!important;transform:translateY(-1px)}
+main,.container,.wrap,.page,.content{color:var(--jr-text)}
+.card,.panel,.box,.section-card,.profile-card,.form-card,.searchbox,.quick,.modal,.dialog,.sheet,.table-wrap,.stats-card,.feature-card,.step,.cta,.empty,.notice{background:linear-gradient(145deg,rgba(58,25,70,.94),rgba(35,16,46,.96))!important;color:var(--jr-text)!important;border:1px solid var(--jr-line)!important;box-shadow:var(--jr-shadow)!important;border-radius:22px!important}
+h1,h2,h3,h4,h5,h6,.title,.heading{color:#fff!important}
+p,.muted,.sub,.description,.hint,.help-text{color:var(--jr-muted)!important}
+.badge,.tag,.chip,.pill{background:linear-gradient(135deg,rgba(122,43,145,.34),rgba(232,23,104,.25))!important;color:#ffe9f4!important;border:1px solid rgba(255,180,220,.30)!important;border-radius:999px!important}
+button,.btn,input[type=button],input[type=submit],input[type=reset]{min-height:48px;border-radius:15px!important;font-weight:900!important;cursor:pointer}
+button,.btn{border:1px solid rgba(255,255,255,.45)!important;color:#fff!important;background:linear-gradient(135deg,#7a2b91,#e81768)!important;box-shadow:0 8px 20px rgba(232,23,104,.18)!important}
+button:hover,.btn:hover{filter:brightness(1.08)!important;box-shadow:0 10px 26px rgba(232,23,104,.28)!important}
+.btn.primary,.primary,.save,.submit,.action-primary{background:linear-gradient(135deg,#e81768,#b52bb0,#7a2b91)!important;color:#fff!important;border:0!important}
+.btn.secondary,.secondary,.outline,.outline-btn{background:transparent!important;color:#ff8fbd!important;border:2px solid #e81768!important;box-shadow:none!important}
+.btn.success,.success{background:linear-gradient(135deg,#15966f,#e81768)!important;color:#fff!important}
+.btn.danger,.danger,.delete{background:linear-gradient(135deg,#d9154f,#9b164f)!important;color:#fff!important}
+.btn:disabled,button:disabled,.disabled{background:#55485a!important;color:#b9acba!important;border-color:#796c7b!important;box-shadow:none!important;opacity:.7!important}
+input,select,textarea{background:#fff!important;color:#251a29!important;border:2px solid #d8c8d7!important;border-radius:14px!important;min-height:48px;outline:none!important}
+input::placeholder,textarea::placeholder{color:#847384!important}
+input:focus,select:focus,textarea:focus{border-color:#e81768!important;box-shadow:0 0 0 4px rgba(232,23,104,.14),0 8px 22px rgba(232,23,104,.08)!important}
+label{color:#ffe8f2!important;font-weight:800!important}
+hr{border:0!important;border-top:1px solid var(--jr-line)!important}
+table{color:#fff!important;border-color:var(--jr-line)!important;background:rgba(35,15,46,.72)!important;border-radius:16px;overflow:hidden}
+th{background:linear-gradient(90deg,#7a2b91,#e81768)!important;color:#fff!important}
+td{border-color:rgba(255,190,225,.16)!important;background:rgba(255,255,255,.025)!important}
+tr:hover td{background:rgba(232,23,104,.08)!important}
+.tabs,.tabbar,.filters{border-color:var(--jr-line)!important}
+.tabs a,.tabbar a,.tab,.filter,.chip-btn{background:rgba(255,255,255,.055)!important;color:#fff!important;border:1px solid var(--jr-line)!important;border-radius:13px!important}
+.tabs a.active,.tabbar a.active,.tab.active,.filter.active{background:linear-gradient(135deg,#e81768,#7a2b91)!important;color:#fff!important;border-color:#ff78ad!important;box-shadow:var(--jr-glow)!important}
+.avatar,img.avatar,.photo,.profile-photo{border-color:#fff!important;box-shadow:0 8px 24px rgba(232,23,104,.20)!important}
+footer,.footer{background:linear-gradient(145deg,#16091e,#28102f)!important;color:#ead6e5!important;border-top:1px solid var(--jr-line)!important}
+footer a,.footer a{color:#ff9ac2!important}
+.alert,.notice,.message{border-color:var(--jr-line)!important;background:rgba(70,30,78,.72)!important;color:#ffeaf3!important}
+.loading,.spinner{color:#ff78ad!important}
+.progress{background:#4b3a4d!important;border-color:var(--jr-line)!important}.progress .bar,.bar{background:linear-gradient(90deg,#7a2b91,#e81768,#ff4fa3)!important}
+/* Keep native light controls readable on dark panels. */
+option{background:#fff!important;color:#21182a!important}
+/* Full-width JORON CTA / relationship button */
+.joron-cta,.relationship-btn,.full-width-btn{background:linear-gradient(90deg,#7a2b91,#e81768,#b52bb0)!important;color:#fff!important;border:1px solid rgba(255,255,255,.45)!important;box-shadow:0 10px 28px rgba(232,23,104,.24)!important}
+@media(max-width:760px){
+ body{font-size:14px!important}
+ .wrap,.container{width:calc(100% - 24px)!important}
+ .card,.panel,.box,.section-card,.profile-card,.form-card,.searchbox,.quick{border-radius:18px!important}
+ .actions{grid-template-columns:1fr!important;gap:9px!important}
+ button,.btn,input[type=button],input[type=submit]{min-height:50px!important}
+ table{font-size:12px!important}
+}
+@media(max-width:420px){
+ .wrap,.container{width:calc(100% - 18px)!important}
+ h1{font-size:clamp(25px,8vw,38px)!important}
+ h2{font-size:clamp(21px,6vw,30px)!important}
+}

@@ -1,0 +1,17 @@
+/* JORON UX Polish — additive visual layer. No Firebase/data logic. */
+:root{--joron-p:#64158f;--joron-k:#d90b62;--joron-g:#087b59;--joron-ink:#20202b;--joron-line:#eadfea;--joron-shadow:0 12px 32px rgba(70,25,90,.10)}
+*{box-sizing:border-box}
+:focus-visible{outline:3px solid rgba(217,11,98,.45);outline-offset:3px}
+button,a,input,select,textarea{font:inherit}
+button:disabled{opacity:.6;cursor:not-allowed}
+.card,.profile-card,.form-card,.login-card,.panel{border-radius:22px!important;box-shadow:var(--joron-shadow)!important}
+.grid{gap:12px!important}
+.btn{min-height:48px;border-radius:14px!important;font-weight:900!important;transition:transform .16s ease,box-shadow .16s ease,filter .16s ease}
+.btn:hover{transform:translateY(-1px);box-shadow:0 9px 20px rgba(70,25,90,.12)}
+.btn:active{transform:translateY(1px) scale(.985)}
+input,select,textarea{border-radius:13px!important;border:1px solid #dcd2e1!important;background:#fff!important;min-height:46px}
+input:focus,select:focus,textarea:focus{border-color:var(--joron-p)!important;box-shadow:0 0 0 3px rgba(100,21,143,.10)!important;outline:0}
+.profile-photo{border:4px solid #fff!important}
+.tag{border-radius:999px!important}
+@media(max-width:600px){body{overflow-x:hidden}.wrap,.container{width:calc(100% - 24px)!important;max-width:100%!important}.grid{grid-template-columns:1fr!important}.buttons{gap:8px!important}.buttons .btn{width:100%;min-height:50px}.card{padding:16px!important}.profile-card{border-radius:20px!important}.section h2{font-size:21px!important}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}

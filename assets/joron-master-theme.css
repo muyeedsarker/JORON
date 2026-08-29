@@ -52,7 +52,6 @@ footer a,.footer a{color:#ff9ac2!important}
 .progress{background:#4b3a4d!important;border-color:var(--jr-line)!important}.progress .bar,.bar{background:linear-gradient(90deg,#7a2b91,#e81768,#ff4fa3)!important}
 option{background:#fff!important;color:#21182a!important}
 .joron-cta,.relationship-btn,.full-width-btn{background:linear-gradient(90deg,#7a2b91,#e81768,#b52bb0)!important;color:#fff!important;border:1px solid rgba(255,255,255,.45)!important;box-shadow:0 10px 28px rgba(232,23,104,.24)!important}
-/* Profile discovery / trust patterns */
 .profile-card,.profiles .card,.match-card{overflow:hidden;position:relative}
 .profile-card .hero-card,.profiles .card .cardtop{background:linear-gradient(145deg,rgba(122,43,145,.32),rgba(232,23,104,.20),rgba(255,255,255,.03))!important}
 .profile-card .profile-photo,.profiles .avatar{border:3px solid rgba(255,255,255,.95)!important;background:linear-gradient(135deg,#7a2b91,#e81768)!important}
@@ -62,7 +61,6 @@ option{background:#fff!important;color:#21182a!important}
 .profile-meta>*,.quick-facts>*,.profile-facts>*{padding:10px;border:1px solid var(--jr-line);border-radius:13px;background:rgba(255,255,255,.045)}
 .profile-section,.bio-section,.match-section{margin-top:16px;padding:18px;border:1px solid var(--jr-line);border-radius:18px;background:rgba(255,255,255,.035)}
 .match-section{background:linear-gradient(145deg,rgba(232,23,104,.10),rgba(122,43,145,.14))!important}
-/* Multi-step forms */
 .step-indicator,.steps,.progress-steps{display:flex;gap:8px;align-items:center;overflow-x:auto;padding:4px 2px 12px;scrollbar-width:none}
 .step-indicator::-webkit-scrollbar,.steps::-webkit-scrollbar,.progress-steps::-webkit-scrollbar{display:none}
 .step-indicator>* ,.steps>* ,.progress-steps>*{flex:1 0 auto;min-width:42px;text-align:center}
@@ -70,29 +68,40 @@ option{background:#fff!important;color:#21182a!important}
 .form-section{padding:18px;border:1px solid var(--jr-line);border-radius:18px;background:rgba(255,255,255,.035);margin-bottom:14px}
 .form-actions{display:flex;gap:10px;justify-content:space-between;position:sticky;bottom:10px;z-index:5;padding:10px;border-radius:18px;background:rgba(33,16,44,.88);backdrop-filter:blur(10px);border:1px solid var(--jr-line)}
 .form-actions>*{flex:1}
-/* Discovery/filter UX */
 .searchbox{backdrop-filter:blur(8px)}
 .filters{display:grid;gap:10px}
 .filter-count,.result-count{font-weight:900;color:#ffd5e8!important}
-/* Privacy / safety */
 .privacy-note,.safety-note{padding:12px 14px;border-radius:14px;background:rgba(8,123,89,.13)!important;border:1px solid rgba(87,214,176,.25)!important;color:#d9fff2!important}
-/* Premium cards */
 .plan-card,.premium-card{position:relative;overflow:hidden}
 .plan-card.popular,.premium-card.popular{border-color:#ff78ad!important;box-shadow:0 14px 40px rgba(232,23,104,.22)!important}
 .plan-card.popular::before,.premium-card.popular::before{content:"POPULAR";position:absolute;top:12px;right:-34px;transform:rotate(35deg);background:#e81768;color:#fff;padding:5px 36px;font-size:10px;font-weight:900}
+/* JORON refinement layer: clearer hierarchy, stronger mobile touch targets, accessible focus and safer overflow. */
+::selection{background:#e81768;color:#fff}
+:focus-visible{outline:3px solid #ff78ad!important;outline-offset:3px!important}
+img{max-width:100%;height:auto}
+button,.btn,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.card,.panel,.box,.section-card,.profile-card,.form-card,.searchbox,.quick,.modal,.dialog,.sheet,.table-wrap,.stats-card,.feature-card,.step,.cta,.empty,.notice{overflow:hidden}
+.profile-card,.match-card,.plan-card,.premium-card{transition:transform var(--jr-fast) ease,box-shadow var(--jr-fast) ease,border-color var(--jr-fast) ease}
+.profile-card:hover,.match-card:hover,.plan-card:hover,.premium-card:hover{transform:translateY(-2px);border-color:rgba(255,120,173,.48)!important;box-shadow:0 18px 44px rgba(8,2,16,.34)!important}
+.profile-card .profile-photo,.profiles .avatar,.photo,.profile-photo{object-fit:cover;aspect-ratio:1/1}
+.profile-card .profile-photo[src=""],.profile-photo[src=""]{visibility:hidden}
+.form-section h2,.form-section h3,.bio-section h2,.bio-section h3,.match-section h2,.match-section h3{margin-top:0}
+.form-actions{box-sizing:border-box}
 @media(max-width:760px){
  body{font-size:14px!important}
  .wrap,.container{width:calc(100% - 24px)!important}
  .card,.panel,.box,.section-card,.profile-card,.form-card,.searchbox,.quick{border-radius:18px!important}
  .actions{grid-template-columns:1fr!important;gap:9px!important}
  button,.btn,input[type=button],input[type=submit]{min-height:50px!important}
- table{font-size:12px!important}
+ table{font-size:12px!important;display:block;overflow-x:auto;white-space:nowrap}
  .profile-meta,.quick-facts,.profile-facts{grid-template-columns:1fr}
  .form-actions{bottom:6px}
+ .profile-card:hover,.match-card:hover,.plan-card:hover,.premium-card:hover{transform:none}
 }
 @media(max-width:420px){
  .wrap,.container{width:calc(100% - 18px)!important}
  h1{font-size:clamp(25px,8vw,38px)!important}
  h2{font-size:clamp(21px,6vw,30px)!important}
+ .form-actions{gap:7px;padding:8px}
 }
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}

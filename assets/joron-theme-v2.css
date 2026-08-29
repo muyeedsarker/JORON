@@ -1,0 +1,157 @@
+/* JORON Theme v2 — global visual system
+   Based on the approved JORON Button Samples reference.
+   Visual-only layer: no JavaScript, Firebase, Firestore or feature logic is changed here.
+*/
+:root{
+  --joron-v2-bg:#170b24;
+  --joron-v2-bg2:#281038;
+  --joron-v2-surface:rgba(45,20,60,.86);
+  --joron-v2-surface2:rgba(34,15,48,.92);
+  --joron-v2-pink:#e81778;
+  --joron-v2-pink2:#ff4fa3;
+  --joron-v2-purple:#7b2bd1;
+  --joron-v2-purple2:#b12ad1;
+  --joron-v2-text:#fff7fc;
+  --joron-v2-muted:#d9c6d8;
+  --joron-v2-line:rgba(255,160,215,.28);
+  --joron-v2-shadow:0 16px 42px rgba(0,0,0,.34);
+  --joron-v2-glow:0 0 28px rgba(255,47,136,.20);
+}
+
+html{background:var(--joron-v2-bg)!important;color-scheme:dark!important}
+body{
+  color:var(--joron-v2-text)!important;
+  background:
+    radial-gradient(circle at 8% 0%,rgba(177,42,209,.22),transparent 32%),
+    radial-gradient(circle at 94% 12%,rgba(232,23,120,.18),transparent 30%),
+    linear-gradient(145deg,var(--joron-v2-bg),var(--joron-v2-bg2) 55%,#0d0615)!important;
+  min-height:100vh!important;
+}
+body::before{
+  content:""!important;position:fixed!important;inset:0!important;pointer-events:none!important;z-index:-1!important;
+  background-image:radial-gradient(rgba(255,255,255,.035) 1px,transparent 1px)!important;
+  background-size:26px 26px!important;opacity:.35!important;
+}
+
+/* Shared shell */
+header,.header,.head,.navbar,.nav,nav,.top,.desktop-menu{
+  background:rgba(23,11,36,.84)!important;
+  color:var(--joron-v2-text)!important;
+  border-color:var(--joron-v2-line)!important;
+  box-shadow:0 10px 30px rgba(0,0,0,.28)!important;
+  backdrop-filter:blur(18px)!important;
+}
+.brand,.brand b,.brand strong,.logo,.site-title,.foot-brand{color:var(--joron-v2-text)!important}
+.brand small,.tagline,.subtitle,.muted,.sub{color:var(--joron-v2-muted)!important}
+
+a{color:var(--joron-v2-text)!important}
+a:hover{color:var(--joron-v2-pink2)!important}
+
+/* Cards / panels */
+.card,.panel,.box,.container-card,.profile-card,.form-card,.auth-card,.biodata-card,.membership-card,.quick,.showcase,.step,.trust,.searchbox,.empty,.actions{
+  background:linear-gradient(145deg,var(--joron-v2-surface),var(--joron-v2-surface2))!important;
+  color:var(--joron-v2-text)!important;
+  border:1px solid var(--joron-v2-line)!important;
+  box-shadow:var(--joron-v2-shadow)!important;
+  backdrop-filter:blur(14px)!important;
+}
+.card:hover,.profile-card:hover,.membership-card:hover,.showcase:hover{
+  border-color:rgba(255,79,163,.46)!important;
+  box-shadow:var(--joron-v2-shadow),var(--joron-v2-glow)!important;
+}
+h1,h2,h3,h4,h5,h6,p,li,label,span{color:inherit}
+
+/* Inputs */
+input,select,textarea{
+  color:var(--joron-v2-text)!important;
+  background:rgba(255,255,255,.055)!important;
+  border:1px solid var(--joron-v2-line)!important;
+  border-radius:13px!important;
+}
+input::placeholder,textarea::placeholder{color:#aa98ad!important}
+input:focus,select:focus,textarea:focus{
+  border-color:rgba(255,79,163,.75)!important;
+  box-shadow:0 0 0 3px rgba(232,23,120,.13),0 0 22px rgba(255,47,136,.12)!important;
+  outline:none!important;
+}
+select option{background:#24112f!important;color:#fff!important}
+
+/* JORON button language — primary, secondary, outline, ghost, gradient, icon, small, round */
+button,.btn,.button,.primary,.cta-button,input[type="submit"],input[type="button"],.view,.cta{
+  color:#fff!important;
+  background:linear-gradient(135deg,var(--joron-v2-pink),#d51d91 48%,var(--joron-v2-purple))!important;
+  border:1px solid rgba(255,255,255,.20)!important;
+  border-radius:999px!important;
+  box-shadow:0 10px 26px rgba(255,47,136,.23),inset 0 1px 0 rgba(255,255,255,.18)!important;
+  font-weight:900!important;
+  transition:transform .18s ease,filter .18s ease,box-shadow .18s ease!important;
+}
+button:hover,.btn:hover,.button:hover,.primary:hover,.cta-button:hover,input[type="submit"]:hover,input[type="button"]:hover,.view:hover{
+  transform:translateY(-2px)!important;filter:saturate(1.08) brightness(1.04)!important;
+  box-shadow:0 14px 34px rgba(255,47,136,.32),inset 0 1px 0 rgba(255,255,255,.22)!important;
+}
+button:active,.btn:active,.button:active,.primary:active{transform:translateY(1px) scale(.985)!important}
+.btn.secondary,.secondary,.outline,.btn-outline,.ghost,.clear{
+  background:rgba(255,255,255,.035)!important;color:#fff!important;
+  border:1px solid rgba(255,79,163,.58)!important;box-shadow:none!important;
+}
+.btn.secondary:hover,.secondary:hover,.outline:hover,.btn-outline:hover,.ghost:hover,.clear:hover{
+  background:rgba(255,47,136,.10)!important;box-shadow:0 0 22px rgba(255,47,136,.13)!important;
+}
+.icon-btn,.profile-btn{border-radius:999px!important;color:#fff!important}
+.profile-btn{background:linear-gradient(135deg,var(--joron-v2-pink),var(--joron-v2-purple))!important}
+
+/* Badges / pills / tabs */
+.badge,.tag,.pill,.verified{
+  color:#fff!important;
+  background:linear-gradient(135deg,rgba(255,47,136,.22),rgba(123,43,209,.26))!important;
+  border:1px solid rgba(255,79,163,.36)!important;
+  border-radius:999px!important;
+}
+.tab,.tabs a,.navlinks a{color:#fff!important}
+
+/* Header navigation: compact, rounded, pink/purple language */
+.navlinks a,.desktop-menu a,.quick a{
+  color:#fff!important;background:rgba(255,255,255,.045)!important;
+  border:1px solid var(--joron-v2-line)!important;border-radius:14px!important;
+}
+.navlinks a:hover,.desktop-menu a:hover,.quick a:hover{background:rgba(255,47,136,.10)!important;border-color:rgba(255,79,163,.48)!important}
+
+/* Hero / CTA */
+.hero-card,.cta,.hero{
+  color:#fff!important;
+}
+.hero-card,.cta{
+  background:
+    radial-gradient(circle at 85% 15%,rgba(255,47,136,.20),transparent 28%),
+    radial-gradient(circle at 10% 85%,rgba(123,43,209,.22),transparent 30%),
+    linear-gradient(145deg,rgba(48,20,66,.96),rgba(20,8,31,.94))!important;
+  border:1px solid var(--joron-v2-line)!important;
+  box-shadow:var(--joron-v2-shadow),var(--joron-v2-glow)!important;
+}
+.hero h1,.hero h2,.title h2{color:#fff!important;text-shadow:0 0 18px rgba(255,79,163,.18)!important}
+.hero p,.hero-card p{color:var(--joron-v2-muted)!important}
+
+/* Profile cards */
+.profile-card,.profiles .card,.cardtop{background:linear-gradient(145deg,rgba(48,21,66,.92),rgba(25,11,38,.94))!important}
+.avatar{border-color:rgba(255,255,255,.9)!important;box-shadow:0 8px 26px rgba(255,47,136,.22)!important}
+.info div{background:rgba(255,255,255,.045)!important;border-color:var(--joron-v2-line)!important;color:#fff!important}
+
+/* Status language from the reference sheet */
+.success,.success-btn,[data-status="success"]{background:linear-gradient(135deg,#35a66f,#d81d88)!important;color:#fff!important}
+.danger,.danger-btn,[data-status="danger"]{background:linear-gradient(135deg,#e52d43,#d71966)!important;color:#fff!important}
+.disabled,.disabled-btn,[disabled]{background:rgba(255,255,255,.10)!important;color:#a99cab!important;border-color:rgba(255,255,255,.20)!important;box-shadow:none!important;filter:none!important}
+.loading,.loading-btn{background:linear-gradient(135deg,#d72a86,#8a2bc4)!important;color:#fff!important}
+
+/* Full-width action */
+.full-width,.fullwidth{width:100%!important}
+
+/* Footer */
+footer{background:linear-gradient(180deg,#210c31,#0c0512)!important;color:var(--joron-v2-muted)!important;border-top:1px solid var(--joron-v2-line)!important}
+
+/* Mobile */
+@media(max-width:600px){
+  .card,.panel,.box,.profile-card,.form-card,.auth-card,.biodata-card,.membership-card,.quick,.showcase,.step,.trust,.searchbox{border-radius:20px!important}
+  button,.btn,.button,.primary,.cta-button,input[type="submit"],input[type="button"],.view{min-height:48px!important}
+}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition:none!important}}

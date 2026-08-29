@@ -1,0 +1,28 @@
+name: Validate Smart Biodata
+
+on:
+  push:
+    paths:
+      - 'smart-biodata.html'
+      - 'assets/**'
+      - 'scripts/validate-smart-biodata.mjs'
+      - '.github/workflows/validate-smart-biodata.yml'
+  pull_request:
+    paths:
+      - 'smart-biodata.html'
+      - 'assets/**'
+      - 'scripts/validate-smart-biodata.mjs'
+      - '.github/workflows/validate-smart-biodata.yml'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Validate Smart Biodata
+        run: node scripts/validate-smart-biodata.mjs

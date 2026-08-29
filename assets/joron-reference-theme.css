@@ -15,13 +15,9 @@ body:has(#profiles) .header .navlinks a:nth-child(3){background:linear-gradient(
 body:has(#profiles) .header .navlinks a:nth-child(4){background:linear-gradient(135deg,#48206f,#8237b5)!important}
 body:has(#profiles) .header .navlinks a:nth-child(5){background:linear-gradient(135deg,#d90b62,#7620ad)!important}
 body:has(#profiles) .header .navlinks a:hover{filter:brightness(1.1)!important;transform:translateY(-2px)!important}
-
-/* Keep profile-search dropdowns native, readable and clickable */
 body:has(#profiles) .searchbox select{background:#fff!important;color:#17232b!important;color-scheme:light!important;appearance:auto!important;-webkit-appearance:menulist!important;border:2px solid #d7cbd5!important;cursor:pointer!important}
 body:has(#profiles) .searchbox select option{background:#fff!important;color:#17232b!important;font-weight:700!important}
 body:has(#profiles) .searchbox select:focus{border-color:#b20b4d!important;outline:none!important;box-shadow:0 0 0 3px rgba(232,23,104,.12)!important}
-
-/* Match page — unified premium polish */
 body:has(#profiles){background:radial-gradient(circle at 0 0,#ffe3ee,transparent 32%),radial-gradient(circle at 100% 0,#eadcff,transparent 32%),linear-gradient(135deg,#fff8fb,#fff,#f1fff8)!important}
 body:has(#profiles) .hero{padding:28px 0 22px!important}
 body:has(#profiles) .hero h1{display:inline-block!important;padding:9px 22px!important;border:2px solid #8b124f!important;border-radius:18px!important;background:#fff!important;color:#8b124f!important;font-size:clamp(25px,5vw,40px)!important;line-height:1.25!important;box-shadow:0 9px 24px rgba(139,18,79,.12)!important;white-space:nowrap!important}
@@ -42,11 +38,8 @@ body:has(#profiles) .card h2{font-size:19px!important}
 body:has(#profiles) .info div{border:1px solid #eee5eb!important;background:#fff9fc!important;border-radius:11px!important;padding:9px!important;font-size:12px!important}
 body:has(#profiles) .view{margin-top:12px!important;min-height:45px!important;display:flex!important;align-items:center!important;justify-content:center!important;border:2px solid #fff!important;border-radius:14px!important;background:linear-gradient(105deg,#8b124f,#5d258f)!important;font-size:13px!important;box-shadow:0 8px 20px rgba(93,37,143,.18)!important}
 body:has(#profiles) .empty{border:2px dashed #d8c7d1!important;border-radius:20px!important}
-
 @media(max-width:600px){body:has(#profiles) .top{font-size:13px!important;padding:9px 0!important}body:has(#profiles) .header .wrap{padding:5px 3px!important}body:has(#profiles) .header .nav{gap:4px!important}body:has(#profiles) .header .navlinks{gap:4px!important}body:has(#profiles) .header .navlinks a{padding:12px 3px!important;font-size:11px!important;border-width:1.5px!important;border-radius:11px!important}body:has(#profiles) .hero h1{font-size:24px!important;padding:8px 12px!important}.filters{grid-template-columns:1fr 1fr!important}.profiles{grid-template-columns:1fr 1fr!important}}
 @media(max-width:420px){body:has(#profiles) .top{font-size:12px!important}body:has(#profiles) .header .wrap{padding:4px 2px!important}body:has(#profiles) .header .nav,.body:has(#profiles) .header .navlinks{gap:3px!important}body:has(#profiles) .header .navlinks a{padding:11px 2px!important;font-size:10px!important;border-radius:10px!important}body:has(#profiles) .hero h1{font-size:22px!important;white-space:nowrap!important}.filters{grid-template-columns:1fr!important}.profiles{gap:9px!important}.info div{font-size:10px!important}.view{font-size:11px!important}}
-
-/* Global JORON premium navigation — only pages using the same 5-link .navlinks header */
 body:has(.navlinks a:nth-child(5)) .top{width:100vw!important;margin-left:calc(50% - 50vw)!important;margin-right:calc(50% - 50vw)!important;padding-left:0!important;padding-right:0!important}
 body:has(.navlinks a:nth-child(5)) .header{width:100vw!important;margin-left:calc(50% - 50vw)!important;margin-right:calc(50% - 50vw)!important}
 body:has(.navlinks a:nth-child(5)) .header .navlinks{display:flex!important;width:100%!important;flex:1 1 100%!important;gap:8px!important}
@@ -58,3 +51,35 @@ body:has(.navlinks a:nth-child(5)) .header .navlinks a:nth-child(4){background:l
 body:has(.navlinks a:nth-child(5)) .header .navlinks a:nth-child(5){background:linear-gradient(135deg,#d90b62,#7620ad)!important}
 @media(max-width:600px){body:has(.navlinks a:nth-child(5)) .header .navlinks{gap:4px!important}body:has(.navlinks a:nth-child(5)) .header .navlinks a{padding:12px 3px!important;font-size:11px!important;border-width:1.5px!important;border-radius:11px!important}}
 @media(max-width:420px){body:has(.navlinks a:nth-child(5)) .header .navlinks{gap:3px!important}body:has(.navlinks a:nth-child(5)) .header .navlinks a{padding:11px 2px!important;font-size:10px!important;border-radius:10px!important}}
+
+/* Smart Biodata — premium form polish */
+body:has(#form){background:radial-gradient(circle at 5% 0,#ffe1ee 0,transparent 28%),radial-gradient(circle at 95% 5%,#dff8ee 0,transparent 30%),linear-gradient(135deg,#f8f5fa,#eef9f5)!important;color:#1d2930!important}
+body:has(#form) .top{background:linear-gradient(90deg,#5c174f,#087b59,#6d1d78)!important;padding:10px 12px!important;box-shadow:0 5px 18px rgba(35,20,42,.18)!important}
+body:has(#form) .head{background:rgba(255,255,255,.94)!important;border-top:3px solid #e81768!important;backdrop-filter:blur(12px)!important;box-shadow:0 10px 28px rgba(32,24,37,.10)!important}
+body:has(#form) .brand b{background:linear-gradient(90deg,#087b59,#7a2b91,#e81768);-webkit-background-clip:text;background-clip:text;color:transparent!important}
+body:has(#form) .hero{padding:30px 0 22px!important}
+body:has(#form) .hero h1{display:inline-block;padding:11px 22px!important;border:2px solid #e4c7d7!important;border-radius:20px!important;background:linear-gradient(135deg,#fff,#fff2f8)!important;color:#8b124f!important;box-shadow:0 12px 30px rgba(93,37,82,.10)!important}
+body:has(#form) .hero p{font-size:14px!important;color:#59676e!important}
+body:has(#form) .progress{height:11px!important;background:#dfe9e5!important;box-shadow:inset 0 1px 3px rgba(0,0,0,.08)!important}
+body:has(#form) .bar{background:linear-gradient(90deg,#e81768,#7a2b91,#087b59)!important}
+body:has(#form) .steps{padding:0 4px!important;color:#52605f!important}
+body:has(#form) .card{background:rgba(255,255,255,.96)!important;border:1px solid #e6dce3!important;border-radius:24px!important;padding:24px!important;margin:18px 0!important;box-shadow:0 18px 45px rgba(48,31,48,.09),0 2px 8px rgba(20,80,60,.04)!important}
+body:has(#form) .card h2{font-size:23px!important;color:#087b59!important;border-bottom:2px solid #f1d8e5!important;padding-bottom:10px!important;margin-bottom:8px!important}
+body:has(#form) .card h3{font-size:18px!important;background:#fff4f9!important;border-left:4px solid #e81768!important;padding:8px 11px!important;border-radius:10px!important}
+body:has(#form) .sub{color:#6c777c!important}
+body:has(#form) .field label{color:#27343a!important;font-size:13px!important;font-weight:900!important}
+body:has(#form) input,body:has(#form) select,body:has(#form) textarea{min-height:50px!important;border:1.5px solid #d9dce0!important;border-radius:14px!important;background:#fcfdfd!important;box-shadow:0 2px 8px rgba(0,0,0,.025)!important;transition:.18s!important}
+body:has(#form) input:focus,body:has(#form) select:focus,body:has(#form) textarea:focus{border-color:#087b59!important;box-shadow:0 0 0 4px rgba(8,123,89,.10),0 5px 15px rgba(8,123,89,.06)!important;background:#fff!important}
+body:has(#form) select:disabled{background:#edf2f1!important;color:#8a9696!important}
+body:has(#form) .note{background:linear-gradient(135deg,#fff3f8,#f4fff9)!important;border:1px solid #e7cbd9!important;color:#7c174e!important;border-radius:14px!important}
+body:has(#form) #locationStatus{border-radius:14px!important;font-size:12px!important}
+body:has(#form) hr{border:0;border-top:1px solid #eadfe5!important;margin:26px 0!important}
+body:has(#form) .actions{position:sticky!important;bottom:10px!important;z-index:15!important;padding:10px!important;border:1px solid #e5d9e1!important;border-radius:20px!important;background:rgba(255,255,255,.92)!important;backdrop-filter:blur(12px)!important;box-shadow:0 15px 35px rgba(35,25,40,.15)!important}
+body:has(#form) .btn{min-height:54px!important;border-radius:15px!important;font-weight:900!important}
+body:has(#form) .primary{background:linear-gradient(105deg,#e81768,#7a2b91,#087b59)!important;box-shadow:0 5px 0 #c7195f!important}
+/* The current page contains an older duplicated Education/Profession/Family/Lifestyle block after the main 8-step form. Keep only the canonical first 8 cards. */
+body:has(#form) #form>section.card:nth-of-type(n+9):nth-of-type(-n+12){display:none!important}
+/* Address labels/fields stay compact and premium */
+body:has(#form) .joron-address-v18{background:#fbfffd!important;border:1px solid #d9eee6!important;border-radius:14px!important;padding:10px!important;margin:0!important}
+body:has(#form) .joron-address-v18 label{color:#087b59!important}
+@media(max-width:620px){body:has(#form) .card{padding:17px!important;border-radius:20px!important}body:has(#form) .hero h1{font-size:27px!important;padding:9px 13px!important}.steps{overflow:hidden!important}.steps span{white-space:nowrap!important}.actions{grid-template-columns:1fr!important}.headin{padding:0 3px!important}.back{font-size:12px!important}}

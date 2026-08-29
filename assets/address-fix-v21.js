@@ -1,6 +1,20 @@
 // JORON Address Fix v22 — Division → District → Thana → Union/Pouroshava → Ward → Village → Post
 (()=>{
 'use strict';
+// Header layout fix: preserve the previous J❤️R❤️N design while forcing the tagline onto its own line.
+const headerFix=()=>{
+ const brand=document.querySelector('.brand');
+ if(!brand)return;
+ const box=brand.querySelector(':scope > div');
+ if(!box)return;
+ box.classList.add('brand-text');
+ const b=box.querySelector('b');
+ const small=box.querySelector('small');
+ if(b){b.style.display='block';b.style.margin='0';b.style.padding='0';}
+ if(small){small.style.display='block';small.style.margin='2px 0 0';small.style.padding='0';small.style.fontSize='10px';small.style.fontWeight='800';small.style.whiteSpace='nowrap';}
+ box.style.display='flex';box.style.flexDirection='column';box.style.alignItems='flex-start';box.style.margin='0';box.style.padding='0';box.style.lineHeight='1.15';
+};
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',headerFix,{once:true});else headerFix();
 const GEO='https://iqbalhasandev.github.io/bangladesh-geo-json/bangladesh-geo.json';
 const POST='https://raw.githubusercontent.com/ifahimreza/bangladesh-geojson/master/src/data/bd-postcodes.json';
 const $=id=>document.getElementById(id);
@@ -32,6 +46,7 @@ function makeField(id,label,before){
 }
 async function init(){
  removeDuplicateCards();
+ headerFix();
  try{
   const [g,p]=await Promise.all([
    fetch(GEO,{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Geo HTTP '+r.status);return r.json()}),
@@ -75,7 +90,6 @@ async function init(){
    wd?.addEventListener('change',()=>{
     reset(vl,(pre?'Permanent ':'Present ')+'গ্রাম / মহল্লা নির্বাচন করুন');
     // The currently used public geo source does not contain village-level rows.
-    // Keep the selector explicit rather than showing unrelated place names.
    });
    po.onchange=()=>{const n=po.selectedOptions?.[0]?.textContent||'',code=(n.match(/—\s*(\d{4})$/)||[])[1]||'';if(pc)pc.value=code};
   };

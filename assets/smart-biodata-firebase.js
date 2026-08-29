@@ -1,11 +1,12 @@
 import "./smart-biodata-save-guard.js";
+import "./smart-biodata-education.js";
 import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 import { auth, db, onAuthStateChanged, persistenceReady } from "./firebase-client.js";
 
 const form = document.getElementById("form");
 const notice = document.getElementById("notice");
-const IDS = ["name","nickname","dob","age","gender","height","blood","marital","nationality","language","religion","practice","division","district","upazila","postOffice","postalCode","area","pdistrict","pdivision","pupazila","ppostOffice","ppostalCode","parea","addressPrivacy","eduSystem","education","profession","workplace","familyType","childCount","smoking","personality","about","prefAge","prefDistrict","top3","photoUrl","visibility"];
-const PUBLIC_IDS = ["name","nickname","age","gender","height","marital","division","district","upazila","postOffice","postalCode","eduSystem","education","profession","familyType","personality","photoUrl","visibility"];
+const IDS = ["name","nickname","dob","age","gender","height","blood","marital","nationality","language","religion","practice","division","district","upazila","postOffice","postalCode","area","pdistrict","pdivision","pupazila","ppostOffice","ppostalCode","parea","addressPrivacy","eduSystem","education","eduHighest","eduDegree","eduInstitution","eduSubject","eduYear","eduResult","trainingName","trainingInstitution","trainingSubject","trainingDuration","trainingCertificate","profession","workplace","familyType","childCount","smoking","personality","about","prefAge","prefDistrict","top3","photoUrl","visibility"];
+const PUBLIC_IDS = ["name","nickname","age","gender","height","marital","division","district","upazila","postOffice","postalCode","eduSystem","education","eduHighest","eduDegree","eduInstitution","eduSubject","eduYear","eduResult","trainingName","trainingInstitution","trainingSubject","trainingDuration","trainingCertificate","profession","familyType","personality","photoUrl","visibility"];
 
 const collect = () => Object.fromEntries(IDS.map(id => [id, document.getElementById(id)?.value ?? ""]));
 const localData = () => { try { return JSON.parse(localStorage.getItem("joronSmartBiodata") || "{}"); } catch { return {}; } };

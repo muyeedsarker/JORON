@@ -68,3 +68,26 @@ img{max-width:100%}
 }
 @media(max-width:420px){.navlinks a{font-size:10px!important;padding:9px 3px!important}.card{border-radius:15px!important}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+
+/* Mobile overflow guard — Step 1: navigation + category grid only. */
+@media(max-width:420px){
+  header,.header,.navbar,nav{width:100%;max-width:100%;overflow-x:hidden}
+  .navlinks,.desktop-menu,.navbar .nav,.navbar .navlinks,nav ul{
+    display:flex!important;flex-wrap:wrap!important;align-items:center!important;justify-content:center!important;
+    gap:4px!important;width:100%;max-width:100%;min-width:0;overflow:visible!important;
+  }
+  .navlinks a,.desktop-menu a,.navbar a,nav a{
+    flex:0 1 auto!important;min-width:0!important;max-width:100%;white-space:nowrap!important;
+    font-size:10px!important;line-height:1.2!important;padding:8px 6px!important;
+  }
+  .quick,.quick-grid{width:100%;max-width:100%;min-width:0}
+  .quick-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important}
+  .quick a{min-width:0!important;width:100%;padding:8px 4px!important;overflow:hidden!important}
+  .quick .label{max-width:100%;font-size:12px!important;line-height:1.2!important;overflow-wrap:anywhere;word-break:break-word;text-align:center}
+  .quick .ico{font-size:26px!important;line-height:1!important}
+}
+@media(min-width:421px) and (max-width:700px){
+  .navlinks,.desktop-menu,.navbar .nav,nav ul{display:flex!important;flex-wrap:wrap!important;align-items:center!important;gap:5px!important;max-width:100%;min-width:0}
+  .navlinks a,.desktop-menu a,.navbar a,nav a{min-width:0!important;white-space:nowrap!important;font-size:11px!important;padding:9px 7px!important}
+  .quick-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:9px!important}
+}

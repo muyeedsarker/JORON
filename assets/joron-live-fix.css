@@ -1,27 +1,70 @@
-/* JORON LIVE FIX — mobile overlay, menu and card readability */
+/* JORON — MOBILE MENU FINAL FIX */
 html,body{overflow-x:hidden!important}
 
-/* The quick-feature wrapper must never become a giant white sheet. */
-.quick{position:relative!important;z-index:1!important;background:transparent!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
-.quick-grid{position:relative!important;z-index:2!important;background:transparent!important}
-.quick a{position:relative!important;z-index:3!important;color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.35)!important;background:linear-gradient(145deg,rgba(66,31,84,.96),rgba(40,18,55,.98))!important;border:1px solid rgba(255,184,224,.28)!important;box-shadow:0 10px 24px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.12)!important}
-.quick a .ico,.quick a .label{position:relative!important;z-index:4!important;color:#fff!important}
+/* Keep the existing quick cards/design. */
+.quick{position:relative!important;z-index:1!important}
+.quick-grid{position:relative!important;z-index:2!important}
+.quick a{position:relative!important;z-index:3!important}
 
-/* Mobile menu: keep it compact and out of the content flow. */
 @media(max-width:759px){
-  .mobile-menu{position:relative!important;z-index:3000!important}
-  .mobile-menu-panel{position:absolute!important;top:52px!important;left:0!important;width:min(300px,calc(100vw - 24px))!important;max-height:70vh!important;overflow:auto!important;background:linear-gradient(145deg,#351044,#5b176f)!important;border:1px solid rgba(255,255,255,.22)!important;box-shadow:0 16px 36px rgba(0,0,0,.42)!important;backdrop-filter:blur(14px)!important;-webkit-backdrop-filter:blur(14px)!important;z-index:4000!important}
-  .mobile-menu-panel a{color:#fff!important;background:rgba(255,255,255,.08)!important;border:1px solid rgba(255,255,255,.12)!important;margin:4px!important;text-shadow:0 1px 2px rgba(0,0,0,.35)!important}
-  .mobile-menu-panel a:hover,.mobile-menu-panel a:active{background:rgba(232,23,120,.55)!important;color:#fff!important}
-  .quick{margin-top:12px!important;padding:10px!important}
-  .quick-grid{gap:10px!important}
-  .quick a{min-height:88px!important;border-radius:20px!important}
+  /* Attractive, readable menu button */
+  header .icon-btn,
+  .menu-btn,
+  button[aria-label*="menu" i],
+  button[aria-label*="Menu"]{
+    width:48px!important;height:48px!important;
+    border-radius:16px!important;
+    display:grid!important;place-items:center!important;
+    color:#fff!important;
+    background:linear-gradient(135deg,#64158f 0%,#9b1ac5 52%,#d90b62 100%)!important;
+    border:0!important;
+    box-shadow:0 8px 20px rgba(100,21,143,.30),inset 0 1px 0 rgba(255,255,255,.28)!important;
+    font-size:25px!important;
+    font-weight:900!important;
+    text-shadow:0 1px 2px rgba(0,0,0,.35)!important;
+  }
+  header .icon-btn:active,.menu-btn:active{transform:scale(.94)!important}
+
+  /* Menu links must NOT remain floating on the screen. Hidden until menu is opened. */
+  .mobile-menu-panel{
+    display:none!important;
+    position:absolute!important;
+    top:54px!important;
+    left:0!important;
+    right:auto!important;
+    width:min(300px,calc(100vw - 24px))!important;
+    max-height:70vh!important;
+    overflow:auto!important;
+    background:linear-gradient(145deg,#351044,#64158f 60%,#8d216d)!important;
+    border:1px solid rgba(255,255,255,.24)!important;
+    border-radius:18px!important;
+    padding:8px!important;
+    box-shadow:0 16px 36px rgba(0,0,0,.38)!important;
+    z-index:5000!important;
+  }
+  /* Open while the menu control/container has focus. */
+  .mobile-menu:focus-within .mobile-menu-panel,
+  .mobile-menu.open .mobile-menu-panel,
+  .mobile-menu.active .mobile-menu-panel,
+  .mobile-menu-panel[aria-hidden="false"]{
+    display:block!important;
+  }
+  .mobile-menu-panel a{
+    display:flex!important;
+    align-items:center!important;
+    min-height:42px!important;
+    margin:4px 0!important;
+    padding:8px 12px!important;
+    border-radius:12px!important;
+    color:#fff!important;
+    background:rgba(255,255,255,.10)!important;
+    border:1px solid rgba(255,255,255,.14)!important;
+    font-weight:800!important;
+    text-shadow:0 1px 2px rgba(0,0,0,.4)!important;
+  }
+  .mobile-menu-panel a:hover,.mobile-menu-panel a:active{background:#d90b62!important;color:#fff!important}
 }
 
 @media(max-width:390px){
-  .quick{padding:8px!important}
-  .quick-grid{gap:8px!important}
-  .quick a{min-height:82px!important;border-radius:18px!important}
-  .quick .ico{font-size:27px!important}
-  .quick .label{font-size:12px!important}
+  header .icon-btn,.menu-btn{width:44px!important;height:44px!important;border-radius:14px!important;font-size:23px!important}
 }

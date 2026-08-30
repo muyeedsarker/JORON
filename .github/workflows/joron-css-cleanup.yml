@@ -10,10 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Remove legacy global CSS layers and keep one clean layer
+      - name: Remove legacy global CSS layers and conflicting header injection
         run: |
           python - <<'PY'
           from pathlib import Path
+          import re
           legacy = [
             'assets/joron-reference-theme.css','assets/joron-theme-v2.css','assets/joron-master-theme.css',
             'assets/joron-ux-polish.css','assets/joron-visual-redesign-v1.css','assets/joron-visual-redesign-v2.css',
@@ -28,8 +29,9 @@ jobs:
               s=p.read_text(encoding='utf-8')
               old=s
               for marker in legacy:
-                  import re
                   s=re.sub(r'<link[^>]+href=["\']'+re.escape(marker)+r'["\'][^>]*>\s*', '', s, flags=re.I)
+              if p.name=='index.html':
+                  s=re.sub(r'<style[^>]+id=["\']joron-premium-header["\'][^>]*>.*?</style>\s*', '', s, flags=re.I|re.S)
               if clean not in s and '</head>' in s:
                   s=s.replace('</head>', f'<link rel="stylesheet" href="{clean}"></head>', 1)
               if s!=old:

@@ -56,3 +56,17 @@ body:has(.bkash-brand) .bkash-brand strong{min-width:0;overflow-wrap:anywhere}
   body:has(.bkash-brand) .bkash-brand strong{font-size:18px!important}
   body:has(.bkash-brand) .number{max-width:100%;font-size:19px!important;overflow-wrap:anywhere}
 }
+
+/* Global mobile navbar visibility/stacking fix — CSS only. */
+@media(max-width:700px){
+  header,nav,.navbar,.topbar,.site-nav,.main-nav,.nav-bar,.nav-container,.navigation,.menu-bar{position:relative!important;z-index:1000!important;isolation:isolate}
+  header nav,header .navbar,header .topbar,header .site-nav,header .main-nav,header .nav-bar,header .nav-container,header .navigation,header .menu-bar{background:rgba(255,255,255,.98)!important;color:#24152d!important;box-shadow:0 4px 16px rgba(36,21,45,.12)!important}
+  header nav a,header .navbar a,header .topbar a,header .site-nav a,header .main-nav a,header .nav-bar a,header .nav-container a,header .navigation a,header .menu-bar a{color:#24152d!important;text-decoration:none}
+  header nav button,header .navbar button,header .topbar button,header .site-nav button,header .main-nav button,header .nav-bar button,header .nav-container button,header .navigation button,header .menu-bar button{color:#24152d!important}
+  header nav+*,header .navbar+*,header .topbar+*,header .site-nav+*,header .main-nav+*,header .nav-bar+*,header .nav-container+*,header .navigation+*,header .menu-bar+*{margin-top:10px!important}
+  nav ul,.navbar ul,.topbar ul,.site-nav ul,.main-nav ul,.nav-bar ul,.nav-container ul,.navigation ul,.menu-bar ul{display:flex!important;flex-wrap:wrap!important;align-items:center!important;gap:6px!important;margin:0!important;padding:6px!important}
+  nav li,.navbar li,.topbar li,.site-nav li,.main-nav li,.nav-bar li,.nav-container li,.navigation li,.menu-bar li{min-width:0!important}
+}
+@media(max-width:420px){
+  nav a,.navbar a,.topbar a,.site-nav a,.main-nav a,.nav-bar a,.nav-container a,.navigation a,.menu-bar a{font-size:13px!important;padding:7px 8px!important;white-space:nowrap!important}
+}

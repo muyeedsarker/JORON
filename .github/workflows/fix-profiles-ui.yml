@@ -1,0 +1,42 @@
+name: Fix profiles UI states
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/fix-profiles-ui.yml'
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch profiles.html
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('profiles.html')
+          s=p.read_text(encoding='utf-8')
+          old="""async function load(){try{const snap=await getDocs(query(collection(db,'biodata'),where('visibility','==','public'),limit(200)));all=snap.docs.map(x=>({id:x.id,data:x.data()}));opts('districtFilter','district','সব জেলা');opts('educationFilter','educationSystem','সব শিক্ষা');opts('professionFilter','profession','সব পেশা');opts('religionFilter','religion','সব ধর্ম');$('status').style.display='none';render()}catch(e){console.error('JORON Profiles:',e);$('status').textContent=e?.code==='permission-denied'?'⚠️ Firebase অনুমতি সমস্যা। Login বা Profile visibility পরীক্ষা করুন।':'⚠️ Profile লোড করা যায়নি। আবার চেষ্টা করুন।'}}"""
+          new="""const FILTER_DATA={district:['ঢাকা','চট্টগ্রাম','রাজশাহী','খুলনা','বরিশাল','সিলেট','রংপুর','ময়মনসিংহ','কুমিল্লা','গাজীপুর','নারায়ণগঞ্জ','নরসিংদী','কক্সবাজার'],educationSystem:['এসএসসি','এইচএসসি','ডিপ্লোমা','স্নাতক','স্নাতকোত্তর','মাস্টার্স','মাদরাসা','কওমি মাদরাসা','অন্যান্য'],profession:['শিক্ষার্থী','শিক্ষক','চাকরি','ব্যবসা','ডাক্তার','ইঞ্জিনিয়ার','আইটি/সফটওয়্যার','সরকারি চাকরি','বেসরকারি চাকরি','ফ্রিল্যান্সার','অন্যান্য'],religion:['ইসলাম','হিন্দু','বৌদ্ধ','খ্রিস্টান','অন্যান্য']};
+          function staticOpts(id,key,label){const s=$(id),items=FILTER_DATA[key]||[];s.innerHTML=`<option value=\"\">${label}</option>`+items.map(v=>`<option value=\"${esc(v)}\">${esc(v)}</option>`).join('')}
+          function setState(state,msg=''){const login=$('loginRequired'),area=$('profileArea'),search=$('searchPanel'),status=$('status');login.style.display=state==='login'?'block':'none';area.style.display=state==='ready'||state==='loading'?'block':'none';search.style.display=state==='ready'||state==='loading'?'block':'none';status.style.display=state==='loading'||state==='error'?'block':'none';if(state==='loading')status.textContent='⏳ Profile লোড হচ্ছে...';if(state==='error')status.textContent=msg||'ℹ️ Profile ডেটা শীঘ্রই আসছে।';if(state==='ready')status.style.display='none'}
+          async function load(){setState('loading');['districtFilter','educationFilter','professionFilter','religionFilter'].forEach((id,i)=>staticOpts(id,['district','educationSystem','profession','religion'][i],['সব জেলা','সব শিক্ষা','সব পেশা','সব ধর্ম'][i]));try{const snap=await Promise.race([getDocs(query(collection(db,'biodata'),where('visibility','==','public'),limit(200))),new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),7000))]);all=snap.docs.map(x=>({id:x.id,data:x.data()}));['districtFilter','educationFilter','professionFilter','religionFilter'].forEach((id,i)=>opts(id,['district','educationSystem','profession','religion'][i],['সব জেলা','সব শিক্ষা','সব পেশা','সব ধর্ম'][i]));setState('ready');render()}catch(e){console.error('JORON Profiles:',e);all=[];setState('error',e?.code==='permission-denied'?'⚠️ Profile ডেটা দেখার অনুমতি এখনো চালু হয়নি। অনুগ্রহ করে পরে চেষ্টা করুন।':'ℹ️ Profile ডেটা শীঘ্রই আসছে। আপাতত কোনো Profile দেখানোর মতো ডেটা পাওয়া যায়নি।');box.innerHTML='';$('count').textContent='Profile শীঘ্রই আসছে';} }"""
+          if old not in s:
+              raise SystemExit('target load() block not found')
+          s=s.replace(old,new)
+          old2="""await persistenceReady;onAuthStateChanged(auth,user=>{if(user){$('loginRequired').style.display='none';$('profileArea').style.display='block';$('searchPanel').style.display='block';load()}else{$('loginRequired').style.display='block';$('profileArea').style.display='none';$('searchPanel').style.display='none'}});"""
+          new2="""await persistenceReady;setState('login');onAuthStateChanged(auth,user=>{if(user){setState('loading');load()}else{setState('login');all=[];box.innerHTML='';$('count').textContent='';}});"""
+          if old2 not in s:
+              raise SystemExit('target auth block not found')
+          s=s.replace(old2,new2)
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Commit changes
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add profiles.html
+          git diff --cached --quiet || git commit -m 'Fix profiles login loading and filter states'
+          git push

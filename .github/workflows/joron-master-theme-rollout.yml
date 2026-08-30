@@ -15,7 +15,7 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
-          markers=['assets/joron-master-theme.css','assets/joron-ux-polish.css','assets/joron-visual-redesign-v1.css','assets/joron-visual-redesign-v2.css','assets/joron-visual-redesign-v3.css','assets/joron-visual-redesign-v4.css']
+          markers=['assets/joron-master-theme.css','assets/joron-ux-polish.css','assets/joron-visual-redesign-v1.css','assets/joron-visual-redesign-v2.css','assets/joron-visual-redesign-v3.css','assets/joron-visual-redesign-v4.css','assets/joron-visual-redesign-v5.css']
           skip={'index-backup.html','index.html.before-design','index.html.before-home-premium','index.html.before-premium','index_backup_before_new_design.html','login.html.before-design','login.html.before-premium','biodata.html.before-design','biodata.html.before-premium','payment.html.before-design','payment.html.before-premium'}
           for p in Path('.').glob('*.html'):
               if p.name in skip or '.bak' in p.name or '.backup' in p.name: continue
@@ -29,7 +29,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+users.noreply.github.com"
-          git add '*.html' assets/joron-master-theme.css assets/joron-ux-polish.css assets/joron-visual-redesign-v1.css assets/joron-visual-redesign-v2.css assets/joron-visual-redesign-v3.css assets/joron-visual-redesign-v4.css .github/workflows/joron-master-theme-rollout.yml
+          git add '*.html' assets/joron-master-theme.css assets/joron-ux-polish.css assets/joron-visual-redesign-v1.css assets/joron-visual-redesign-v2.css assets/joron-visual-redesign-v3.css assets/joron-visual-redesign-v4.css assets/joron-visual-redesign-v5.css .github/workflows/joron-master-theme-rollout.yml
           if git diff --cached --quiet; then echo 'No rollout changes needed'; exit 0; fi
-          git commit -m "Apply JORON visual redesign v4 across active pages"
+          git commit -m "Apply JORON visual redesign v5 across active pages"
           git push origin HEAD:main

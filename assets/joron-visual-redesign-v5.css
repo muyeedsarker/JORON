@@ -1,0 +1,45 @@
+/* JORON VISUAL REDESIGN V5 — UI ONLY
+   Product-quality UX polish. No backend, database, auth, API or business logic.
+*/
+:root{--j5-pink:#e81768;--j5-pink-soft:#ff78ad;--j5-purple:#7a2b91;--j5-surface:rgba(255,255,255,.055);--j5-line:rgba(255,184,224,.16);--j5-shadow:0 14px 38px rgba(8,2,16,.20)}
+
+/* Consistent interactive states */
+button,.btn,a[role="button"],input,select,textarea{font-family:inherit}
+button:focus-visible,.btn:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--j5-pink-soft)!important;outline-offset:3px!important}
+
+/* Clear disabled/loading states without changing behavior */
+button[disabled],.btn[disabled],input[disabled],select[disabled],textarea[disabled]{opacity:.58!important;filter:saturate(.65)!important}
+
+/* Consistent success/error messaging */
+.success,.success-message,.alert-success{border:1px solid rgba(50,190,140,.25)!important;border-radius:16px!important}
+.error,.error-message,.alert-error,.alert-danger{border:1px solid rgba(255,90,120,.25)!important;border-radius:16px!important}
+
+/* Profile information hierarchy */
+.profile-card .name,.profile-card .profile-name,.profile-card h3{font-weight:800!important;letter-spacing:-.01em}
+.profile-card .meta,.profile-card .details,.profile-card .location{opacity:.86}
+.profile-card .actions{display:flex;gap:8px;flex-wrap:wrap}
+
+/* Cleaner content containers */
+.container,.wrap{max-width:1180px!important}
+.section,.page-section{content-visibility:auto;contain-intrinsic-size:600px}
+
+/* Navigation and tabs */
+.tabs,.tabbar,.filterbar{overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar,.tabbar::-webkit-scrollbar,.filterbar::-webkit-scrollbar{display:none}
+.tabs a,.tabbar a,.tab,.chip,.filter{white-space:nowrap}
+
+/* Touch-friendly mobile controls */
+@media(max-width:760px){
+ button,.btn,a[role="button"]{min-height:48px!important}
+ input,select,textarea{font-size:16px!important}
+ .actions,.buttons,.form-actions{gap:8px!important}
+ .tabs,.tabbar,.filterbar{padding-bottom:3px!important}
+ .profile-card .actions>*{flex:1 1 auto;min-width:110px}
+}
+
+/* Prevent accidental horizontal overflow */
+html,body{overflow-x:hidden}
+img,video,svg{max-width:100%;height:auto}
+
+/* Respect reduced motion */
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}}

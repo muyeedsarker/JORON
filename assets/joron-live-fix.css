@@ -22,24 +22,14 @@ header .icon-btn,.menu-btn,button[aria-label*="menu" i],button[aria-label*="Menu
 body:has(.bkash-brand) .section h3,.section h3{color:#fff!important;background:linear-gradient(135deg,#4b0875,#d90b62)!important;border-radius:16px!important;padding:13px 15px!important;margin:0 0 13px!important;box-shadow:0 8px 18px rgba(100,21,143,.20)!important;text-shadow:0 1px 2px rgba(0,0,0,.35)!important;opacity:1!important}.section:has(.method) .method,.section:has(.method) .method b,.section:has(.method) .method span{color:#fff!important}.section:has(.method) .method .number,.section:has(.method) .method .amount,.section:has(.method) #selectedAmount{color:#a5074b!important;background:#ffe6f0!important;font-weight:1000!important}.section:has(.method) .method .security{color:#721641!important;background:#fff!important}.bkash-brand strong{color:#fff!important}body{font-family:"Noto Sans Bengali","Hind Siliguri","Noto Color Emoji","Segoe UI Emoji",system-ui,sans-serif}.emoji,.method,.section{font-variant-emoji:emoji}@media(max-width:650px){.section h3{font-size:18px!important;line-height:1.45!important;padding:12px 13px!important}}
 
 /* JORON — HOME PAGE WHITE PANEL FIX */
-.hero-card,.quick,.showcase,.card,.step,.cta,.trust div{
-  background:linear-gradient(145deg,#3a1946 0%,#28102f 52%,#1f0d27 100%)!important;
-  color:#fff!important;
-  border-color:rgba(255,184,224,.24)!important;
-  box-shadow:0 14px 38px rgba(8,2,16,.28)!important;
-}
+.hero-card,.quick,.showcase,.card,.step,.cta,.trust div{background:linear-gradient(145deg,#3a1946 0%,#28102f 52%,#1f0d27 100%)!important;color:#fff!important;border-color:rgba(255,184,224,.24)!important;box-shadow:0 14px 38px rgba(8,2,16,.28)!important}
 .hero-card h1,.hero-card h2,.hero-card p,.showcase h3,.showcase p,.card h3,.card p,.step h3,.step p,.cta h2,.cta p,.trust div,.quick .label{color:#fff!important}
-.quick a{
-  background:linear-gradient(145deg,#4a2058 0%,#32133e 55%,#26102f 100%)!important;
-  color:#fff!important;
-  border-color:rgba(255,184,224,.24)!important;
-  box-shadow:0 8px 18px rgba(8,2,16,.24),inset 0 1px 0 rgba(255,255,255,.08)!important;
-}
-.quick a:before{background:linear-gradient(135deg,rgba(255,255,255,.10),transparent 48%)!important}
-.quick a:after{opacity:.35!important}
-.quick .ico{filter:drop-shadow(0 3px 4px rgba(0,0,0,.25))!important}
-.hero-card{background:linear-gradient(135deg,#3c194a,#2a1234 58%,#123c34)!important}
-.showcase .heart-art{background:radial-gradient(circle at 50% 42%,rgba(255,255,255,.12) 0 12%,transparent 36%),radial-gradient(circle at 50% 60%,rgba(217,11,98,.22),transparent 58%),linear-gradient(145deg,#351535 0%,#2b1940 52%,#123a32 100%)!important}
-.badge{background:linear-gradient(135deg,rgba(122,43,145,.45),rgba(232,23,104,.30))!important;color:#ffe9f4!important;border-color:rgba(255,180,220,.30)!important}
-.cta{background:linear-gradient(135deg,#4a194e,#32133f,#123d34)!important}
+.quick a{background:linear-gradient(145deg,#4a2058 0%,#32133e 55%,#26102f 100%)!important;color:#fff!important;border-color:rgba(255,184,224,.24)!important;box-shadow:0 8px 18px rgba(8,2,16,.24),inset 0 1px 0 rgba(255,255,255,.08)!important}
+.quick a:before{background:linear-gradient(135deg,rgba(255,255,255,.10),transparent 48%)!important}.quick a:after{opacity:.35!important}.quick .ico{filter:drop-shadow(0 3px 4px rgba(0,0,0,.25))!important}
+.hero-card{background:linear-gradient(135deg,#3c194a,#2a1234 58%,#123c34)!important}.showcase .heart-art{background:radial-gradient(circle at 50% 42%,rgba(255,255,255,.12) 0 12%,transparent 36%),radial-gradient(circle at 50% 60%,rgba(217,11,98,.22),transparent 58%),linear-gradient(145deg,#351535 0%,#2b1940 52%,#123a32 100%)!important}.badge{background:linear-gradient(135deg,rgba(122,43,145,.45),rgba(232,23,104,.30))!important;color:#ffe9f4!important;border-color:rgba(255,180,220,.30)!important}.cta{background:linear-gradient(135deg,#4a194e,#32133f,#123d34)!important}
 @media(max-width:560px){.hero-card,.quick,.showcase,.card,.step,.cta,.trust div{border-radius:18px!important}.quick a{border-radius:18px!important}.hero-card{padding:25px 18px!important}}
+
+/* JORON — SHOWCASE CONTRAST FIX */
+.showcase h3{color:#64158f!important;opacity:1!important}.showcase p{color:#4a3d55!important;opacity:1!important}.showcase .badge{background:linear-gradient(135deg,#d90b62,#64158f)!important;color:#fff!important}
+/* Same contrast pattern for headings and paragraphs */
+.card h3,.step h3,.cta h2{color:#64158f!important;opacity:1!important}.card p,.step p,.cta p{color:#4a3d55!important;opacity:1!important}

@@ -1,54 +1,35 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<meta name="theme-color" content="#64158f">
-<title>J❤️R❤️N | Login</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><meta name="theme-color" content="#64158f"><title>J❤️R❤️N | Login</title>
 <link rel="stylesheet" href="assets/style.css">
 <style>
 :root{--joron-p:#64158f;--joron-k:#d90b62;--joron-g:#087b59}
 body{background:radial-gradient(circle at 10% 0%,#ffe8f3 0,transparent 28%),radial-gradient(circle at 90% 10%,#eee1ff 0,transparent 30%),linear-gradient(145deg,#fff7fb,#f4efff 55%,#edfff7)!important}
-header{background:rgba(255,255,255,.94)!important;backdrop-filter:blur(10px)}
-main{min-height:calc(100vh - 170px)}
+header{background:rgba(255,255,255,.94)!important;backdrop-filter:blur(10px)}main{min-height:calc(100vh - 170px)}
 .card,.profile-card,.form-card,.login-card,.panel,.container>section{box-shadow:0 12px 32px rgba(70,25,90,.10)!important;border-color:#ead8ee!important}
-#logoutBox{display:none;text-align:center;margin-top:20px;padding:16px;border:2px solid #ead8ee;border-radius:16px;background:rgba(255,255,255,.72)}
+#logoutBox{display:none;text-align:center;margin-top:20px;padding:16px;border:2px solid #ead8ee;border-radius:16px;background:rgba(255,255,255,.82)}
 #logoutBtn{width:100%;padding:12px;border:0;border-radius:13px;color:#fff;background:linear-gradient(135deg,#64158f,#d90b62);font-weight:900;cursor:pointer}
-</style>
-<style id="joron-premium-page-skin">
-:root{--joron-p:#64158f;--joron-k:#d90b62;--joron-g:#087b59}
-body{background:radial-gradient(circle at 10% 0%,#ffe8f3 0,transparent 28%),radial-gradient(circle at 90% 10%,#eee1ff 0,transparent 30%),linear-gradient(145deg,#fff7fb,#f4efff 55%,#edfff7)!important}
-header{background:rgba(255,255,255,.94)!important;backdrop-filter:blur(10px)}
-main{min-height:calc(100vh - 170px)}
-.card,.profile-card,.form-card,.login-card,.panel,.container>section{box-shadow:0 12px 32px rgba(70,25,90,.10)!important;border-color:#ead8ee!important}
-</style><link rel="stylesheet" href="assets/joron-clean.css"></head>
+.form-card h1,.form-card h2{color:#64158f!important;opacity:1!important;text-shadow:0 2px 0 #fff!important}.form-card>p{color:#4a3d55!important;opacity:1!important}.field label{color:#30143f!important;font-weight:800!important;opacity:1!important}.field input{background:#fff!important;border:2px solid #d8c1ed!important;color:#20202b!important}.field input::placeholder{color:#8a7f92!important;opacity:1!important}.form-card a{color:#64158f!important}.form-card .btn.pink{background:linear-gradient(135deg,#64158f,#d90b62)!important;color:#fff!important}
+</style><link rel="stylesheet" href="assets/joron-clean.css">
+</head>
 <body>
-<main class="form-page">
-<div class="form-card" style="max-width:460px">
+<main class="form-page"><div class="form-card" style="max-width:460px">
 <div style="text-align:center"><img src="assets/joron-logo.jpg" alt="J❤️R❤️N" style="width:120px;height:120px;border-radius:50%;object-fit:cover;border:4px solid rgba(255,255,255,.75);box-shadow:0 12px 35px rgba(232,23,104,.25)"></div>
-<h1>🔐 লগইন করুন</h1>
-<p style="text-align:center;color:#e8dff0">আপনার J❤️R❤️N অ্যাকাউন্টে প্রবেশ করুন</p>
-<div id="message" class="status"></div>
-<form id="loginForm">
-<div class="field"><label>📧 ইমেইল</label><input id="email" type="email" placeholder="আপনার ইমেইল লিখুন" required></div>
-<div class="field"><label>🔒 পাসওয়ার্ড</label><input id="password" type="password" placeholder="আপনার পাসওয়ার্ড লিখুন" required></div>
-<button type="button" class="unstyled" id="forgot" style="display:block;margin:8px 0 0 auto;background:none;border:0;color:#ff9fc4;font-weight:900">পাসওয়ার্ড ভুলে গেছেন?</button>
-<button type="submit" class="btn pink" style="width:100%;margin-top:18px">🔐 নিরাপদে লগইন করুন</button>
-</form>
+<h1>🔐 লগইন করুন</h1><p style="text-align:center">আপনার J❤️R❤️N অ্যাকাউন্টে প্রবেশ করুন</p><div id="message" class="status"></div>
+<form id="loginForm"><div class="field"><label>📧 ইমেইল</label><input id="email" type="email" placeholder="আপনার ইমেইল লিখুন" required></div><div class="field"><label>🔒 পাসওয়ার্ড</label><input id="password" type="password" placeholder="আপনার পাসওয়ার্ড লিখুন" required></div>
+<button type="button" class="unstyled" id="forgot" style="display:block;margin:8px 0 0 auto;background:none;border:0;color:#64158f;font-weight:900">পাসওয়ার্ড ভুলে গেছেন?</button><button type="submit" class="btn pink" style="width:100%;margin-top:18px">🔐 নিরাপদে লগইন করুন</button></form>
 <div id="logoutBox"><div id="loginState" style="margin-bottom:12px;color:#64158f;font-weight:900"></div><button id="logoutBtn" type="button">🚪 Logout / লগআউট</button></div>
-<div style="text-align:center;margin-top:22px;color:#e8dff0">নতুন সদস্য? <a href="signup.html" style="color:#ff9fc4;font-weight:900">অ্যাকাউন্ট তৈরি করুন</a></div>
-</div>
-</main>
+<div style="text-align:center;margin-top:22px;color:#4a3d55">নতুন সদস্য? <a href="signup.html" style="font-weight:900">অ্যাকাউন্ট তৈরি করুন</a></div>
+</div></main>
 <script type="module">
-import { auth, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged, persistenceReady } from './assets/firebase-client.js';
+import {auth,signInWithEmailAndPassword,sendPasswordResetEmail,signOut,onAuthStateChanged,persistenceReady} from './assets/firebase-client.js';
 const form=document.getElementById('loginForm'),msg=document.getElementById('message'),logoutBox=document.getElementById('logoutBox'),logoutBtn=document.getElementById('logoutBtn'),loginState=document.getElementById('loginState');
 function showMessage(t,ok=false){msg.textContent=t;msg.style.color=ok?'#087b59':'#d90b62'}
-onAuthStateChanged(auth,user=>{if(user){logoutBox.style.display='block';loginState.textContent='✅ আপনি লগইন আছেন';}else{logoutBox.style.display='none';}});
+onAuthStateChanged(auth,user=>{if(user){logoutBox.style.display='block';loginState.textContent='✅ আপনি লগইন আছেন'}else{logoutBox.style.display='none';loginState.textContent='';}});
 form.addEventListener('submit',async e=>{e.preventDefault();const email=document.getElementById('email').value.trim(),password=document.getElementById('password').value;if(!email||!password)return showMessage('ইমেইল ও পাসওয়ার্ড দিন');try{await persistenceReady;await signInWithEmailAndPassword(auth,email,password);showMessage('✅ লগইন সফল হচ্ছে...',true);setTimeout(()=>location.href='biodata.html',700)}catch(error){showMessage('❌ ইমেইল অথবা পাসওয়ার্ড সঠিক নয়');console.log(error)}});
 document.getElementById('forgot').onclick=async()=>{const email=document.getElementById('email').value.trim();if(!email)return showMessage('আগে ইমেইল লিখুন');try{await sendPasswordResetEmail(auth,email);showMessage('✅ পাসওয়ার্ড পরিবর্তনের লিংক ইমেইলে পাঠানো হয়েছে',true)}catch(e){showMessage('পাসওয়ার্ড রিসেট করা যায়নি')}};
 logoutBtn.onclick=async()=>{try{await signOut(auth);showMessage('✅ সফলভাবে Logout হয়েছে',true)}catch(e){showMessage('❌ Logout করা যায়নি')}};
 </script>
-<style id="joron-global-page-nav-style">.joron-global-page-nav{width:100%!important;display:flex!important;flex-direction:row!important;gap:10px!important;justify-content:center!important;align-items:stretch!important;padding:14px 0 24px!important;margin:0!important;clear:both!important;box-sizing:border-box!important}.joron-global-page-nav a,.joron-global-page-nav button{flex:1 1 0!important;width:50%!important;max-width:360px!important;height:54px!important;min-height:54px!important;box-sizing:border-box!important;margin:0!important;padding:0 16px!important;display:flex!important;align-items:center!important;justify-content:center!important;vertical-align:middle!important;border:2px solid rgba(255,255,255,.95)!important;border-radius:15px!important;color:#fff!important;background:linear-gradient(135deg,#087b59,#10a978)!important;font:900 15px/1 "Noto Sans Bengali","Hind Siliguri",system-ui,sans-serif!important;text-decoration:none!important;cursor:pointer!important;box-shadow:0 8px 20px rgba(70,25,90,.18),inset 0 1px 0 rgba(255,255,255,.35)!important;transition:filter .2s!important;appearance:none!important;-webkit-appearance:none!important}.joron-global-page-nav button{background:linear-gradient(135deg,#64158f,#a13bc5)!important}.joron-global-page-nav a:hover,.joron-global-page-nav button:hover{transform:none!important;filter:brightness(1.06)!important}@media(max-width:600px){.joron-global-page-nav{gap:6px!important;padding:12px 2px 20px!important}.joron-global-page-nav a,.joron-global-page-nav button{width:50%!important;height:50px!important;min-height:50px!important;padding:0 8px!important;font-size:13px!important;border-width:1.5px!important;border-radius:12px!important}}</style>
 <div id="joron-global-page-nav" class="joron-global-page-nav" aria-label="JORON page navigation"><a href="index.html" class="joron-home-btn">🏠 হোম</a><button type="button" class="joron-back-btn" onclick="if(history.length>1){history.back()}else{location.href='index.html'}">↩️ Back</button></div>
-</body>
-</html>
+</body></html>

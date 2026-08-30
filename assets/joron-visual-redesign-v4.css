@@ -1,0 +1,21 @@
+/* JORON VISUAL REDESIGN V4 — UI ONLY
+   Premium interaction/accessibility polish. Backend/data/auth/API/business logic untouched.
+*/
+:root{--j4-glow:rgba(232,23,104,.22);--j4-glass:rgba(255,255,255,.055)}
+header,.header,.navbar,.nav{background:rgba(31,12,42,.72)!important;border-bottom:1px solid rgba(255,184,224,.10)!important;box-shadow:0 10px 34px rgba(8,2,16,.16)!important}
+button,.btn,a[role="button"],.nav a,.tabs a,.chip,.filter,.menu a{transition:transform .18s ease,box-shadow .18s ease,background .18s ease,border-color .18s ease,color .18s ease!important}
+button:hover,.btn:hover,a[role="button"]:hover{box-shadow:0 10px 24px var(--j4-glow)!important}
+button:disabled,.btn:disabled{transform:none!important;box-shadow:none!important;cursor:not-allowed!important}
+.hero h1,.hero-card h1{max-width:850px}
+.hero strong,.hero .highlight,.hero-card strong,.hero-card .highlight{background:linear-gradient(100deg,#ff78ad,#d75ac7 55%,#a75ce6);-webkit-background-clip:text;background-clip:text;color:transparent}
+.card,.profile-card,.feature-card,.membership-card,.stat-card,.form-card{overflow:hidden}
+.card:after,.profile-card:after,.feature-card:after,.membership-card:after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;background:linear-gradient(120deg,transparent 0 62%,rgba(255,120,173,.045));opacity:.9}
+.badge,.tag,.chip,.pill,.status{border-radius:999px!important;letter-spacing:.01em}
+input,select,textarea{border-width:1px!important}
+input:hover,select:hover,textarea:hover{border-color:rgba(232,23,104,.34)!important}
+input:focus,select:focus,textarea:focus{border-color:#ff78ad!important;box-shadow:0 0 0 4px rgba(232,23,104,.10),0 10px 24px rgba(53,20,67,.08)!important}
+.empty,.error,.notice,.alert{backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.loading,.skeleton{background-image:linear-gradient(90deg,rgba(255,255,255,.025),rgba(255,255,255,.09),rgba(255,255,255,.025))!important;background-size:220% 100%!important;animation:joronShimmer 1.5s ease-in-out infinite}
+@keyframes joronShimmer{0%{background-position:200% 0}100%{background-position:-20% 0}}
+@media(max-width:760px){.sticky-actions,.mobile-actions{padding:10px!important;background:rgba(29,10,39,.82)!important;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid rgba(255,184,224,.12)!important}.hero .actions,.hero-card .actions{gap:10px!important}}
+@media(prefers-reduced-motion:reduce){button,.btn,a[role="button"],.nav a,.tabs a,.chip,.filter,.menu a{transition:none!important}.loading,.skeleton{animation:none!important}}

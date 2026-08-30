@@ -1,0 +1,33 @@
+name: Home Hero Polish
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  polish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply hero polish safely
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          style='''<style id="joron-hero-showcase-polish">\n.hero .badge{animation:heroBadgeFloat 3s ease-in-out infinite}\n@keyframes heroBadgeFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}\n.actions .btn{transition:transform .2s ease,box-shadow .2s ease}\n.actions .btn:active{transform:scale(.97)}\n.actions .btn.primary:hover{transform:translateY(-2px);box-shadow:0 16px 32px rgba(217,11,98,.4)}\n.heart-art{min-height:230px!important}\n.hero-card{box-shadow:0 10px 28px rgba(70,25,90,.10),0 0 60px rgba(217,11,98,.08)!important}\n</style>'''
+          import re
+          s=re.sub(r'<style id="joron-hero-showcase-polish">.*?</style>','',s,flags=re.S)
+          s=s.replace('</head>',style+'</head>',1)
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Commit polish
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          git diff --cached --quiet || git commit -m 'Polish home hero and showcase styling'
+          git push

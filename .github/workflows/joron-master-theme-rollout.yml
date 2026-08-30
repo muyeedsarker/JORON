@@ -15,7 +15,7 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
-          markers=['assets/joron-master-theme.css','assets/joron-ux-polish.css','assets/joron-visual-redesign-v1.css']
+          markers=['assets/joron-master-theme.css','assets/joron-ux-polish.css','assets/joron-visual-redesign-v1.css','assets/joron-visual-redesign-v2.css']
           skip={
             'index-backup.html','index.html.before-design','index.html.before-home-premium',
             'index.html.before-premium','index_backup_before_new_design.html',
@@ -37,7 +37,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+users.noreply.github.com"
-          git add '*.html' assets/joron-master-theme.css assets/joron-ux-polish.css assets/joron-visual-redesign-v1.css .github/workflows/joron-master-theme-rollout.yml
+          git add '*.html' assets/joron-master-theme.css assets/joron-ux-polish.css assets/joron-visual-redesign-v1.css assets/joron-visual-redesign-v2.css .github/workflows/joron-master-theme-rollout.yml
           if git diff --cached --quiet; then echo 'No rollout changes needed'; exit 0; fi
-          git commit -m "Apply JORON master theme and UX polish across active pages"
+          git commit -m "Apply JORON visual redesign v2 across active pages"
           git push origin HEAD:main

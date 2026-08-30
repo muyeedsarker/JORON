@@ -15,3 +15,21 @@ input:focus,select:focus,textarea:focus{border-color:var(--joron-p)!important;bo
 .tag{border-radius:999px!important}
 @media(max-width:600px){body{overflow-x:hidden}.wrap,.container{width:calc(100% - 24px)!important;max-width:100%!important}.grid{grid-template-columns:1fr!important}.buttons{gap:8px!important}.buttons .btn{width:100%;min-height:50px}.card{padding:16px!important}.profile-card{border-radius:20px!important}.section h2{font-size:21px!important}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+
+/* Signup/profile form mobile width fix — CSS only; no form/Firebase logic changes. */
+.signup-box{width:100%!important;max-width:500px!important;margin-left:auto!important;margin-right:auto!important;min-width:0!important}
+.signup-box form,.signup-box input,.signup-box select,.signup-box button{max-width:100%!important;min-width:0!important}
+@media(max-width:420px){
+  body:has(.signup-box){padding-left:0!important;padding-right:0!important;overflow-x:hidden!important}
+  .signup-box{width:100%!important;max-width:none!important;margin:0 auto!important;padding:20px 14px!important;border-radius:18px!important}
+  .signup-box .hero-title h1{max-width:100%!important;white-space:normal!important;font-size:20px!important;line-height:1.35!important;padding:8px 10px!important}
+  .signup-box .hero-guide{padding-left:0!important;padding-right:0!important;font-size:16px!important;line-height:1.55!important}
+  .signup-box .membership-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+  .signup-box .membership-card{min-width:0!important;padding:14px 6px!important}
+  .signup-box .terms{min-width:0!important}
+  .signup-box .terms span{min-width:0!important;overflow-wrap:anywhere}
+}
+@media(max-width:360px){
+  .signup-box{padding-left:12px!important;padding-right:12px!important}
+  .signup-box .membership-grid{grid-template-columns:1fr!important}
+}

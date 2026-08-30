@@ -1,0 +1,54 @@
+name: JORON targeted CSS cleanup
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  cleanup:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Clean legacy CSS layers in index and core CSS
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          root=Path('.')
+          p=root/'index.html'
+          s=p.read_text(encoding='utf-8')
+          bad=['joron-theme-v2.css','joron-visual-redesign-v1.css','joron-visual-redesign-v2.css','joron-visual-redesign-v3.css','joron-visual-redesign-v4.css','joron-visual-redesign-v5.css','joron-reference-theme.css','joron-ux-polish.css','joron-final-qa.css','joron-clean.css']
+          for name in bad:
+              s=re.sub(r'<link\b[^>]*href=["\'][^"\']*'+re.escape(name)+r'[^"\']*["\'][^>]*>\s*','',s,flags=re.I)
+          ids=['joron-home-polish-v2','joron-final-ui-fix','joron-final-brand-fix','joron-final-header-fix']
+          for ident in ids:
+              s=re.sub(r'<style\b[^>]*\bid=["\']'+re.escape(ident)+r'["\'][^>]*>.*?</style>\s*','',s,flags=re.I|re.S)
+          s=re.sub(r'<link\b[^>]*joron-clean\.css[^>]*>\s*','',s,flags=re.I)
+          head_end=s.lower().find('</head>')
+          if head_end!=-1:
+              head=s[:head_end]; tail=s[head_end:]
+              if 'assets/joron-master-theme.css' not in head: head += '<link rel="stylesheet" href="assets/joron-master-theme.css">'
+              if 'assets/joron-live-fix.css' not in head: head += '<link rel="stylesheet" href="assets/joron-live-fix.css">'
+              s=head+tail
+          s=re.sub(r'\.brand\s+img\s*\{[^{}]*\}\s*','',s,flags=re.I)
+          s=re.sub(r'(\.relationship-btn\s*\{)([^{}]*?)(\})',lambda m:m.group(1)+re.sub(r'\b(?:width|height)\s*:[^;{}]+;?','',m.group(2),flags=re.I)+m.group(3),s,flags=re.I|re.S)
+          s=re.sub(r'\.relationship-btn\s*\{[^{}]*\b(?:width|height)\s*:[^{};]+;?[^{}]*\}\s*','',s,flags=re.I)
+          s=re.sub(r'<style[^>]*id=["\']joron-relationship-size["\'][^>]*>.*?</style>\s*','',s,flags=re.I|re.S)
+          s=s.replace('</head>','<style id="joron-relationship-size">@media(max-width:560px){.relationship-btn{width:46px!important;height:46px!important;}}</style></head>',1)
+          p.write_text(s,encoding='utf-8')
+          for f in [root/'assets/joron-master-theme.css',root/'assets/joron-live-fix.css']:
+              if f.exists():
+                  t=f.read_text(encoding='utf-8')
+                  t=re.sub(r'\.brand\s+img\s*\{[^{}]*\}\s*','',t,flags=re.I)
+                  f.write_text(t,encoding='utf-8')
+          PY
+      - name: Remove this temporary cleanup workflow and commit
+        run: |
+          rm -f .github/workflows/targeted-css-cleanup.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html assets/joron-master-theme.css assets/joron-live-fix.css .github/workflows/targeted-css-cleanup.yml
+          git diff --cached --quiet || git commit -m "cleanup: remove legacy CSS conflicts and normalize header sizing"
+          git push origin HEAD:main

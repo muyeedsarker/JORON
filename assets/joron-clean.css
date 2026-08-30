@@ -4,6 +4,16 @@
 */
 :root{--joron-purple:#4a1259;--joron-purple-2:#64158f;--joron-pink:#d90b62;--joron-line:#eadfea}
 html,body{overflow-x:hidden}
+
+/* Hero contrast: one authoritative cross-page rule */
+.hero-card{background:linear-gradient(135deg,#fff0f7,#f0e6ff 55%,#e8fff5)!important;border:2px solid rgba(217,11,98,.15)!important}
+.hero .badge{background:linear-gradient(135deg,#d90b62,#64158f)!important;color:#fff!important;box-shadow:0 6px 14px rgba(217,11,98,.25)!important}
+.hero h1{color:#64158f!important;text-shadow:0 2px 0 #fff,0 6px 16px rgba(100,21,143,.25)!important}
+.hero h1 span{color:#d90b62!important}
+.hero h2{color:#30143f!important;font-weight:900!important}
+.hero p{color:#4a3d55!important;opacity:1!important}
+.actions .btn.primary{box-shadow:0 12px 26px rgba(217,11,98,.35)!important}
+
 /* One authoritative mobile menu */
 @media(max-width:759px){
   .mobile-menu{position:relative!important;display:block!important;z-index:6000!important}
@@ -14,13 +24,19 @@ html,body{overflow-x:hidden}
   .mobile-menu-panel a,.mobile-menu-panel a:visited{display:flex!important;align-items:center!important;gap:8px!important;width:100%!important;height:40px!important;min-height:40px!important;max-height:40px!important;box-sizing:border-box!important;margin:3px 0!important;padding:8px 10px!important;background:#64158f!important;color:#fff!important;border:1px solid rgba(255,255,255,.16)!important;border-radius:10px!important;font-size:14px!important;font-weight:800!important;line-height:1!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;opacity:1!important}
   .mobile-menu-panel a:hover,.mobile-menu-panel a:active{background:#d90b62!important;color:#fff!important}
   .mobile-menu summary{position:relative!important;z-index:6002!important;cursor:pointer!important}
+  .mobile-menu summary small{display:block!important;color:#fff!important;opacity:1!important;visibility:visible!important;margin-top:2px!important;line-height:1.2!important}
   header .icon-btn,.menu-btn,button[aria-label*="menu" i]{width:46px!important;height:46px!important;border-radius:14px!important;display:grid!important;place-items:center!important;color:#fff!important;background:linear-gradient(135deg,#64158f,#9b1ac5 52%,#d90b62)!important;border:0!important;box-shadow:0 7px 16px rgba(100,21,143,.30)!important;font-size:23px!important;font-weight:900!important}
   .sidebar,.side-menu,.dropdown-menu,#menu,[class*="sidebar"],[class*="side-menu"],[class*="dropdown-menu"]{background:#4a1259!important;background-color:#4a1259!important;opacity:1!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+  .relationship-btn{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:4px!important;padding:8px 10px!important;box-sizing:border-box!important}
+  .relationship-btn .relationship-icon{line-height:1!important}
+  .relationship-btn small{line-height:1.2!important;margin-top:2px!important}
 }
 @media(max-width:390px){.mobile-menu-panel{width:190px!important}.mobile-menu-panel a{height:38px!important;min-height:38px!important;max-height:38px!important;padding:7px 9px!important;font-size:13px!important}header .icon-btn,.menu-btn{width:44px!important;height:44px!important;font-size:22px!important}}
+
 /* Payment readability */
 body:has(.bkash-brand) .section h3{color:#fff!important;background:linear-gradient(135deg,#4b0875,#d90b62)!important;border-radius:16px!important;padding:13px 15px!important;text-shadow:0 1px 2px rgba(0,0,0,.35)!important}
 body:has(.bkash-brand) .method,body:has(.bkash-brand) .method *{color:#fff!important}
 body:has(.bkash-brand) #selectedAmount{color:#a5074b!important;background:#ffe6f0!important;font-weight:900!important}
+
 /* Accessible emoji fallback */
 body{font-family:"Noto Sans Bengali","Hind Siliguri","Noto Color Emoji","Segoe UI Emoji",system-ui,sans-serif}

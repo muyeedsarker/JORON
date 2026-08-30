@@ -3,51 +3,36 @@ html,body{overflow-x:hidden!important}
 @media(max-width:759px){
   header{position:relative!important;display:block!important;height:auto!important;min-height:0!important;overflow:visible!important;z-index:1000!important}
   header .head{position:relative!important;display:grid!important;z-index:1001!important}
-  /* Never allow navigation links to float over the page. */
-  header .desktop-menu,
-  header nav,
-  header .nav,
-  header .menu,
-  header .nav-links,
-  header .menu-links,
-  header .main-menu{
-    position:relative!important;inset:auto!important;top:auto!important;right:auto!important;bottom:auto!important;left:auto!important;
-    transform:none!important;float:none!important;clear:both!important;
+  /* Force every navigation wrapper into normal document flow. */
+  nav,[role="navigation"],header .desktop-menu,header nav,header .nav,header .menu,header .nav-links,header .menu-links,header .main-menu,
+  body>.menu,body>.navbar,body>.nav,body>.nav-menu,body>.menu-bar,body>.navbar-menu,
+  .menu-bar,.navbar,.nav-menu,.navbar-menu,.main-menu,.site-menu,.site-nav,.navigation,.navigation-menu{
+    position:relative!important;top:auto!important;right:auto!important;bottom:auto!important;left:auto!important;
+    inset:auto!important;transform:none!important;float:none!important;clear:both!important;
     display:flex!important;flex-wrap:wrap!important;align-items:center!important;justify-content:center!important;
     width:100%!important;max-width:100%!important;height:auto!important;min-height:0!important;max-height:none!important;
     margin:0!important;padding:7px 6px!important;gap:6px!important;box-sizing:border-box!important;
     overflow:visible!important;visibility:visible!important;opacity:1!important;
     background:linear-gradient(135deg,#35104f,#64158f 55%,#8d216d)!important;
     border:0!important;border-radius:0!important;box-shadow:0 5px 16px rgba(0,0,0,.18)!important;
-    z-index:1002!important;
+    z-index:10!important;
   }
-  header .desktop-menu a,
-  header nav a,
-  header .nav a,
-  header .menu a,
-  header .nav-links a,
-  header .menu-links a,
-  header .main-menu a{
+  nav a,[role="navigation"] a,header .desktop-menu a,header nav a,header .nav a,header .menu a,header .nav-links a,header .menu-links a,header .main-menu a,
+  .menu-bar a,.navbar a,.nav-menu a,.navbar-menu a,.main-menu a,.site-menu a,.site-nav a,.navigation a,.navigation-menu a{
     position:relative!important;inset:auto!important;top:auto!important;right:auto!important;bottom:auto!important;left:auto!important;
     transform:none!important;float:none!important;display:inline-flex!important;flex:0 0 auto!important;
     align-items:center!important;justify-content:center!important;width:auto!important;height:auto!important;min-width:0!important;min-height:34px!important;
     margin:0!important;padding:6px 9px!important;box-sizing:border-box!important;
-    color:#fff!important;background:rgba(255,255,255,.10)!important;
-    border:1px solid rgba(255,255,255,.24)!important;border-radius:10px!important;
-    font:900 11px/1.2 "Noto Sans Bengali","Hind Siliguri",system-ui,sans-serif!important;
-    white-space:nowrap!important;text-shadow:0 1px 2px rgba(0,0,0,.45)!important;
-    opacity:1!important;visibility:visible!important;box-shadow:none!important;
+    color:#fff!important;background:rgba(255,255,255,.10)!important;border:1px solid rgba(255,255,255,.24)!important;
+    border-radius:10px!important;font:900 11px/1.2 "Noto Sans Bengali","Hind Siliguri",system-ui,sans-serif!important;
+    white-space:nowrap!important;text-shadow:0 1px 2px rgba(0,0,0,.45)!important;opacity:1!important;visibility:visible!important;box-shadow:none!important;
   }
-  header .desktop-menu a:hover,header nav a:hover,header .nav a:hover,header .menu a:hover,header .nav-links a:hover,header .menu-links a:hover,header .main-menu a:hover{background:#d90b62!important;color:#fff!important}
+  nav a:hover,[role="navigation"] a:hover,.menu-bar a:hover,.navbar a:hover,.nav-menu a:hover,.navbar-menu a:hover{background:#d90b62!important;color:#fff!important}
   .mobile-menu{position:relative!important;z-index:3000!important}
   .mobile-menu-panel{position:absolute!important;top:52px!important;left:0!important;right:auto!important;width:min(300px,calc(100vw - 24px))!important;max-height:70vh!important;overflow:auto!important;z-index:4000!important}
 }
 @media(max-width:390px){
- header .desktop-menu,header nav,header .nav,header .menu,header .nav-links,header .menu-links,header .main-menu{gap:4px!important;padding:6px 4px!important}
- header .desktop-menu a,header nav a,header .nav a,header .menu a,header .nav-links a,header .menu-links a,header .main-menu a{font-size:10px!important;padding:6px 7px!important;min-height:32px!important}
+ nav,[role="navigation"],header .desktop-menu,header nav,header .nav,header .menu,header .nav-links,header .menu-links,header .main-menu,.menu-bar,.navbar,.nav-menu,.navbar-menu,.main-menu,.site-menu,.site-nav,.navigation,.navigation-menu{gap:4px!important;padding:6px 4px!important}
+ nav a,[role="navigation"] a,header .desktop-menu a,header nav a,header .nav a,header .menu a,header .nav-links a,header .menu-links a,header .main-menu a,.menu-bar a,.navbar a,.nav-menu a,.navbar-menu a,.main-menu a,.site-menu a,.site-nav a,.navigation a,.navigation-menu a{font-size:10px!important;padding:6px 7px!important;min-height:32px!important}
 }
-/* Quick cards */
-.quick{position:relative!important;z-index:1!important}
-.quick-grid{position:relative!important;z-index:2!important}
-.quick a{position:relative!important;z-index:3!important}
-.quick a .ico,.quick a .label{position:relative!important;z-index:4!important}
+.quick{position:relative!important;z-index:1!important}.quick-grid{position:relative!important;z-index:2!important}.quick a{position:relative!important;z-index:3!important}.quick a .ico,.quick a .label{position:relative!important;z-index:4!important}

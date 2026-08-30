@@ -1,0 +1,10 @@
+/* Smart Biodata layout isolation: fix overlap without changing the global theme */
+.bio-wrap .hero{display:block!important;position:relative!important;float:none!important;overflow:visible!important}
+.bio-wrap .hero .bio-badge{position:static!important;float:none!important;display:inline-flex!important;vertical-align:middle!important;clear:both!important;margin:0 0 12px!important;line-height:1.2!important;white-space:normal!important}
+.bio-wrap .hero h1{position:static!important;float:none!important;display:block!important;clear:both!important;margin:0!important;line-height:1.25!important}
+.bio-wrap .hero p{position:static!important;float:none!important;display:block!important;clear:both!important;margin:9px 0 0!important;line-height:1.6!important}
+.bio-wrap .hero .progress,.bio-wrap .hero .save-state{position:static!important;float:none!important;display:block!important;clear:both!important}
+.bio-wrap .form-section,.bio-wrap .bio-card{position:relative!important;float:none!important;display:block!important;clear:both!important}
+.bio-wrap .form-section *,.bio-wrap .bio-card *{box-sizing:border-box}
+.bio-wrap .field{position:relative!important;float:none!important}
+@media(max-width:650px){.bio-wrap .hero .bio-badge{max-width:100%;justify-content:center}.bio-wrap .hero h1{font-size:28px!important}}

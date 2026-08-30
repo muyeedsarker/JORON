@@ -1,0 +1,27 @@
+/* JORON LIVE FIX — mobile overlay, menu and card readability */
+html,body{overflow-x:hidden!important}
+
+/* The quick-feature wrapper must never become a giant white sheet. */
+.quick{position:relative!important;z-index:1!important;background:transparent!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.quick-grid{position:relative!important;z-index:2!important;background:transparent!important}
+.quick a{position:relative!important;z-index:3!important;color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.35)!important;background:linear-gradient(145deg,rgba(66,31,84,.96),rgba(40,18,55,.98))!important;border:1px solid rgba(255,184,224,.28)!important;box-shadow:0 10px 24px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.12)!important}
+.quick a .ico,.quick a .label{position:relative!important;z-index:4!important;color:#fff!important}
+
+/* Mobile menu: keep it compact and out of the content flow. */
+@media(max-width:759px){
+  .mobile-menu{position:relative!important;z-index:3000!important}
+  .mobile-menu-panel{position:absolute!important;top:52px!important;left:0!important;width:min(300px,calc(100vw - 24px))!important;max-height:70vh!important;overflow:auto!important;background:linear-gradient(145deg,#351044,#5b176f)!important;border:1px solid rgba(255,255,255,.22)!important;box-shadow:0 16px 36px rgba(0,0,0,.42)!important;backdrop-filter:blur(14px)!important;-webkit-backdrop-filter:blur(14px)!important;z-index:4000!important}
+  .mobile-menu-panel a{color:#fff!important;background:rgba(255,255,255,.08)!important;border:1px solid rgba(255,255,255,.12)!important;margin:4px!important;text-shadow:0 1px 2px rgba(0,0,0,.35)!important}
+  .mobile-menu-panel a:hover,.mobile-menu-panel a:active{background:rgba(232,23,120,.55)!important;color:#fff!important}
+  .quick{margin-top:12px!important;padding:10px!important}
+  .quick-grid{gap:10px!important}
+  .quick a{min-height:88px!important;border-radius:20px!important}
+}
+
+@media(max-width:390px){
+  .quick{padding:8px!important}
+  .quick-grid{gap:8px!important}
+  .quick a{min-height:82px!important;border-radius:18px!important}
+  .quick .ico{font-size:27px!important}
+  .quick .label{font-size:12px!important}
+}

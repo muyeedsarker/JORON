@@ -1,0 +1,70 @@
+/* JORON VISUAL REDESIGN V3 — UI ONLY
+   Backend, data, auth, API, database and business logic remain untouched.
+*/
+:root{
+ --j3-pink:#e81768;--j3-pink2:#ff5d9d;--j3-purple:#64158f;--j3-deep:#24102f;
+ --j3-ink:#35143f;--j3-muted:#746579;--j3-line:rgba(100,21,143,.13);
+ --j3-shadow:0 16px 42px rgba(53,20,67,.12)
+}
+
+/* Page rhythm */
+main>section{scroll-margin-top:80px}
+section+section{border-top:1px solid rgba(100,21,143,.055)}
+
+/* Hero polish */
+.hero,.hero-card{position:relative;overflow:hidden}
+.hero:after,.hero-card:after{content:"";position:absolute;inset:auto -12% -55% -12%;height:170px;border-radius:50%;background:radial-gradient(ellipse,rgba(232,23,104,.12),transparent 68%);pointer-events:none}
+.hero .primary,.hero-card .primary{min-height:54px!important}
+.hero .secondary,.hero-card .secondary{min-height:52px!important}
+
+/* Discovery/search */
+.searchbox{border:1px solid var(--j3-line)!important;box-shadow:var(--j3-shadow)!important}
+.searchline{gap:10px!important}
+.searchline input,.filters select{border-radius:15px!important}
+.filters .btn,.filterbar .btn{min-height:46px!important}
+
+/* Profiles: refined hierarchy */
+.profiles .card{box-shadow:0 12px 34px rgba(53,20,67,.10)!important}
+.profiles .card:hover{transform:translateY(-4px)!important;box-shadow:0 22px 48px rgba(100,21,143,.17)!important}
+.profiles .card .info div{transition:background .2s ease,transform .2s ease}
+.profiles .card:hover .info div{background:#fff7fb!important}
+.profiles .card .view{font-weight:800!important;letter-spacing:.01em}
+
+/* Login/signup/form pages */
+.form-page .form-card,.signup-box{max-width:680px!important}
+.form-page .field,.signup-box .field{margin-bottom:14px!important}
+.form-page input,.form-page select,.form-page textarea,.signup-box input,.signup-box select,.signup-box textarea{transition:border-color .18s ease,box-shadow .18s ease,background .18s ease}
+.form-page input:focus,.form-page select:focus,.form-page textarea:focus,.signup-box input:focus,.signup-box select:focus,.signup-box textarea:focus{background:rgba(255,255,255,.075)!important}
+.form-page .btn,.signup-box button[type=submit]{font-weight:800!important;letter-spacing:.01em}
+
+/* Membership / plans */
+.membership-card{position:relative;overflow:hidden}
+.membership-card:after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 55%,rgba(232,23,104,.06));pointer-events:none}
+.membership-card:hover{transform:translateY(-3px)!important}
+
+/* Common notices */
+.notice,.alert,.empty{border-radius:18px!important}
+
+/* Footer */
+footer,.footer{padding-top:30px!important;padding-bottom:30px!important}
+footer a,.footer a{transition:opacity .18s ease,color .18s ease}
+footer a:hover,.footer a:hover{opacity:1!important}
+
+/* Small-screen UX */
+@media(max-width:700px){
+ .hero{padding-top:24px!important}
+ .hero h1{line-height:1.12!important}
+ .hero .actions,.hero-card .actions{display:grid!important;grid-template-columns:1fr!important}
+ .searchline{display:grid!important;grid-template-columns:1fr!important}
+ .filters{display:grid!important;grid-template-columns:1fr 1fr!important}
+ .filters>*{min-width:0!important}
+ .profiles .card:hover{transform:none!important}
+}
+@media(max-width:420px){
+ .filters{grid-template-columns:1fr!important}
+ .hero h1{font-size:clamp(27px,9vw,36px)!important}
+ .hero p{font-size:13px!important}
+}
+@media(prefers-reduced-motion:reduce){
+ .profiles .card,.membership-card{transition:none!important}
+}

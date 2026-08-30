@@ -1,0 +1,40 @@
+name: Apply JORON Live Mobile Fix
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  apply-live-fix:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Attach live mobile fix to HTML pages
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          marker='assets/joron-live-fix.css'
+          link=f'<link rel="stylesheet" href="{marker}">'
+          changed=[]
+          for p in Path('.').glob('*.html'):
+              if '.bak' in p.name or '.backup' in p.name or '.before-' in p.name:
+                  continue
+              s=p.read_text(encoding='utf-8')
+              if marker in s:
+                  continue
+              if '</head>' in s:
+                  s=s.replace('</head>',link+'</head>',1)
+                  p.write_text(s,encoding='utf-8')
+                  changed.append(str(p))
+          print('Live fix attached to',len(changed),'pages')
+          print('\n'.join(changed))
+          PY
+      - name: Commit live fix rollout
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add '*.html' assets/joron-live-fix.css .github/workflows/apply-joron-live-fix.yml
+          if git diff --cached --quiet; then echo 'No changes needed'; exit 0; fi
+          git commit -m "Apply JORON live mobile UI fix"
+          git push origin HEAD:main

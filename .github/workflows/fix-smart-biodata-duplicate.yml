@@ -1,0 +1,28 @@
+name: Fix Smart Biodata duplicate badge
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Remove duplicate badge
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('smart-biodata.html')
+          s = p.read_text(encoding='utf-8')
+          old = '<section class="hero"><div class="bio-badge">📝 ধাপে ধাপে আপনার Biodata সম্পূর্ণ করুন</div><div class="badge bio-badge">📝 ধাপে ধাপে আপনার Biodata সম্পূর্ণ করুন</div>'
+          new = '<section class="hero"><div class="bio-badge">📝 ধাপে ধাপে আপনার Biodata সম্পূর্ণ করুন</div>'
+          if old in s:
+              p.write_text(s.replace(old, new, 1), encoding='utf-8')
+          PY
+      - name: Commit fix
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add smart-biodata.html
+          git diff --cached --quiet || (git commit -m 'Fix duplicate Smart Biodata badge' && git push)

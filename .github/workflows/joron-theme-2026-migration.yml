@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   migrate:
-    if: contains(github.event.head_commit.message, 'Add JORON 2026 single-theme design system')
+    if: contains(github.event.head_commit.message, 'JORON 2026')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -24,14 +24,8 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p assets/_archive/html-backups assets/_archive/css
-
-          # Archive legacy CSS files; keep only the new production theme at assets/joron-theme-2026.css.
-          find assets -maxdepth 1 -type f -name '*.css' ! -name 'joron-theme-2026.css' -print0 | while IFS= read -r -d '' f; do
-            mv "$f" assets/_archive/css/
-          done
+          find assets -maxdepth 1 -type f -name '*.css' ! -name 'joron-theme-2026.css' -print0 | while IFS= read -r -d '' f; do mv "$f" assets/_archive/css/; done
           if [ -f joron-theme.css ]; then mv joron-theme.css assets/_archive/css/; fi
-
-          # Archive backup / preview / obsolete splash variants from production root.
           shopt -s nullglob
           for f in *-backup*.html *.bak *.before-* *.backup joron-splash-login-*.html JORON-splash-login-*.html login-fixed.html signup-professional-preview.html; do
             [ -f "$f" ] || continue
@@ -45,53 +39,39 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
           import re
-
           theme = '<link rel="stylesheet" href="assets/joron-theme-2026.css">'
           css_link = re.compile(r'<link\b[^>]*?rel=["\']stylesheet["\'][^>]*?>', re.I|re.S)
           href_css = re.compile(r'href=["\'][^"\']+\.css(?:\?[^"\']*)?["\']', re.I)
-
           for p in sorted(Path('.').glob('*.html')):
               text = p.read_text(encoding='utf-8')
-              # Remove legacy stylesheet links only; keep scripts and inline functional logic intact.
               def clean(m):
                   tag=m.group(0)
-                  if href_css.search(tag):
-                      return ''
-                  return tag
+                  return '' if href_css.search(tag) else tag
               new = css_link.sub(clean, text)
-              # Add the new theme last in <head>, so it becomes the visual authority without touching JS/IDs.
               if 'assets/joron-theme-2026.css' not in new:
                   marker = re.search(r'</head\s*>', new, re.I)
-                  if marker:
-                      new = new[:marker.start()] + theme + '\n' + new[marker.start():]
-                  else:
+                  if not marker:
                       raise SystemExit(f'No </head> found in {p}')
+                  new = new[:marker.start()] + theme + '\n' + new[marker.start():]
               if new != text:
                   p.write_text(new, encoding='utf-8')
           PY
 
-      - name: Add migration notes and commit
+      - name: Commit migration
         shell: bash
         run: |
           set -euo pipefail
           cat > assets/_archive/README.md <<'EOF'
           # JORON archive
-
           Legacy CSS overrides and backup/preview HTML files are retained here for rollback.
           Production pages use `assets/joron-theme-2026.css` as the single site theme.
           Functional Firebase/auth/Firestore scripts and existing form IDs were not intentionally renamed.
           EOF
-
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -A
           git commit -m 'chore: migrate JORON to 2026 single theme' || exit 0
           git push
-
-      - name: Remove one-time migration workflow
-        shell: bash
-        run: |
-          set -euo pipefail
           git rm .github/workflows/joron-theme-2026-migration.yml
           git commit -m 'chore: remove one-time theme migration workflow'
           git push

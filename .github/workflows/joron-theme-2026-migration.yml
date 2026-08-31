@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'assets/joron-theme-2026.css'
+      - '.github/workflows/joron-theme-2026-migration.yml'
 
 permissions:
   contents: write
@@ -18,7 +19,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
       - name: Archive legacy CSS and duplicate HTML
         shell: bash
         run: |
@@ -31,33 +31,26 @@ jobs:
             [ -f "$f" ] || continue
             mv "$f" assets/_archive/html-backups/
           done
-
-      - name: Wire the single theme into production HTML
+      - name: Wire single theme into production HTML
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
           from pathlib import Path
           import re
-          theme = '<link rel="stylesheet" href="assets/joron-theme-2026.css">'
-          css_link = re.compile(r'<link\b[^>]*?rel=["\']stylesheet["\'][^>]*?>', re.I|re.S)
-          href_css = re.compile(r'href=["\'][^"\']+\.css(?:\?[^"\']*)?["\']', re.I)
+          theme='<link rel="stylesheet" href="assets/joron-theme-2026.css">'
+          tag_re=re.compile(r'<link\b[^>]*?rel=["\']stylesheet["\'][^>]*?>',re.I|re.S)
+          href_re=re.compile(r'href=["\'][^"\']+\.css(?:\?[^"\']*)?["\']',re.I)
           for p in sorted(Path('.').glob('*.html')):
-              text = p.read_text(encoding='utf-8')
-              def clean(m):
-                  tag=m.group(0)
-                  return '' if href_css.search(tag) else tag
-              new = css_link.sub(clean, text)
+              text=p.read_text(encoding='utf-8')
+              new=tag_re.sub(lambda m:'' if href_re.search(m.group(0)) else m.group(0),text)
               if 'assets/joron-theme-2026.css' not in new:
-                  marker = re.search(r'</head\s*>', new, re.I)
-                  if not marker:
-                      raise SystemExit(f'No </head> found in {p}')
-                  new = new[:marker.start()] + theme + '\n' + new[marker.start():]
-              if new != text:
-                  p.write_text(new, encoding='utf-8')
+                  marker=re.search(r'</head\s*>',new,re.I)
+                  if not marker: raise SystemExit(f'No </head> found in {p}')
+                  new=new[:marker.start()]+theme+'\n'+new[marker.start():]
+              if new!=text: p.write_text(new,encoding='utf-8')
           PY
-
-      - name: Commit migration
+      - name: Commit migration and remove one-time workflow
         shell: bash
         run: |
           set -euo pipefail
@@ -70,8 +63,8 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -A
-          git commit -m 'chore: migrate JORON to 2026 single theme' || exit 0
+          git commit -m 'chore: migrate JORON to 2026 single theme' || true
           git push
           git rm .github/workflows/joron-theme-2026-migration.yml
-          git commit -m 'chore: remove one-time theme migration workflow'
+          git commit -m 'chore: remove one-time JORON 2026 migration workflow'
           git push

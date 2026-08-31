@@ -1,0 +1,49 @@
+name: JORON 2026 Site Audit & Fix
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  audit-fix:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Audit and repair production pages
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          root=Path('.')
+          pages=['index.html','profiles.html','profile.html','profile-view.html','smart-biodata.html','biodata.html','login.html','signup.html','help.html','report.html','dashboard.html','matching.html','smart-matching.html','interests.html','following.html','chat.html','free-chat.html','safe-chat.html','membership.html','payment.html','verification.html']
+          theme='assets/joron-theme-2026.css'
+          legacy=re.compile(r'<link[^>]+href=["\'](?:assets/)?(?:style|main|theme|override|final|mobile|premium)[^"\']*\.css[^"\']*["\'][^>]*>\s*',re.I)
+          for name in pages:
+            p=root/name
+            if not p.exists():
+              print('MISSING PAGE:',name); continue
+            s=p.read_text(encoding='utf-8')
+            # Keep Firebase/JS and form IDs untouched; only normalize stylesheet links.
+            s=legacy.sub('',s)
+            link=f'<link rel="stylesheet" href="{theme}">'
+            s=re.sub(r'<link[^>]+href=["\']assets/joron-theme-2026\.css[^"\']*["\'][^>]*>\s*','',s,flags=re.I)
+            s=s.replace('</head>',link+'\n</head>',1) if '</head>' in s and link not in s else s
+            p.write_text(s,encoding='utf-8')
+          # Strong visual guardrail for legacy inline styles: no functional selectors are changed.
+          t=root/theme
+          css=t.read_text(encoding='utf-8')
+          marker='/* JORON 2026 SITE-AUDIT GUARDRAILS */'
+          if marker not in css:
+            css += '''\n\n/* JORON 2026 SITE-AUDIT GUARDRAILS */\nbody{background:var(--ivory)!important;color:var(--ink)!important}\nheader,.header,.site-header{background:rgba(251,247,239,.97)!important;border-bottom:1px solid var(--gold)!important}\nbutton,.btn,.btn-gold{font-family:"Hind Siliguri","Noto Sans Bengali",system-ui,sans-serif!important}\ninput,select,textarea{border-color:var(--gold-line)!important;border-radius:14px!important}\n.card,.panel,.surface,.quick,.list-card,.match-card,.interest-card{border-color:var(--gold-line)!important;border-radius:var(--radius-card)!important;box-shadow:var(--shadow)!important}\n@media(max-width:650px){img{max-width:100%}.container,.wrap{width:min(94%,1180px)}}\n'''
+            t.write_text(css,encoding='utf-8')
+          PY
+      - name: Commit repaired production files
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .
+          git diff --cached --quiet || git commit -m 'audit and repair 21 production pages with JORON 2026 theme'
+          git diff --cached --quiet || git push

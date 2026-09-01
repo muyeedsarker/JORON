@@ -4,54 +4,36 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#64158f">
-  <title>JORON — QR প্রবেশ</title>
-  <meta name="description" content="JORON ওয়েবসাইটে নিরাপদ QR প্রবেশপথ">
-  <link rel="stylesheet" href="./assets/joron-theme-2026.css">
+  <title>JORON — QR Code</title>
   <style>
-    :root{color-scheme:light}
-    body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;box-sizing:border-box;background:linear-gradient(135deg,#faf7ff,#f2eafa)}
-    .qr-wrap{width:min(100%,520px);box-sizing:border-box;background:#fff;border-radius:24px;padding:28px;box-shadow:0 16px 45px rgba(70,30,100,.14);text-align:center}
-    .qr-wrap h1{margin:0 0 8px;font-size:clamp(26px,7vw,38px)}
-    .qr-wrap p{margin:8px 0;color:#555;line-height:1.6}
-    #qrcode{width:260px;min-height:260px;margin:22px auto;padding:12px;background:#fff;border-radius:16px;display:grid;place-items:center;box-sizing:border-box}
-    #qrcode img,#qrcode canvas{max-width:100%;height:auto}
-    .btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 22px;border:0;border-radius:12px;text-decoration:none;font-weight:700;cursor:pointer;margin:6px}
-    .primary{background:#64158f;color:#fff}
-    .secondary{background:#f1eafa;color:#64158f}
-    .note{font-size:13px;color:#666;margin-top:18px}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;display:grid;place-items:center;padding:20px;background:#f7f2fb;font-family:system-ui,"Noto Sans Bengali",sans-serif}
+    .card{width:min(92vw,360px);padding:24px 20px;background:#fff;border-radius:24px;text-align:center;box-shadow:0 12px 35px rgba(70,30,100,.14)}
+    h1{margin:0 0 18px;color:#64158f;font-size:28px}
+    #qrcode{width:260px;height:260px;margin:0 auto;padding:10px;background:#fff;border:1px solid #eee;border-radius:16px;display:grid;place-items:center}
+    #qrcode img,#qrcode canvas{display:block;max-width:100%;height:auto}
+    .status{margin:16px 0 0;color:#666;font-size:13px;line-height:1.5}
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
-<style id="joron-brand-final-v3">
-.site-header .brand,.site-header .brand>span:last-child,.brand{display:flex!important;align-items:center!important}
-.site-header .brand{gap:0!important;min-width:0!important}
-.site-header .brand-mark{display:none!important}
-.site-header .brand>span:last-child{flex-direction:column!important;align-items:center!important;justify-content:center!important;text-align:center!important;min-width:150px!important;max-width:210px!important;overflow:hidden!important}
-.site-header .brand strong{display:block!important;width:100%!important;font-size:40px!important;line-height:1!important;letter-spacing:2px!important;white-space:nowrap!important;text-align:center!important}
-.site-header .brand small{display:block!important;width:100%!important;margin-top:5px!important;font-family:"Hind Siliguri","Noto Sans Bengali",system-ui,sans-serif!important;font-size:14px!important;line-height:1.25!important;font-weight:700!important;letter-spacing:0!important;color:var(--gold-deep)!important;white-space:nowrap!important;text-align:center!important;overflow:hidden!important;text-overflow:clip!important}
-@media(max-width:650px){.site-header .brand>span:last-child{min-width:132px!important;max-width:180px!important}.site-header .brand strong{font-size:31px!important;letter-spacing:1.5px!important}.site-header .brand small{font-size:11px!important;margin-top:4px!important}}
-@media(max-width:390px){.site-header .brand>span:last-child{min-width:120px!important;max-width:165px!important}.site-header .brand strong{font-size:28px!important}.site-header .brand small{font-size:10px!important}}
-</style></head>
+</head>
 <body>
-  <main class="qr-wrap" aria-labelledby="title">
-    <h1 id="title">💜 JORON</h1>
-    <p>QR স্ক্যান করে JORON-এর নিরাপদ প্রবেশপথে যান।</p>
-    <div id="qrcode" aria-label="JORON login QR code"></div>
-    <a class="btn primary" href="./login.html?qr=1">JORON Login খুলুন</a>
-    <a class="btn secondary" href="./index.html">হোম পেজ</a>
-    <p class="note">এই QR কোডে কোনো পাসওয়ার্ড, OTP বা Admin secret রাখা নেই। পরবর্তী ধাপে Passkey/Fingerprint যাচাই আলাদাভাবে যুক্ত হবে।</p>
+  <main class="card">
+    <h1>💜 JORON</h1>
+    <div id="qrcode" aria-label="JORON QR Code"></div>
+    <p id="status" class="status">QR স্ক্যান করলে JORON Login খুলবে।</p>
   </main>
   <script>
     window.addEventListener('DOMContentLoaded',()=>{
-      const target=new URL('./login.html?qr=1',window.location.href).href;
       const box=document.getElementById('qrcode');
-      const make=()=>{
-        if(window.QRCode){
-          new QRCode(box,{text:target,width:236,height:236,correctLevel:QRCode.CorrectLevel.M});
-        }else{
-          box.textContent='QR তৈরি করা যাচ্ছে না। Login খুলুন।';
-        }
+      const status=document.getElementById('status');
+      const target=new URL('./login.html?qr=1',window.location.href).href;
+      const makeQR=()=>{
+        if(!window.QRCode){status.textContent='QR তৈরি হচ্ছে না। পেজটি আবার খুলুন।';return;}
+        box.innerHTML='';
+        new QRCode(box,{text:target,width:236,height:236,correctLevel:QRCode.CorrectLevel.M});
       };
-      if(window.QRCode) make(); else setTimeout(make,500);
+      if(window.QRCode) makeQR();
+      else setTimeout(makeQR,700);
     });
   </script>
 </body>

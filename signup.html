@@ -15,7 +15,7 @@
 </head>
 <body>
 <div class="signup-box">
-<div class="logo">J♥R♥N</div><p class="tagline">দুজনের গল্প, এক জোড়ন। ❤️</p>
+<div class="logo">J♥R♥N</div><p class="tagline">সম্পর্ক জুড়ে দেয় জোড়ন ❤️</p>
 <div class="hero-title"><h1>✨ নতুন অ্যাকাউন্ট তৈরি করুন</h1><div class="hero-guide"><span>আপনার তথ্য দিন • Membership নির্বাচন করুন</span><span>J♥R♥N-এ শুরু করুন ❤️</span></div></div>
 <form id="signupForm" novalidate>
 <div class="step-title">👤 আপনার তথ্য</div>
@@ -28,12 +28,54 @@
 <label class="field-label" for="confirmPassword">পাসওয়ার্ড নিশ্চিত করুন</label><input type="password" id="confirmPassword" autocomplete="new-password" placeholder="আবার পাসওয়ার্ড লিখুন" minlength="6" required>
 <div class="terms"><input type="checkbox" id="terms" required><span>আমি <a href="terms.html">Terms of service</a> এবং <a href="privacy.html">Privacy policy</a> মেনে নিচ্ছি।</span></div>
 <div id="signupError" class="error"></div>
-<div class="recaptcha-wrap" id="recaptcha-container"></div>
-<button type="submit" class="primary-btn">অ্যাকাউন্ট তৈরি করুন</button>
+<button type="submit" class="primary-btn" id="signupBtn">অ্যাকাউন্ট তৈরি করুন</button>
 </form>
 <div class="login">আগেই অ্যাকাউন্ট আছে? <a href="login.html">লগইন করুন</a></div>
 <div class="back"><a href="index.html">🏠 হোমে ফিরুন</a></div>
 <p class="note">আপনার তথ্য নিরাপদ রাখার জন্য Firebase Authentication ব্যবহার করা হয়।</p>
 </div>
+<script type="module">
+import {auth,createUserWithEmailAndPassword,updateProfile,ensureUserProfile,persistenceReady,friendlyAuthError} from './assets/firebase-client.js';
+
+const form=document.getElementById('signupForm');
+const errorBox=document.getElementById('signupError');
+const signupBtn=document.getElementById('signupBtn');
+const showError=text=>{errorBox.textContent=text;errorBox.classList.toggle('show',!!text)};
+
+form.addEventListener('submit',async event=>{
+  event.preventDefault();
+  showError('');
+  if(!form.checkValidity()){
+    form.reportValidity();
+    return;
+  }
+  const name=document.getElementById('name').value.trim();
+  const email=document.getElementById('email').value.trim().toLowerCase();
+  const phone=document.getElementById('phone').value.trim();
+  const gender=document.getElementById('gender').value;
+  const password=document.getElementById('password').value;
+  const confirmPassword=document.getElementById('confirmPassword').value;
+
+  if(!/^01[0-9]{9}$/.test(phone)) return showError('সঠিক ১১ সংখ্যার বাংলাদেশি মোবাইল নম্বর দিন।');
+  if(password.length<6) return showError('পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।');
+  if(password!==confirmPassword) return showError('দুটি পাসওয়ার্ড এক নয়।');
+
+  signupBtn.disabled=true;
+  signupBtn.textContent='⏳ অ্যাকাউন্ট তৈরি হচ্ছে...';
+  try{
+    await persistenceReady;
+    const credential=await createUserWithEmailAndPassword(auth,email,password);
+    await updateProfile(credential.user,{displayName:name});
+    await ensureUserProfile(credential.user,'password',{name,email,phone,gender});
+    signupBtn.textContent='✅ অ্যাকাউন্ট তৈরি হয়েছে';
+    setTimeout(()=>location.href='biodata.html',500);
+  }catch(error){
+    console.error('JORON signup error:',error);
+    showError(friendlyAuthError(error));
+    signupBtn.disabled=false;
+    signupBtn.textContent='অ্যাকাউন্ট তৈরি করুন';
+  }
+});
+</script>
 </body>
 </html>

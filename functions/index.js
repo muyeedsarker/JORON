@@ -1,0 +1,249 @@
+const { onRequest } = require("firebase-functions/https");
+const { initializeApp } = require("firebase-admin/app");
+const { getAuth } = require("firebase-admin/auth");
+const { getFirestore, FieldValue, Timestamp } = require("firebase-admin/firestore");
+const {
+  generateRegistrationOptions,
+  verifyRegistrationResponse,
+  generateAuthenticationOptions,
+  verifyAuthenticationResponse,
+} = require("@simplewebauthn/server");
+const { isoUint8Array } = require("@simplewebauthn/server/helpers");
+const crypto = require("crypto");
+
+initializeApp();
+
+const db = getFirestore();
+const auth = getAuth();
+
+const ADMIN_UID = "PcDehBv4dYezeIPA6h0Peo9lpih2";
+const RP_NAME = "JORON — জোড়ন";
+const RP_ID = "muyeedsarker.github.io";
+const ORIGIN = "https://muyeedsarker.github.io";
+const CHALLENGE_TTL_MS = 5 * 60 * 1000;
+const PASSKEYS = "passkeys";
+const CHALLENGES = "passkeyChallenges";
+
+function cors(req, res) {
+  const origin = req.get("origin");
+  if (origin === ORIGIN) {
+    res.set("Access-Control-Allow-Origin", origin);
+    res.set("Vary", "Origin");
+  }
+  res.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+}
+
+function jsonError(res, status, message) {
+  return res.status(status).json({ ok: false, error: message });
+}
+
+function challengeId() {
+  return crypto.randomBytes(24).toString("base64url");
+}
+
+function isFreshChallenge(data) {
+  if (!data || data.used || !data.createdAt) return false;
+  const created = data.createdAt.toMillis();
+  return Date.now() - created <= CHALLENGE_TTL_MS;
+}
+
+async function requireAdmin(req, res) {
+  const header = req.get("authorization") || "";
+  if (!header.startsWith("Bearer ")) {
+    jsonError(res, 401, "Admin authentication required");
+    return null;
+  }
+  try {
+    const decoded = await auth.verifyIdToken(header.slice(7));
+    if (decoded.uid !== ADMIN_UID) {
+      jsonError(res, 403, "Admin access denied");
+      return null;
+    }
+    return decoded;
+  } catch (error) {
+    console.error("Admin token verification failed", error);
+    jsonError(res, 401, "Invalid authentication token");
+    return null;
+  }
+}
+
+async function storeChallenge(id, type, challenge, extra = {}) {
+  await db.collection(CHALLENGES).doc(id).set({
+    type,
+    challenge,
+    createdAt: FieldValue.serverTimestamp(),
+    used: false,
+    ...extra,
+  });
+}
+
+exports.passkeyRegisterOptions = onRequest(async (req, res) => {
+  cors(req, res);
+  if (req.method === "OPTIONS") return res.status(204).send("");
+  if (req.method !== "GET") return jsonError(res, 405, "GET required");
+
+  const user = await requireAdmin(req, res);
+  if (!user) return;
+
+  try {
+    const existing = await db.collection(PASSKEYS).where("uid", "==", ADMIN_UID).get();
+    const options = await generateRegistrationOptions({
+      rpName: RP_NAME,
+      rpID: RP_ID,
+      userName: `admin-${ADMIN_UID}`,
+      userDisplayName: "JORON Admin",
+      userID: isoUint8Array.fromUTF8String(`joron-admin-${ADMIN_UID}`),
+      attestationType: "none",
+      excludeCredentials: existing.docs.map((doc) => ({
+        id: doc.data().id,
+        transports: doc.data().transports || [],
+      })),
+      authenticatorSelection: {
+        residentKey: "required",
+        userVerification: "required",
+        authenticatorAttachment: "platform",
+      },
+    });
+
+    const id = challengeId();
+    await storeChallenge(id, "registration", options.challenge, { uid: ADMIN_UID });
+    return res.json({ ok: true, challengeId: id, options });
+  } catch (error) {
+    console.error("Passkey registration options failed", error);
+    return jsonError(res, 500, "Could not create Passkey registration options");
+  }
+});
+
+exports.passkeyRegisterVerify = onRequest(async (req, res) => {
+  cors(req, res);
+  if (req.method === "OPTIONS") return res.status(204).send("");
+  if (req.method !== "POST") return jsonError(res, 405, "POST required");
+
+  const user = await requireAdmin(req, res);
+  if (!user) return;
+
+  const { challengeId: id, response } = req.body || {};
+  if (!id || !response) return jsonError(res, 400, "Missing registration response");
+
+  const ref = db.collection(CHALLENGES).doc(id);
+  const snap = await ref.get();
+  const data = snap.data();
+  if (!snap.exists || !isFreshChallenge(data) || data.type !== "registration" || data.uid !== ADMIN_UID) {
+    return jsonError(res, 400, "Registration challenge expired or invalid");
+  }
+
+  try {
+    const verification = await verifyRegistrationResponse({
+      response,
+      expectedChallenge: data.challenge,
+      expectedOrigin: ORIGIN,
+      expectedRPID: RP_ID,
+      requireUserVerification: true,
+    });
+
+    if (!verification.verified || !verification.registrationInfo) {
+      return jsonError(res, 400, "Passkey registration was not verified");
+    }
+
+    const { credential, credentialDeviceType, credentialBackedUp } = verification.registrationInfo;
+    await db.collection(PASSKEYS).doc(credential.id).set({
+      id: credential.id,
+      uid: ADMIN_UID,
+      publicKey: Buffer.from(credential.publicKey),
+      counter: credential.counter,
+      transports: credential.transports || [],
+      credentialDeviceType,
+      credentialBackedUp,
+      createdAt: FieldValue.serverTimestamp(),
+    });
+    await ref.update({ used: true });
+
+    return res.json({ ok: true, verified: true });
+  } catch (error) {
+    console.error("Passkey registration verification failed", error);
+    return jsonError(res, 400, "Passkey registration verification failed");
+  }
+});
+
+exports.passkeyAuthOptions = onRequest(async (req, res) => {
+  cors(req, res);
+  if (req.method === "OPTIONS") return res.status(204).send("");
+  if (req.method !== "GET") return jsonError(res, 405, "GET required");
+
+  try {
+    const options = await generateAuthenticationOptions({
+      rpID: RP_ID,
+      userVerification: "required",
+    });
+    const id = challengeId();
+    await storeChallenge(id, "authentication", options.challenge);
+    return res.json({ ok: true, challengeId: id, options });
+  } catch (error) {
+    console.error("Passkey authentication options failed", error);
+    return jsonError(res, 500, "Could not create Passkey login options");
+  }
+});
+
+exports.passkeyAuthVerify = onRequest(async (req, res) => {
+  cors(req, res);
+  if (req.method === "OPTIONS") return res.status(204).send("");
+  if (req.method !== "POST") return jsonError(res, 405, "POST required");
+
+  const { challengeId: id, response } = req.body || {};
+  if (!id || !response || !response.id) return jsonError(res, 400, "Missing Passkey response");
+
+  const challengeRef = db.collection(CHALLENGES).doc(id);
+  const challengeSnap = await challengeRef.get();
+  const challengeData = challengeSnap.data();
+  if (!challengeSnap.exists || !isFreshChallenge(challengeData) || challengeData.type !== "authentication") {
+    return jsonError(res, 400, "Authentication challenge expired or invalid");
+  }
+
+  try {
+    const passkeySnap = await db.collection(PASSKEYS).doc(response.id).get();
+    if (!passkeySnap.exists || passkeySnap.data().uid !== ADMIN_UID) {
+      return jsonError(res, 403, "This Passkey is not authorized for JORON Admin");
+    }
+
+    const passkey = passkeySnap.data();
+    const verification = await verifyAuthenticationResponse({
+      response,
+      expectedChallenge: challengeData.challenge,
+      expectedOrigin: ORIGIN,
+      expectedRPID: RP_ID,
+      requireUserVerification: true,
+      credential: {
+        id: passkey.id,
+        publicKey: new Uint8Array(passkey.publicKey),
+        counter: passkey.counter || 0,
+        transports: passkey.transports || [],
+      },
+    });
+
+    if (!verification.verified) {
+      return jsonError(res, 401, "Passkey verification failed");
+    }
+
+    await passkeySnap.ref.update({
+      counter: verification.authenticationInfo.newCounter,
+      lastUsedAt: FieldValue.serverTimestamp(),
+    });
+    await challengeRef.update({ used: true });
+
+    const customToken = await auth.createCustomToken(ADMIN_UID, {
+      passkey: true,
+      adminAccess: true,
+    });
+
+    return res.json({ ok: true, verified: true, customToken });
+  } catch (error) {
+    console.error("Passkey authentication verification failed", error);
+    return jsonError(res, 401, "Passkey authentication failed");
+  }
+});
+
+exports.passkeyHealth = onRequest((req, res) => {
+  cors(req, res);
+  return res.json({ ok: true, service: "JORON Passkey", rpId: RP_ID });
+});

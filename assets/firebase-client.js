@@ -117,11 +117,22 @@ function wireLoginPage() {
   const googleBtn = document.getElementById("googleBtn");
   const facebookBtn = document.getElementById("facebookBtn");
   const msg = document.getElementById("msg");
-  if (!googleBtn && !facebookBtn) return;
+  const form = document.getElementById("emailForm");
+  const identifierInput = document.getElementById("email");
+  const passwordInput = document.getElementById("password");
+  const forgotBtn = document.getElementById("forgot");
+  if (!googleBtn && !facebookBtn && !form) return;
 
   document.title = "JORON — Login";
   const sub = document.querySelector(".brand .sub");
   if (sub) sub.textContent = "সম্পর্ক জুড়ে দেয় জোড়ন";
+  if (identifierInput) {
+    identifierInput.type = "text";
+    identifierInput.inputMode = "text";
+    identifierInput.placeholder = "Member ID / মোবাইল / ইমেইল";
+  }
+  const label = form?.querySelector("label[for=\"email\"]") || form?.querySelector("label");
+  if (label) label.textContent = "📧 Member ID / Mobile / Email";
 
   if (googleBtn && !googleBtn.dataset.joronWired) {
     googleBtn.dataset.joronWired = "1";
@@ -130,6 +141,43 @@ function wireLoginPage() {
   if (facebookBtn && !facebookBtn.dataset.joronWired) {
     facebookBtn.dataset.joronWired = "1";
     facebookBtn.onclick = () => loginWithProvider(facebookProvider, "Facebook", msg);
+  }
+
+  if (form && !form.dataset.joronIdentifierWired) {
+    form.dataset.joronIdentifierWired = "1";
+    form.addEventListener("submit", async event => {
+      event.preventDefault();
+      const identifier = identifierInput?.value.trim() || "";
+      const password = passwordInput?.value || "";
+      if (!identifier || !password) return msg.textContent = "Member ID, মোবাইল/ইমেইল এবং পাসওয়ার্ড দিন।";
+      try {
+        msg.textContent = "⏳ লগইন হচ্ছে...";
+        await persistenceReady;
+        const email = await findLoginEmail(identifier);
+        await signInWithEmailAndPassword(auth, email, password);
+        msg.textContent = "✅ লগইন সফল হচ্ছে...";
+        setTimeout(() => location.href = "biodata.html", 700);
+      } catch (error) {
+        msg.textContent = `❌ ${friendlyAuthError(error)}`;
+        console.error("JORON identifier login error:", error);
+      }
+    });
+  }
+
+  if (forgotBtn && !forgotBtn.dataset.joronResetWired) {
+    forgotBtn.dataset.joronResetWired = "1";
+    forgotBtn.onclick = async () => {
+      const identifier = identifierInput?.value.trim() || "";
+      if (!identifier) return msg.textContent = "আগে Member ID, মোবাইল অথবা ইমেইল লিখুন।";
+      try {
+        msg.textContent = "⏳ তথ্য যাচাই হচ্ছে...";
+        const email = await findLoginEmail(identifier);
+        await sendPasswordResetEmail(auth, email);
+        msg.textContent = "✅ পাসওয়ার্ড রিসেট লিংক ইমেইলে পাঠানো হয়েছে।";
+      } catch (error) {
+        msg.textContent = `❌ ${friendlyAuthError(error)}`;
+      }
+    };
   }
 
   if (!document.getElementById("joron-auth-login-skin")) {

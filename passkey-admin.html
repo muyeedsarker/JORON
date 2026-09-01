@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#08070a">
+<title>JORON — Admin Passkey</title>
+<link rel="stylesheet" href="assets/joron-theme-2026.css">
+<style>
+body{margin:0;background:#08070a;color:#fff;font-family:"Hind Siliguri","Noto Sans Bengali",system-ui,sans-serif}.wrap{max-width:520px;margin:auto;min-height:100vh;padding:28px 18px;display:flex;align-items:center}.card{width:100%;background:#120d13;border:1px solid #49313f;border-radius:24px;padding:26px;text-align:center;box-shadow:0 18px 50px rgba(0,0,0,.35)}h1{margin:0 0 8px}.sub{color:#cdbfc9;font-size:14px;line-height:1.6}.btn{width:100%;height:52px;border:0;border-radius:28px;margin-top:18px;background:linear-gradient(135deg,#c79a45,#e81768);color:#fff;font-weight:800;font-size:15px;cursor:pointer}.status{min-height:44px;margin-top:16px;color:#f4d9a4;font-weight:700}.back{display:block;margin-top:18px;color:#d8c8d3;text-decoration:none;font-size:13px}
+</style>
+</head>
+<body>
+<main class="wrap"><section class="card">
+<h1>🔐 JORON Admin Passkey</h1>
+<p class="sub">একবার আপনার বর্তমান Admin account দিয়ে লগইন করে এই ডিভাইসের Passkey নিবন্ধন করুন। এরপর QR স্ক্যান করে ফোনের Fingerprint/Face/PIN দিয়ে প্রবেশ করা যাবে।</p>
+<button id="register" class="btn">এই ডিভাইসে Passkey চালু করুন</button>
+<div id="status" class="status" aria-live="polite"></div>
+<a class="back" href="index.html">← JORON হোম</a>
+</section></main>
+<script src="https://unpkg.com/@simplewebauthn/browser@13.3.0/dist/bundle/index.umd.min.js"></script>
+<script type="module">
+import{auth,onAuthStateChanged}from'./assets/firebase-client.js';
+const ADMIN_UID='PcDehBv4dYezeIPA6h0Peo9lpih2';
+const API='https://us-central1-joron-d7742.cloudfunctions.net';
+const status=document.getElementById('status'),button=document.getElementById('register');
+let adminUser=null;
+function setStatus(t){status.textContent=t}
+onAuthStateChanged(auth,user=>{adminUser=user;if(!user){location.href='login.html?next=passkey-admin.html';return}if(user.uid!==ADMIN_UID){setStatus('❌ এই পেজ শুধু JORON Admin-এর জন্য।');button.disabled=true}});
+button.onclick=async()=>{if(!adminUser)return;try{button.disabled=true;setStatus('⏳ Passkey registration প্রস্তুত হচ্ছে...');const token=await adminUser.getIdToken(true);const r=await fetch(`${API}/passkeyRegisterOptions`,{headers:{Authorization:`Bearer ${token}`}});const data=await r.json();if(!r.ok)throw new Error(data.error||'Options failed');const attResp=await SimpleWebAuthnBrowser.startRegistration({optionsJSON:data.options});const v=await fetch(`${API}/passkeyRegisterVerify`,{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${token}`},body:JSON.stringify({challengeId:data.challengeId,response:attResp})});const result=await v.json();if(!v.ok||!result.verified)throw new Error(result.error||'Verification failed');setStatus('✅ Passkey সফলভাবে চালু হয়েছে। এখন QR Login ব্যবহার করতে পারবেন।')}catch(e){console.error(e);setStatus('❌ '+(e.message||'Passkey চালু করা যায়নি।'));}finally{button.disabled=false}};
+</script>
+</body>
+</html>

@@ -4,6 +4,7 @@ import {
   onAuthStateChanged,
   signOut,
   signInWithEmailAndPassword,
+  signInWithCustomToken,
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
   GoogleAuthProvider,
@@ -65,14 +66,12 @@ async function findLoginEmail(identifier) {
   const value = String(identifier || "").trim();
   if (!value) throw new Error("LOGIN_IDENTIFIER_REQUIRED");
   if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return value.toLowerCase();
-
   const users = collection(db, "users");
   const memberSnap = await getDocs(query(users, where("memberId", "==", value.toUpperCase())));
   if (!memberSnap.empty) {
     const email = memberSnap.docs[0].data()?.email;
     if (email) return email.toLowerCase();
   }
-
   const phoneSnap = await getDocs(query(users, where("phone", "==", value)));
   if (!phoneSnap.empty) {
     const email = phoneSnap.docs[0].data()?.email;
@@ -122,7 +121,6 @@ function wireLoginPage() {
   const passwordInput = document.getElementById("password");
   const forgotBtn = document.getElementById("forgot");
   if (!googleBtn && !facebookBtn && !form) return;
-
   document.title = "JORON — Login";
   const sub = document.querySelector(".brand .sub");
   if (sub) sub.textContent = "সম্পর্ক জুড়ে দেয় জোড়ন";
@@ -133,7 +131,6 @@ function wireLoginPage() {
   }
   const label = form?.querySelector("label[for=\"email\"]") || form?.querySelector("label");
   if (label) label.textContent = "📧 Member ID / Mobile / Email";
-
   if (googleBtn && !googleBtn.dataset.joronWired) {
     googleBtn.dataset.joronWired = "1";
     googleBtn.onclick = () => loginWithProvider(googleProvider, "Google", msg);
@@ -142,7 +139,6 @@ function wireLoginPage() {
     facebookBtn.dataset.joronWired = "1";
     facebookBtn.onclick = () => loginWithProvider(facebookProvider, "Facebook", msg);
   }
-
   if (form && !form.dataset.joronIdentifierWired) {
     form.dataset.joronIdentifierWired = "1";
     form.addEventListener("submit", async event => {
@@ -164,7 +160,6 @@ function wireLoginPage() {
       }
     });
   }
-
   if (forgotBtn && !forgotBtn.dataset.joronResetWired) {
     forgotBtn.dataset.joronResetWired = "1";
     forgotBtn.onclick = async () => {
@@ -180,19 +175,10 @@ function wireLoginPage() {
       }
     };
   }
-
   if (!document.getElementById("joron-auth-login-skin")) {
     const style = document.createElement("style");
     style.id = "joron-auth-login-skin";
-    style.textContent = `
-      .login-shell{border:1px solid rgba(199,154,69,.38)!important}
-      .brand span{color:#d90b62!important}
-      .brand .sub{color:#c79a45!important;letter-spacing:1.2px!important;font-size:12px!important}
-      .idbtn{background:linear-gradient(135deg,#c79a45,#d90b62)!important}
-      .email-form{border-color:rgba(199,154,69,.42)!important}
-      .email-form input:focus{border-color:#c79a45!important;box-shadow:0 0 0 3px rgba(199,154,69,.12)!important}
-      .terms a,.msg{color:#d90b62!important}
-    `;
+    style.textContent = `.login-shell{border:1px solid rgba(199,154,69,.38)!important}.brand span{color:#d90b62!important}.brand .sub{color:#c79a45!important;letter-spacing:1.2px!important;font-size:12px!important}.idbtn{background:linear-gradient(135deg,#c79a45,#d90b62)!important}.email-form{border-color:rgba(199,154,69,.42)!important}.email-form input:focus{border-color:#c79a45!important;box-shadow:0 0 0 3px rgba(199,154,69,.12)!important}.terms a,.msg{color:#d90b62!important}`;
     document.head.appendChild(style);
   }
 }
@@ -202,24 +188,4 @@ if (typeof document !== "undefined") {
   else wireLoginPage();
 }
 
-export {
-  app,
-  auth,
-  db,
-  storage,
-  onAuthStateChanged,
-  signOut,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  sendPasswordResetEmail,
-  GoogleAuthProvider,
-  FacebookAuthProvider,
-  googleProvider,
-  facebookProvider,
-  signInWithPopup,
-  updateProfile,
-  ensureUserProfile,
-  findLoginEmail,
-  persistenceReady,
-  friendlyAuthError
-};
+export { app, auth, db, storage, onAuthStateChanged, signOut, signInWithEmailAndPassword, signInWithCustomToken, createUserWithEmailAndPassword, sendPasswordResetEmail, GoogleAuthProvider, FacebookAuthProvider, googleProvider, facebookProvider, signInWithPopup, updateProfile, ensureUserProfile, findLoginEmail, persistenceReady, friendlyAuthError };

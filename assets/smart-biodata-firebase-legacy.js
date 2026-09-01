@@ -11,9 +11,8 @@ function ageFromDob(){const v=document.getElementById("dob")?.value;if(!v)return
 document.getElementById("dob")?.addEventListener("change",ageFromDob);
 function fill(d){ids.forEach(id=>{const e=document.getElementById(id);if(!e||d[id]===undefined||d[id]===null)return;if(e.type==="checkbox")e.checked=!!d[id];else e.value=d[id]});ageFromDob()}
 
-// Replace the old incomplete address selector with the working Bangladesh address engine.
-// It supplies separate Present and Permanent address chains and auto-fills postal code.
-await import("./address-fix-v21.js");
+// Load the fixed address engine after the page DOM exists.
+await import("./biodata-smart-fields.js");
 await persistenceReady;
 
 onAuthStateChanged(auth,async user=>{

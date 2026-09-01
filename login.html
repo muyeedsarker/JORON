@@ -10,99 +10,25 @@
 :root{--pink:#e81768;--gold:#c79a45;--dark:#08070a}
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;background:#08070a!important;color:#fff!important;font-family:"Hind Siliguri","Noto Sans Bengali",system-ui,sans-serif}
-body{overflow-x:hidden}
-.login-page{min-height:100vh;display:flex;justify-content:center;align-items:center;padding:0;background:radial-gradient(circle at 50% 0,#4a153f 0,transparent 38%),linear-gradient(180deg,#160d18 0,#050507 78%)}
+body{overflow-x:hidden}.login-page{min-height:100vh;display:flex;justify-content:center;align-items:center;padding:0;background:radial-gradient(circle at 50% 0,#4a153f 0,transparent 38%),linear-gradient(180deg,#160d18 0,#050507 78%)}
 .login-shell{width:min(100%,470px);min-height:100vh;background:#08070a;overflow:hidden;position:relative;box-shadow:0 0 60px rgba(232,23,104,.18)}
-.hero{height:52vh;min-height:350px;max-height:560px;position:relative!important;overflow:hidden!important;padding:0!important;background:#20151b!important;border:0!important;box-shadow:none!important}
-.hero img{width:100%!important;height:100%!important;max-width:none!important;object-fit:cover!important;object-position:center 35%!important;display:block!important;filter:saturate(1.05) contrast(1.03)!important}
-.hero:after{content:"";position:absolute;inset:25% 0 0;background:linear-gradient(180deg,transparent 0%,rgba(8,7,10,.08) 35%,#08070a 100%);z-index:1}
-.brand{position:absolute!important;z-index:3!important;left:0!important;right:0!important;bottom:18px!important;display:block!important;min-width:0!important;text-align:center!important;font-family:Georgia,"Times New Roman",serif!important;font-size:38px!important;font-weight:900!important;line-height:1!important;letter-spacing:5px!important;color:#fff!important;text-shadow:0 3px 18px #000!important}
-.brand .heart{color:var(--pink)}
-.brand .sub{display:block!important;margin:8px 0 0!important;font-family:"Hind Siliguri","Noto Sans Bengali",sans-serif!important;font-size:14px!important;line-height:1.2!important;letter-spacing:1px!important;color:#f7dfb0!important}
-.login-panel{position:relative;z-index:4;margin-top:-4px;padding:0 22px 28px;text-align:center;background:#08070a}
-.welcome{font-size:14px;color:#eee1e9;margin:0 0 15px}
-.btn{width:100%;height:50px;border:0!important;border-radius:26px!important;margin:7px 0!important;font-size:14px!important;font-weight:800!important;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 7px 18px rgba(0,0,0,.25)!important;transition:.18s}
-.btn:hover{transform:translateY(-1px)}
-.fb,.google,.idbtn{color:#fff!important}
-.fb{background:#1877f2!important;border-color:#1877f2!important}
-.google{background:#fff!important;color:#222!important;border-color:#fff!important}
-.idbtn{background:linear-gradient(135deg,#c79a45 0%,#e81768 100%)!important;border:2px solid #dfb45e!important}
-.icon{font-size:19px;font-weight:950}
-.divider{display:flex;align-items:center;gap:10px;color:#a99aa5;font-size:12px;margin:12px 0}
-.divider:before,.divider:after{content:"";height:1px;background:#3b3039;flex:1}
-.msg{min-height:20px;color:#ff719f;font-size:12px;font-weight:800}
-.email-form{display:none;text-align:left;margin-top:7px;background:#120d13;border:1px solid #3b2a34;border-radius:18px;padding:15px}
-.email-form label{display:block;font-size:12px;font-weight:800;margin:8px 0 5px;color:#eadde6}
-.email-form input{width:100%!important;height:45px!important;border:1px solid #513846!important;border-radius:12px!important;background:#09070a!important;color:#fff!important;padding:0 12px!important;outline:none}
-.email-form input:focus{border-color:var(--pink)!important;box-shadow:0 0 0 3px rgba(232,23,104,.12)!important}
-.small{height:42px!important;font-size:13px!important}
-.terms{font-size:11px;color:#aaa0a9;line-height:1.6;margin:14px 8px 0}.terms a{color:#ff477f;text-decoration:none;font-weight:800}
-.homeback{display:flex;justify-content:center;gap:16px;padding:8px 0 18px;font-size:12px}.homeback a{color:#d8c8d3;text-decoration:none}.homeback a:hover{color:#fff}
-@media(min-width:600px){.login-shell{min-height:auto;border-radius:28px;margin:22px}.login-panel{border-radius:0 0 28px 28px}}
-@media(max-width:390px){.login-panel{padding-inline:16px}.brand{font-size:34px;letter-spacing:4px}.brand .sub{font-size:13px}}
+.hero{height:52vh;min-height:350px;max-height:560px;position:relative!important;overflow:hidden!important;padding:0!important;background:#20151b!important;border:0!important;box-shadow:none!important}.hero img{width:100%!important;height:100%!important;max-width:none!important;object-fit:cover!important;object-position:center 35%!important;display:block!important;filter:saturate(1.05) contrast(1.03)!important}.hero:after{content:"";position:absolute;inset:25% 0 0;background:linear-gradient(180deg,transparent 0%,rgba(8,7,10,.08) 35%,#08070a 100%);z-index:1}.brand{position:absolute!important;z-index:3!important;left:0!important;right:0!important;bottom:18px!important;display:block!important;min-width:0!important;text-align:center!important;font-family:Georgia,"Times New Roman",serif!important;font-size:38px!important;font-weight:900!important;line-height:1!important;letter-spacing:5px!important;color:#fff!important;text-shadow:0 3px 18px #000!important}.brand .heart{color:var(--pink)}.brand .sub{display:block!important;margin:8px 0 0!important;font-family:"Hind Siliguri","Noto Sans Bengali",sans-serif!important;font-size:14px!important;line-height:1.2!important;letter-spacing:1px!important;color:#f7dfb0!important}
+.login-panel{position:relative;z-index:4;margin-top:-4px;padding:0 22px 28px;text-align:center;background:#08070a}.welcome{font-size:14px;color:#eee1e9;margin:0 0 15px}.btn{width:100%;height:50px;border:0!important;border-radius:26px!important;margin:7px 0!important;font-size:14px!important;font-weight:800!important;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 7px 18px rgba(0,0,0,.25)!important;transition:.18s}.btn:hover{transform:translateY(-1px)}.fb,.google,.idbtn,.passkey{color:#fff!important}.fb{background:#1877f2!important;border-color:#1877f2!important}.google{background:#fff!important;color:#222!important;border-color:#fff!important}.idbtn{background:linear-gradient(135deg,#c79a45 0%,#e81768 100%)!important;border:2px solid #dfb45e!important}.passkey{display:none;background:linear-gradient(135deg,#5b2cff,#e81768)!important;border:2px solid #9a7cff!important}.icon{font-size:19px;font-weight:950}.divider{display:flex;align-items:center;gap:10px;color:#a99aa5;font-size:12px;margin:12px 0}.divider:before,.divider:after{content:"";height:1px;background:#3b3039;flex:1}.msg{min-height:20px;color:#ff719f;font-size:12px;font-weight:800}.email-form{display:none;text-align:left;margin-top:7px;background:#120d13;border:1px solid #3b2a34;border-radius:18px;padding:15px}.email-form label{display:block;font-size:12px;font-weight:800;margin:8px 0 5px;color:#eadde6}.email-form input{width:100%!important;height:45px!important;border:1px solid #513846!important;border-radius:12px!important;background:#09070a!important;color:#fff!important;padding:0 12px!important;outline:none}.email-form input:focus{border-color:var(--pink)!important;box-shadow:0 0 0 3px rgba(232,23,104,.12)!important}.small{height:42px!important;font-size:13px!important}.terms{font-size:11px;color:#aaa0a9;line-height:1.6;margin:14px 8px 0}.terms a{color:#ff477f;text-decoration:none;font-weight:800}.homeback{display:flex;justify-content:center;gap:16px;padding:8px 0 18px;font-size:12px}.homeback a{color:#d8c8d3;text-decoration:none}.homeback a:hover{color:#fff}@media(min-width:600px){.login-shell{min-height:auto;border-radius:28px;margin:22px}.login-panel{border-radius:0 0 28px 28px}}@media(max-width:390px){.login-panel{padding-inline:16px}.brand{font-size:34px;letter-spacing:4px}.brand .sub{font-size:13px}}
 </style>
-<style id="joron-brand-final-v3">
-.site-header .brand,.site-header .brand>span:last-child,.brand{display:flex!important;align-items:center!important}
-.site-header .brand{gap:0!important;min-width:0!important}
-.site-header .brand-mark{display:none!important}
-.site-header .brand>span:last-child{flex-direction:column!important;align-items:center!important;justify-content:center!important;text-align:center!important;min-width:150px!important;max-width:210px!important;overflow:hidden!important}
-.site-header .brand strong{display:block!important;width:100%!important;font-size:40px!important;line-height:1!important;letter-spacing:2px!important;white-space:nowrap!important;text-align:center!important}
-.site-header .brand small{display:block!important;width:100%!important;margin-top:5px!important;font-family:"Hind Siliguri","Noto Sans Bengali",system-ui,sans-serif!important;font-size:14px!important;line-height:1.25!important;font-weight:700!important;letter-spacing:0!important;color:var(--gold-deep)!important;white-space:nowrap!important;text-align:center!important;overflow:hidden!important;text-overflow:clip!important}
-@media(max-width:650px){.site-header .brand>span:last-child{min-width:132px!important;max-width:180px!important}.site-header .brand strong{font-size:31px!important;letter-spacing:1.5px!important}.site-header .brand small{font-size:11px!important;margin-top:4px!important}}
-@media(max-width:390px){.site-header .brand>span:last-child{min-width:120px!important;max-width:165px!important}.site-header .brand strong{font-size:28px!important}.site-header .brand small{font-size:10px!important}}
-</style></head>
-<body>
-<main class="login-page">
-<section class="login-shell" aria-label="JORON Login">
-<div class="hero">
-<img src="assets/couple.png" alt="বিয়ের পোশাকে বর ও কনে" loading="eager">
-<div class="brand">J<span class="heart">♥</span>R<span class="heart">♥</span>N<span class="sub">সম্পর্ক জুড়ে দেয় জোড়ন</span></div>
-</div>
-<div class="login-panel">
-<p class="welcome">ভালোবাসার সম্পর্ককে বিয়ের বন্ধনে জুড়ে দেয় JORON</p>
-<div id="msg" class="msg" aria-live="polite"></div>
-<button class="btn fb" id="facebookBtn" type="button"><span class="icon">f</span> Continue With Facebook</button>
-<button class="btn google" id="googleBtn" type="button"><span class="icon">G</span> Continue With Google</button>
-<div class="divider">অথবা</div>
-<button class="btn idbtn" id="idLoginBtn" type="button"><span class="icon">👤</span> Login with ID / Mobile / Email</button>
-<form id="emailForm" class="email-form">
-<label for="email">📧 Member ID / Mobile / Email</label>
-<input id="email" type="text" autocomplete="username" placeholder="Member ID / মোবাইল / ইমেইল" required>
-<label for="password">🔒 Password</label>
-<input id="password" type="password" autocomplete="current-password" placeholder="আপনার পাসওয়ার্ড লিখুন" required>
-<button class="btn idbtn small" type="submit">🔐 নিরাপদে লগইন করুন</button>
-<button type="button" id="forgot" class="btn google small">পাসওয়ার্ড ভুলে গেছেন?</button>
-</form>
-<p class="terms">By logging in, you accept our <a href="terms.html">Terms of service</a> and <a href="privacy.html">privacy policy</a>.</p>
-<div class="homeback"><a href="index.html">🏠 হোম</a><a href="signup.html">নতুন সদস্য? অ্যাকাউন্ট তৈরি করুন</a></div>
-</div>
-</section>
-</main>
+<style id="joron-brand-final-v3">.site-header .brand,.site-header .brand>span:last-child,.brand{display:flex!important;align-items:center!important}.site-header .brand{gap:0!important;min-width:0!important}.site-header .brand-mark{display:none!important}.site-header .brand>span:last-child{flex-direction:column!important;align-items:center!important;justify-content:center!important;text-align:center!important;min-width:150px!important;max-width:210px!important;overflow:hidden!important}.site-header .brand strong{display:block!important;width:100%!important;font-size:40px!important;line-height:1!important;letter-spacing:2px!important;white-space:nowrap!important;text-align:center!important}.site-header .brand small{display:block!important;width:100%!important;margin-top:5px!important;font-family:"Hind Siliguri","Noto Sans Bengali",system-ui,sans-serif!important;font-size:14px!important;line-height:1.25!important;font-weight:700!important;letter-spacing:0!important;color:var(--gold-deep)!important;white-space:nowrap!important;text-align:center!important;overflow:hidden!important;text-overflow:clip!important}@media(max-width:650px){.site-header .brand>span:last-child{min-width:132px!important;max-width:180px!important}.site-header .brand strong{font-size:31px!important;letter-spacing:1.5px!important}.site-header .brand small{font-size:11px!important;margin-top:4px!important}}@media(max-width:390px){.site-header .brand>span:last-child{min-width:120px!important;max-width:165px!important}.site-header .brand strong{font-size:28px!important}.site-header .brand small{font-size:10px!important}}</style>
+</head>
+<body><main class="login-page"><section class="login-shell" aria-label="JORON Login"><div class="hero"><img src="assets/couple.png" alt="বিয়ের পোশাকে বর ও কনে" loading="eager"><div class="brand">J<span class="heart">♥</span>R<span class="heart">♥</span>N<span class="sub">সম্পর্ক জুড়ে দেয় জোড়ন</span></div></div><div class="login-panel"><p class="welcome">ভালোবাসার সম্পর্ককে বিয়ের বন্ধনে জুড়ে দেয় JORON</p><div id="msg" class="msg" aria-live="polite"></div><button class="btn passkey" id="passkeyBtn" type="button">🔐 QR Passkey দিয়ে প্রবেশ</button><button class="btn fb" id="facebookBtn" type="button"><span class="icon">f</span> Continue With Facebook</button><button class="btn google" id="googleBtn" type="button"><span class="icon">G</span> Continue With Google</button><div class="divider">অথবা</div><button class="btn idbtn" id="idLoginBtn" type="button"><span class="icon">👤</span> Login with ID / Mobile / Email</button><form id="emailForm" class="email-form"><label for="email">📧 Member ID / Mobile / Email</label><input id="email" type="text" autocomplete="username" placeholder="Member ID / মোবাইল / ইমেইল" required><label for="password">🔒 Password</label><input id="password" type="password" autocomplete="current-password" placeholder="আপনার পাসওয়ার্ড লিখুন" required><button class="btn idbtn small" type="submit">🔐 নিরাপদে লগইন করুন</button><button type="button" id="forgot" class="btn google small">পাসওয়ার্ড ভুলে গেছেন?</button></form><p class="terms">By logging in, you accept our <a href="terms.html">Terms of service</a> and <a href="privacy.html">privacy policy</a>.</p><div class="homeback"><a href="index.html">🏠 হোম</a><a href="signup.html">নতুন সদস্য? অ্যাকাউন্ট তৈরি করুন</a></div></div></section></main>
+<script src="https://unpkg.com/@simplewebauthn/browser@13.3.0/dist/bundle/index.umd.min.js"></script>
 <script type="module">
-import{auth,db,signInWithEmailAndPassword,sendPasswordResetEmail,persistenceReady,GoogleAuthProvider,FacebookAuthProvider,signInWithPopup,ensureUserProfile}from'./assets/firebase-client.js';
+import{auth,db,signInWithEmailAndPassword,sendPasswordResetEmail,persistenceReady,GoogleAuthProvider,FacebookAuthProvider,signInWithPopup,ensureUserProfile,signInWithCustomToken}from'./assets/firebase-client.js';
 import{collection,query,where,getDocs}from'https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js';
-const $=id=>document.getElementById(id),msg=$('msg'),form=$('emailForm');
-const show=t=>msg.textContent=t;
-const googleProvider=new GoogleAuthProvider();
-const facebookProvider=new FacebookAuthProvider();
-googleProvider.setCustomParameters({prompt:'select_account'});
-async function identifierToEmail(value){
- value=String(value||'').trim();
- if(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))return value.toLowerCase();
- const users=collection(db,'users');
- const m=await getDocs(query(users,where('memberId','==',value.toUpperCase())));
- if(!m.empty&&m.docs[0].data()?.email)return m.docs[0].data().email.toLowerCase();
- const p=await getDocs(query(users,where('phone','==',value)));
- if(!p.empty&&p.docs[0].data()?.email)return p.docs[0].data().email.toLowerCase();
- throw new Error('IDENTIFIER_NOT_FOUND');
-}
+const $=id=>document.getElementById(id),msg=$('msg'),form=$('emailForm');const show=t=>msg.textContent=t;const googleProvider=new GoogleAuthProvider();const facebookProvider=new FacebookAuthProvider();googleProvider.setCustomParameters({prompt:'select_account'});
+const params=new URLSearchParams(location.search);const qr=params.get('qr')==='1';const next=params.get('next');if(qr)$('passkeyBtn').style.display='flex';
+async function identifierToEmail(value){value=String(value||'').trim();if(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))return value.toLowerCase();const users=collection(db,'users');const m=await getDocs(query(users,where('memberId','==',value.toUpperCase())));if(!m.empty&&m.docs[0].data()?.email)return m.docs[0].data().email.toLowerCase();const p=await getDocs(query(users,where('phone','==',value)));if(!p.empty&&p.docs[0].data()?.email)return p.docs[0].data().email.toLowerCase();throw new Error('IDENTIFIER_NOT_FOUND')}
 function friendly(e){const c=e?.code||e?.message||'';return c==='IDENTIFIER_NOT_FOUND'?'এই Member ID/মোবাইল দিয়ে কোনো অ্যাকাউন্ট পাওয়া যায়নি।':c==='auth/invalid-credential'?'Member ID/মোবাইল/ইমেইল অথবা পাসওয়ার্ড সঠিক নয়.':c==='auth/popup-closed-by-user'?'লগইন উইন্ডো বন্ধ করা হয়েছে।':c==='auth/popup-blocked'?'ব্রাউজার popup বন্ধ করেছে। Popup অনুমতি দিন।':'লগইন সম্পন্ন করা যায়নি। আবার চেষ্টা করুন।'}
+$('passkeyBtn').onclick=async()=>{try{if(!window.SimpleWebAuthnBrowser)throw new Error('Passkey library unavailable');show('⏳ Passkey প্রস্তুত হচ্ছে...');const api='https://us-central1-joron-d7742.cloudfunctions.net';const r=await fetch(`${api}/passkeyAuthOptions`);const data=await r.json();if(!r.ok)throw new Error(data.error||'Passkey options failed');const assertion=await SimpleWebAuthnBrowser.startAuthentication({optionsJSON:data.options});const v=await fetch(`${api}/passkeyAuthVerify`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({challengeId:data.challengeId,response:assertion})});const result=await v.json();if(!v.ok||!result.customToken)throw new Error(result.error||'Passkey verification failed');await persistenceReady;await signInWithCustomToken(auth,result.customToken);show('✅ Passkey লগইন সফল হচ্ছে...');setTimeout(()=>location.href=next||'admin.html',500)}catch(e){console.error(e);show('❌ '+(e.message||'Passkey লগইন করা যায়নি।'))}};
 $('idLoginBtn').onclick=()=>{form.style.display=form.style.display==='block'?'none':'block';$('email').focus()};
-form.addEventListener('submit',async e=>{e.preventDefault();const identifier=$('email').value.trim(),password=$('password').value;if(!identifier||!password)return show('Member ID, মোবাইল/ইমেইল এবং পাসওয়ার্ড দিন');try{await persistenceReady;const email=await identifierToEmail(identifier);await signInWithEmailAndPassword(auth,email,password);show('✅ লগইন সফল হচ্ছে...');setTimeout(()=>location.href='biodata.html',500)}catch(err){console.error(err);show('❌ '+friendly(err))}});
+form.addEventListener('submit',async e=>{e.preventDefault();const identifier=$('email').value.trim(),password=$('password').value;if(!identifier||!password)return show('Member ID, মোবাইল/ইমেইল এবং পাসওয়ার্ড দিন');try{await persistenceReady;const email=await identifierToEmail(identifier);await signInWithEmailAndPassword(auth,email,password);show('✅ লগইন সফল হচ্ছে...');setTimeout(()=>location.href=next||'biodata.html',500)}catch(err){console.error(err);show('❌ '+friendly(err))}});
 $('forgot').onclick=async()=>{const identifier=$('email').value.trim();if(!identifier)return show('আগে Member ID / মোবাইল / ইমেইল লিখুন');try{const email=await identifierToEmail(identifier);await sendPasswordResetEmail(auth,email);show('✅ রিসেট লিংক ইমেইলে পাঠানো হয়েছে')}catch(err){show('❌ '+friendly(err))}};
-async function oauth(provider,label){try{await persistenceReady;show('⏳ '+label+' দিয়ে লগইন হচ্ছে...');const r=await signInWithPopup(auth,provider);await ensureUserProfile(r.user,provider===googleProvider?'google.com':'facebook.com');show('✅ লগইন সফল হচ্ছে...');setTimeout(()=>location.href='biodata.html',500)}catch(err){console.error(err);show('❌ '+friendly(err))}}
-$('googleBtn').onclick=()=>oauth(googleProvider,'Google');
-$('facebookBtn').onclick=()=>oauth(facebookProvider,'Facebook');
-</script>
-</body>
-</html>
+async function oauth(provider,label){try{await persistenceReady;show('⏳ '+label+' দিয়ে লগইন হচ্ছে...');const r=await signInWithPopup(auth,provider);await ensureUserProfile(r.user,provider===googleProvider?'google.com':'facebook.com');show('✅ লগইন সফল হচ্ছে...');setTimeout(()=>location.href=next||'biodata.html',500)}catch(err){console.error(err);show('❌ '+friendly(err))}}$('googleBtn').onclick=()=>oauth(googleProvider,'Google');$('facebookBtn').onclick=()=>oauth(facebookProvider,'Facebook');
+</script></body></html>

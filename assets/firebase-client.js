@@ -147,6 +147,7 @@ function wireLoginPage() {
     form.dataset.joronIdentifierWired = "1";
     form.addEventListener("submit", async event => {
       event.preventDefault();
+      event.stopImmediatePropagation();
       const identifier = identifierInput?.value.trim() || "";
       const password = passwordInput?.value || "";
       if (!identifier || !password) return msg.textContent = "Member ID, মোবাইল/ইমেইল এবং পাসওয়ার্ড দিন।";

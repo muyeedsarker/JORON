@@ -6,6 +6,8 @@
   const languageOptions=['বাংলা','ইংরেজি','আরবি','উর্দু','হিন্দি','বাংলা ও ইংরেজি','অন্যান্য'];
   const religionOptions=['ইসলাম','হিন্দু','খ্রিস্টান','বৌদ্ধ','অন্যান্য'];
   const educationOptions=['এসএসসি','এইচএসসি','স্নাতক','স্নাতকোত্তর','দাওরায়ে হাদিস','পিএইচডি','অন্যান্য'];
+  const heightOptions=['৪′ ৬″','৪′ ৭″','৪′ ৮″','৪′ ৯″','৪′ ১০″','৪′ ১১″','৫′ ০″','৫′ ১″','৫′ ২″','৫′ ৩″','৫′ ৪″','৫′ ৫″','৫′ ৬″','৫′ ৭″','৫′ ৮″','৫′ ৯″','৫′ ১০″','৫′ ১১″','৬′ ০″','৬′ ১″','৬′ ২″','৬′ ৩″','৬′ ৪″','৬′ ৫″','৬′ ৬″'];
+  const bloodOptions=['A+','A−','B+','B−','AB+','AB−','O+','O−'];
   const GEO='https://raw.githubusercontent.com/ifahimreza/bangladesh-geojson/master/src/data/';
   const IDS={current:{division:'division',district:'district',upazila:'upazila',post:'postOffice',code:'postalCode'},permanent:{division:'pdivision',district:'pdistrict',upazila:'pupazila',post:'ppostOffice',code:'ppostalCode'}};
 
@@ -16,6 +18,8 @@
     const language=document.getElementById('language');if(language){language.setAttribute('list','language-list');datalist('language-list',languageOptions);language.placeholder='ভাষা লিখুন'}
     makeSelect(document.getElementById('religion'),religionOptions,'ধর্ম নির্বাচন করুন');
     const education=document.getElementById('education');if(education){education.setAttribute('list','education-list');datalist('education-list',educationOptions);education.placeholder='সর্বোচ্চ যোগ্যতা লিখুন'}
+    makeSelect(document.getElementById('height'),heightOptions,'উচ্চতা নির্বাচন করুন');
+    makeSelect(document.getElementById('bloodGroup'),bloodOptions,'রক্তের গ্রুপ নির্বাচন করুন');
   }
   function setOptions(el,items,placeholder,label,value){if(!el)return;el.innerHTML=`<option value="">${placeholder}</option>`;items.forEach(x=>{const o=document.createElement('option');o.value=value(x);o.textContent=label(x);el.appendChild(o)})}
   async function loadGeo(){

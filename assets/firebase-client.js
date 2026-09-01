@@ -13,7 +13,7 @@ import {
   setPersistence,
   browserLocalPersistence
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, serverTimestamp, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 import { getStorage } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-storage.js";
 import { firebaseConfig } from "./firebase-config.js";
 
@@ -28,14 +28,27 @@ googleProvider.setCustomParameters({ prompt: "select_account" });
 
 const persistenceReady = setPersistence(auth, browserLocalPersistence);
 
+function createMemberId(uid) {
+  return `JRN-${String(uid).replace(/[^a-zA-Z0-9]/g, "").slice(0, 10).toUpperCase()}`;
+}
+
 async function ensureUserProfile(user, provider = null, extra = {}) {
   if (!user) throw new Error("ইউজার পাওয়া যায়নি");
   const ref = doc(db, "users", user.uid);
   const snap = await getDoc(ref);
-  if (snap.exists()) return snap.data();
+  if (snap.exists()) {
+    const existing = snap.data();
+    if (!existing.memberId) {
+      const memberId = createMemberId(user.uid);
+      await updateDoc(ref, { memberId });
+      return { ...existing, memberId };
+    }
+    return existing;
+  }
 
   const data = {
     uid: user.uid,
+    memberId: createMemberId(user.uid),
     name: user.displayName || extra.name || "",
     email: user.email || extra.email || "",
     phone: user.phoneNumber || extra.phone || "",
@@ -48,18 +61,40 @@ async function ensureUserProfile(user, provider = null, extra = {}) {
   return data;
 }
 
+async function findLoginEmail(identifier) {
+  const value = String(identifier || "").trim();
+  if (!value) throw new Error("LOGIN_IDENTIFIER_REQUIRED");
+  if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return value.toLowerCase();
+
+  const users = collection(db, "users");
+  const memberSnap = await getDocs(query(users, where("memberId", "==", value.toUpperCase())));
+  if (!memberSnap.empty) {
+    const email = memberSnap.docs[0].data()?.email;
+    if (email) return email.toLowerCase();
+  }
+
+  const phoneSnap = await getDocs(query(users, where("phone", "==", value)));
+  if (!phoneSnap.empty) {
+    const email = phoneSnap.docs[0].data()?.email;
+    if (email) return email.toLowerCase();
+  }
+  throw new Error("LOGIN_IDENTIFIER_NOT_FOUND");
+}
+
 function friendlyAuthError(error) {
-  const code = error?.code || "";
+  const code = error?.code || error?.message || "";
   const map = {
     "auth/email-already-in-use": "এই ইমেইল দিয়ে ইতিমধ্যে অ্যাকাউন্ট আছে।",
     "auth/invalid-email": "ইমেইল ঠিকানাটি সঠিক নয়।",
     "auth/weak-password": "পাসওয়ার্ড আরও শক্তিশালী দিন (কমপক্ষে ৬ অক্ষর)।",
-    "auth/invalid-credential": "ইমেইল অথবা পাসওয়ার্ড সঠিক নয়।",
+    "auth/invalid-credential": "ইমেইল, Member ID/মোবাইল অথবা পাসওয়ার্ড সঠিক নয়।",
     "auth/popup-closed-by-user": "লগইন উইন্ডো বন্ধ করা হয়েছে।",
     "auth/popup-blocked": "ব্রাউজার popup বন্ধ করেছে। Popup অনুমতি দিন।",
     "auth/account-exists-with-different-credential": "এই ইমেইলে অন্য একটি লগইন পদ্ধতির অ্যাকাউন্ট আছে।",
     "auth/operation-not-allowed": "Firebase Console-এ এই Login Provider চালু করা হয়নি।",
-    "auth/unauthorized-domain": "এই ওয়েবসাইটের domain Firebase Authentication-এ অনুমোদিত নয়।"
+    "auth/unauthorized-domain": "এই ওয়েবসাইটের domain Firebase Authentication-এ অনুমোদিত নয়।",
+    "LOGIN_IDENTIFIER_REQUIRED": "Member ID, মোবাইল অথবা ইমেইল দিন।",
+    "LOGIN_IDENTIFIER_NOT_FOUND": "এই Member ID/মোবাইল দিয়ে কোনো অ্যাকাউন্ট পাওয়া যায়নি।"
   };
   return map[code] || "লগইন সম্পন্ন করা যায়নি। আবার চেষ্টা করুন।";
 }
@@ -135,6 +170,7 @@ export {
   signInWithPopup,
   updateProfile,
   ensureUserProfile,
+  findLoginEmail,
   persistenceReady,
   friendlyAuthError
 };

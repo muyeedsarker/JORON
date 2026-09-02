@@ -59,10 +59,8 @@ exports.passkeyAuthVerify = onRequest(async (req, res) => {
 });
 exports.passkeyHealth = onRequest((req, res) => { cors(req, res); return res.json({ ok: true, service: "JORON Passkey", rpId: RP_ID }); });
 
-// Secure Member ID / Mobile login and password reset without exposing /users to clients.
 Object.assign(module.exports, require("./identifier-auth"));
 
-// Admin payment review. Admin SDK writes bypass client Firestore rules.
 exports.adminListPendingPayments = onRequest(async (req, res) => {
   cors(req, res); if (req.method === "OPTIONS") return res.status(204).send(""); if (req.method !== "GET") return jsonError(res, 405, "GET required");
   const admin = await requireAdmin(req, res); if (!admin) return;
@@ -73,9 +71,28 @@ exports.adminReviewPayment = onRequest(async (req, res) => {
   cors(req, res); if (req.method === "OPTIONS") return res.status(204).send(""); if (req.method !== "POST") return jsonError(res, 405, "POST required");
   const admin = await requireAdmin(req, res); if (!admin) return;
   const { uid, action } = req.body || {}; if (!uid || typeof uid !== "string") return jsonError(res, 400, "Missing uid"); if (!['approve','reject'].includes(action)) return jsonError(res, 400, "Invalid action");
-  try { const paymentRef = db.collection("payments").doc(uid); const paymentSnap = await paymentRef.get(); if (!paymentSnap.exists) return jsonError(res, 404, "Payment not found"); if (paymentSnap.data().paymentStatus !== "pending") return jsonError(res, 409, "Payment already reviewed");
-    if (action === "approve") { await paymentRef.update({ paymentStatus: "approved", membershipStatus: "active", reviewedAt: FieldValue.serverTimestamp(), reviewedBy: admin.uid }); await db.collection("users").doc(uid).set({ paymentStatus: "paid", membershipStatus: "active", updatedAt: FieldValue.serverTimestamp() }, { merge: true }); }
-    else { await paymentRef.update({ paymentStatus: "rejected", reviewedAt: FieldValue.serverTimestamp(), reviewedBy: admin.uid }); await db.collection("users").doc(uid).set({ paymentStatus: "rejected", membershipStatus: "pending", updatedAt: FieldValue.serverTimestamp() }, { merge: true }); }
-    return res.json({ ok: true, uid, action });
-  } catch (error) { console.error("adminReviewPayment failed", error); return jsonError(res, 500, "Could not review payment"); }
+  try {
+    const paymentRef = db.collection("payments").doc(uid);
+    const userRef = db.collection("users").doc(uid);
+    const result = await db.runTransaction(async (tx) => {
+      const paymentSnap = await tx.get(paymentRef);
+      if (!paymentSnap.exists) { const error = new Error("Payment not found"); error.code = "NOT_FOUND"; throw error; }
+      const payment = paymentSnap.data();
+      if (payment.paymentStatus !== "pending") { const error = new Error("Payment already reviewed"); error.code = "ALREADY_REVIEWED"; throw error; }
+      const reviewedAt = FieldValue.serverTimestamp();
+      if (action === "approve") {
+        tx.update(paymentRef, { paymentStatus: "approved", membershipStatus: "active", reviewedAt, reviewedBy: admin.uid });
+        tx.set(userRef, { paymentStatus: "paid", membershipStatus: "active", updatedAt: reviewedAt }, { merge: true });
+      } else {
+        tx.update(paymentRef, { paymentStatus: "rejected", reviewedAt, reviewedBy: admin.uid });
+        tx.set(userRef, { paymentStatus: "rejected", membershipStatus: "pending", updatedAt: reviewedAt }, { merge: true });
+      }
+      return { uid, action };
+    });
+    return res.json({ ok: true, ...result });
+  } catch (error) {
+    if (error.code === "NOT_FOUND") return jsonError(res, 404, "Payment not found");
+    if (error.code === "ALREADY_REVIEWED") return jsonError(res, 409, "Payment already reviewed");
+    console.error("adminReviewPayment failed", error); return jsonError(res, 500, "Could not review payment");
+  }
 });

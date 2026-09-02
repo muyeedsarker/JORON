@@ -27,7 +27,7 @@ export function calculateMatchScore(me,candidate){
   return available?Math.round(earned/available*100):0;
 }
 function genderCompatible(me,candidate){const wanted=clean(me.partnerGender);if(wanted)return !clean(candidate.gender)||clean(candidate.gender)===wanted;return !clean(me.gender)||!clean(candidate.gender)||clean(me.gender)!==clean(candidate.gender);}
-function preferenceCompatible(me,candidate){
+export function preferenceCompatible(me,candidate){
  const wantedGender=clean(me.partnerGender);if(wantedGender&&clean(candidate.gender)&&clean(candidate.gender)!==wantedGender)return false;
  const wantedReligion=clean(me.partnerReligion||me.religionPreference);if(wantedReligion&&clean(candidate.religion)&&!textMatch(wantedReligion,candidate.religion))return false;
  const wantedCommunity=clean(me.partnerCommunity);if(wantedCommunity&&clean(candidate.community)&&!textMatch(wantedCommunity,candidate.community))return false;
@@ -39,7 +39,6 @@ function preferenceCompatible(me,candidate){
 
 export async function findMatches(currentUid,myProfile){
   if(!currentUid)throw new Error("Authentication required");
-  // Fetch the full public set before local filtering so an early query limit cannot hide a compatible profile.
   const snapshot=await getDocs(query(collection(db,"publicProfiles"),where("visibility","==","public")));
   return snapshot.docs.filter(item=>item.id!==currentUid).map(item=>{const profile=item.data()||{};return{
     id:item.id,score:calculateMatchScore(myProfile,profile),compatible:preferenceCompatible(myProfile,profile),

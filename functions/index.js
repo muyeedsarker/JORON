@@ -15,6 +15,7 @@ initializeApp();
 const db = getFirestore();
 const auth = getAuth();
 const ADMIN_UID = "PcDehBv4dYezeIPA6h0Peo9lpih2";
+const PLAN_PRICES = { Basic: 99, Standard: 199, Premium: 399, "Premium Plus": 599 };
 const RP_NAME = "JORON — জোড়ন";
 const RP_ID = "muyeedsarker.github.io";
 const ORIGIN = "https://muyeedsarker.github.io";
@@ -70,7 +71,7 @@ exports.adminListPendingPayments = onRequest(async (req, res) => {
 exports.adminReviewPayment = onRequest(async (req, res) => {
   cors(req, res); if (req.method === "OPTIONS") return res.status(204).send(""); if (req.method !== "POST") return jsonError(res, 405, "POST required");
   const admin = await requireAdmin(req, res); if (!admin) return;
-  const { uid, action } = req.body || {}; if (!uid || typeof uid !== "string") return jsonError(res, 400, "Missing uid"); if (!['approve','reject'].includes(action)) return jsonError(res, 400, "Invalid action");
+  const { uid, action } = req.body || {}; if (!uid || typeof uid !== "string") return jsonError(res, 400, "Missing uid"); if (!["approve","reject"].includes(action)) return jsonError(res, 400, "Invalid action");
   try {
     const paymentRef = db.collection("payments").doc(uid);
     const userRef = db.collection("users").doc(uid);
@@ -79,6 +80,8 @@ exports.adminReviewPayment = onRequest(async (req, res) => {
       if (!paymentSnap.exists) { const error = new Error("Payment not found"); error.code = "NOT_FOUND"; throw error; }
       const payment = paymentSnap.data();
       if (payment.paymentStatus !== "pending") { const error = new Error("Payment already reviewed"); error.code = "ALREADY_REVIEWED"; throw error; }
+      const expectedPrice = PLAN_PRICES[payment.selectedPlan];
+      if (!expectedPrice || Number(payment.membershipPrice) !== expectedPrice) { const error = new Error("Invalid payment plan or amount"); error.code = "INVALID_PAYMENT_DATA"; throw error; }
       const reviewedAt = FieldValue.serverTimestamp();
       if (action === "approve") {
         tx.update(paymentRef, { paymentStatus: "approved", membershipStatus: "active", reviewedAt, reviewedBy: admin.uid });
@@ -93,6 +96,7 @@ exports.adminReviewPayment = onRequest(async (req, res) => {
   } catch (error) {
     if (error.code === "NOT_FOUND") return jsonError(res, 404, "Payment not found");
     if (error.code === "ALREADY_REVIEWED") return jsonError(res, 409, "Payment already reviewed");
+    if (error.code === "INVALID_PAYMENT_DATA") return jsonError(res, 400, "Payment plan or amount is invalid");
     console.error("adminReviewPayment failed", error); return jsonError(res, 500, "Could not review payment");
   }
 });

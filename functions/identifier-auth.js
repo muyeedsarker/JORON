@@ -1,7 +1,8 @@
 const { getApps, initializeApp } = require("firebase-admin/app");
-const { getFirestore } = require("firebase-admin/firestore");
+const { getFirestore, FieldValue } = require("firebase-admin/firestore");
 const { getAuth } = require("firebase-admin/auth");
 const { onRequest } = require("firebase-functions/https");
+const crypto = require("crypto");
 
 if (!getApps().length) initializeApp();
 const db = getFirestore();
@@ -11,6 +12,10 @@ const WEB_API_KEY = "AIzaSyDWxxu3zwThJp1fuWMhXiRig3Fswt0QARA";
 const IDENTITY_TOOLKIT = "https://identitytoolkit.googleapis.com/v1";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_RE = /^01[0-9]{9}$/;
+const LOGIN_WINDOW_MS = 10 * 60 * 1000;
+const LOGIN_MAX_FAILURES = 5;
+const LOGIN_LOCK_MS = 15 * 60 * 1000;
+const LOGIN_RATE_LIMITS = "authRateLimits";
 
 function cors(req, res) {
   const origin = req.get("origin") || "";
@@ -24,6 +29,47 @@ function cors(req, res) {
 
 function genericAuthError(res) {
   return res.status(401).json({ ok: false, error: "INVALID_CREDENTIALS" });
+}
+
+function hashRateKey(identifier, req) {
+  const value = String(identifier || "").trim().toLowerCase();
+  const forwarded = String(req.get("x-forwarded-for") || "").split(",")[0].trim();
+  const ip = forwarded || String(req.ip || "unknown");
+  return crypto.createHash("sha256").update(`${value}|${ip}`).digest("hex");
+}
+
+async function checkLoginRateLimit(key) {
+  const ref = db.collection(LOGIN_RATE_LIMITS).doc(key);
+  const snap = await ref.get();
+  if (!snap.exists) return { blocked: false, ref };
+  const data = snap.data() || {};
+  const now = Date.now();
+  const updatedAt = Number(data.updatedAtMs || 0);
+  const lockedUntil = Number(data.lockedUntilMs || 0);
+  if (lockedUntil > now) return { blocked: true, ref };
+  if (!updatedAt || now - updatedAt > LOGIN_WINDOW_MS) return { blocked: false, ref };
+  return { blocked: false, ref };
+}
+
+async function recordLoginFailure(key) {
+  const ref = db.collection(LOGIN_RATE_LIMITS).doc(key);
+  await db.runTransaction(async (tx) => {
+    const snap = await tx.get(ref);
+    const now = Date.now();
+    const old = snap.exists ? snap.data() || {} : {};
+    const updatedAt = Number(old.updatedAtMs || 0);
+    const failures = updatedAt && now - updatedAt <= LOGIN_WINDOW_MS ? Number(old.failures || 0) : 0;
+    const nextFailures = failures + 1;
+    tx.set(ref, {
+      failures: nextFailures,
+      updatedAtMs: now,
+      lockedUntilMs: nextFailures >= LOGIN_MAX_FAILURES ? now + LOGIN_LOCK_MS : 0,
+    }, { merge: true });
+  });
+}
+
+async function clearLoginFailures(key) {
+  await db.collection(LOGIN_RATE_LIMITS).doc(key).delete();
 }
 
 async function resolveEmail(identifier) {
@@ -60,13 +106,19 @@ exports.loginWithIdentifier = onRequest(async (req, res) => {
 
   const { identifier, password } = req.body || {};
   if (!identifier || !password) return genericAuthError(res);
+  const rateKey = hashRateKey(identifier, req);
 
   try {
+    const rate = await checkLoginRateLimit(rateKey);
+    if (rate.blocked) return genericAuthError(res);
+
     const email = await resolveEmail(identifier);
     const result = await signInWithPassword(email, password);
+    await clearLoginFailures(rateKey);
     const customToken = await adminAuth.createCustomToken(result.localId);
     return res.json({ ok: true, customToken });
   } catch (error) {
+    try { await recordLoginFailure(rateKey); } catch (rateError) { console.error("JORON login rate-limit update failed:", rateError.message); }
     console.error("JORON identifier login failed:", error.message);
     return genericAuthError(res);
   }

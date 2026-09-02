@@ -39,6 +39,41 @@
     up.addEventListener('change',()=>{const rows=postsFor(dist.value,up.value);setOptions(post,rows,'পোস্ট অফিস নির্বাচন করুন',x=>x.postOffice,x=>x.postOffice);post.disabled=!rows.length;code.value='';code.placeholder=rows.length?'Postal Code অটো পূরণ হবে':'Postal Code লিখুন'});
     post.addEventListener('change',()=>{const row=data.postcodes.find(x=>String(x.district_id)===String(dist.value)&&String(x.postOffice).trim()===String(post.value).trim()&&String(x.upazila).trim()===String(up.value).trim())||data.postcodes.find(x=>String(x.district_id)===String(dist.value)&&String(x.postOffice).trim()===String(post.value).trim());if(row)code.value=row.postCode||''});
   }
-  async function start(){enhance();try{const data=await loadGeo();initAddress(IDS.current,data);initAddress(IDS.permanent,data);window.JORON_GEO_DATA=data;document.dispatchEvent(new CustomEvent('joron-address-ready'))}catch(e){console.error('JORON address data failed',e)}}
+
+  function ensureHidden(id,value){
+    if(value===undefined||value===null||value==='')return;
+    const form=document.getElementById('form');if(!form)return;
+    let e=document.getElementById(id);if(!e){e=document.createElement('input');e.type='hidden';e.id=id;e.name=id;form.appendChild(e)}
+    e.value=String(value);
+  }
+
+  function syncOnboarding(data){
+    try{
+      const raw=localStorage.getItem('joronOnboarding');if(!raw)return;
+      const o=JSON.parse(raw)||{};
+      const names={bn:'বাংলা',en:'ইংরেজি',hi:'হিন্দি',ur:'উর্দু',ar:'আরবি',ms:'মালয়',it:'ইতালীয়',de:'জার্মান',fr:'ফরাসি',ja:'জাপানি',ko:'কোরিয়ান'};
+      const countryNames={BD:'বাংলাদেশি',IN:'ভারতীয়',PK:'পাকিস্তানি',SA:'সৌদি আরবের',AE:'সংযুক্ত আরব আমিরাতের',MY:'মালয়েশীয়',SG:'সিঙ্গাপুরের',GB:'ব্রিটিশ',US:'আমেরিকান',CA:'কানাডিয়ান',AU:'অস্ট্রেলিয়ান',IT:'ইতালীয়',DE:'জার্মান',FR:'ফরাসি',JP:'জাপানি',KR:'দক্ষিণ কোরীয়',QA:'কাতারি',KW:'কুয়েতি',OM:'ওমানি'};
+      const setIfBlank=(id,value)=>{const e=document.getElementById(id);if(e&&value!==undefined&&value!==null&&value!==''&&!e.value)e.value=String(value)};
+      setIfBlank('gender',o.gender);
+      setIfBlank('marital',o.marital);
+      setIfBlank('religion',o.religion);
+      setIfBlank('language',names[o.language]||o.language);
+      setIfBlank('nationality',countryNames[o.country]);
+      ensureHidden('country',o.country);ensureHidden('profileFor',o.profileFor);ensureHidden('community',o.community);ensureHidden('partnerGender',o.partnerGender||(o.gender==='পুরুষ'?'নারী':o.gender==='নারী'?'পুরুষ':''));
+      ensureHidden('motherTongue',names[o.motherTongue]||o.motherTongue);
+      const d=document.getElementById('division'),dist=document.getElementById('district');
+      if(d&&!d.value&&o.division){const match=data.divisions.find(x=>(x.bn_name||x.name)===o.division);if(match){d.value=match.id;d.dispatchEvent(new Event('change',{bubbles:true}));setTimeout(()=>{if(dist&&!dist.value&&o.district){const row=data.districts.find(x=>String(x.division_id)===String(match.id)&&(x.bn_name||x.name)===o.district);if(row){dist.value=row.id;dist.dispatchEvent(new Event('change',{bubbles:true}))}}},50)}}
+    }catch(e){console.warn('JORON onboarding sync',e)}
+  }
+
+  async function start(){
+    enhance();
+    try{
+      const data=await loadGeo();
+      initAddress(IDS.current,data);initAddress(IDS.permanent,data);window.JORON_GEO_DATA=data;
+      syncOnboarding(data);
+      document.dispatchEvent(new CustomEvent('joron-address-ready'));
+    }catch(e){console.error('JORON address data failed',e)}
+  }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
 })();

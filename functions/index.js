@@ -247,3 +247,6 @@ exports.passkeyHealth = onRequest((req, res) => {
   cors(req, res);
   return res.json({ ok: true, service: "JORON Passkey", rpId: RP_ID });
 });
+
+// STEP 1: secure Member ID / Mobile login and password reset without exposing /users to clients.
+Object.assign(module.exports, require("./identifier-auth"));

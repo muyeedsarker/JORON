@@ -1,5 +1,5 @@
 // JORON Smart Biodata — personal field helpers
-// Fixes automatic age calculation and converts height/blood/practice to easy-select fields.
+// Automatic age calculation + controlled height/blood/practice selects.
 (()=>{
   'use strict';
   const ready=()=>{
@@ -7,16 +7,18 @@
     const age=document.getElementById('age');
 
     function calcAge(){
-      if(!dob || !age || !dob.value){ if(age) age.value=''; return; }
+      if(!dob || !age || !dob.value){ if(age){ age.value=''; age.readOnly=true; } return; }
       const birth=new Date(`${dob.value}T00:00:00`);
-      if(Number.isNaN(birth.getTime())){ age.value=''; return; }
+      if(Number.isNaN(birth.getTime())){ age.value=''; age.readOnly=true; return; }
       const today=new Date();
       let years=today.getFullYear()-birth.getFullYear();
       const birthdayPassed=(today.getMonth()>birth.getMonth()) ||
         (today.getMonth()===birth.getMonth() && today.getDate()>=birth.getDate());
       if(!birthdayPassed) years--;
       age.value=(years>=0 && years<=120)?String(years):'';
+      age.readOnly=true;
     }
+    if(age) age.readOnly=true;
     if(dob){ dob.addEventListener('input',calcAge); dob.addEventListener('change',calcAge); calcAge(); }
 
     const replaceWithSelect=(id, options, placeholder)=>{

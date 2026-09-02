@@ -11,6 +11,26 @@ function ageFromDob(){const v=document.getElementById("dob")?.value;if(!v)return
 document.getElementById("dob")?.addEventListener("change",ageFromDob);
 function fill(d){ids.forEach(id=>{const e=document.getElementById(id);if(!e||d[id]===undefined||d[id]===null)return;if(e.type==="checkbox")e.checked=!!d[id];else e.value=d[id]});ageFromDob()}
 
+// Guided onboarding → Smart Biodata bridge.
+// Existing Firebase biodata remains authoritative; onboarding only fills blank fields.
+function applyOnboarding(){
+ try{
+  const raw=localStorage.getItem("joronOnboarding");
+  if(!raw)return;
+  const o=JSON.parse(raw)||{};
+  const map={gender:o.gender,marital:o.marital,education:o.education,religion:o.religion,division:o.division,district:o.district,language:o.language};
+  const countryNames={BD:"বাংলাদেশি",IN:"ভারতীয়",PK:"পাকিস্তানি",SA:"সৌদি আরবের",AE:"সংযুক্ত আরব আমিরাতের",MY:"মালয়েশীয়",SG:"সিঙ্গাপুরের",GB:"ব্রিটিশ",US:"আমেরিকান",CA:"কানাডিয়ান",AU:"অস্ট্রেলিয়ান",IT:"ইতালীয়",DE:"জার্মান",FR:"ফরাসি",JP:"জাপানি",KR:"দক্ষিণ কোরীয়",QA:"কাতারি",KW:"কুয়েতি",OM:"ওমানি",OTHER:""};
+  if(o.country&&countryNames[o.country])map.nationality=countryNames[o.country];
+  Object.entries(map).forEach(([id,val])=>{if(val!==undefined&&val!==null&&String(val)!===""){const e=document.getElementById(id);if(e&&!e.value)e.value=String(val)}});
+  if(o.community&&!document.getElementById("community")){
+   const hidden=document.createElement("input");hidden.type="hidden";hidden.id="community";hidden.name="community";hidden.value=o.community;form?.appendChild(hidden);
+  }
+  const hiddenKeys={country:o.country,profileFor:o.profileFor,community:o.community};
+  Object.entries(hiddenKeys).forEach(([id,val])=>{if(!val)return;let e=document.getElementById(id);if(!e){e=document.createElement("input");e.type="hidden";e.id=id;e.name=id;form?.appendChild(e)}e.value=String(val)});
+ }catch(e){console.warn("JORON onboarding bridge",e)}
+}
+applyOnboarding();
+
 // Load the fixed address engine after the page DOM exists.
 await import("./biodata-smart-fields.js");
 await persistenceReady;
@@ -25,11 +45,13 @@ form?.addEventListener("submit",async e=>{
  if(!form.checkValidity()){form.reportValidity();return}
  const user=auth.currentUser;
  if(!user){location.replace("login.html?next=smart-biodata.html");return}
- const data=collect();data.uid=user.uid;data.email=user.email||"";data.updatedAt=serverTimestamp();
+ const data=collect();
+ ["country","profileFor","community"].forEach(id=>{const v=valueOf(id);if(v)data[id]=v});
+ data.uid=user.uid;data.email=user.email||"";data.updatedAt=serverTimestamp();
  try{
   await setDoc(doc(db,"privateBiodata",user.uid),data,{merge:true});
   await setDoc(doc(db,"biodata",user.uid),{...project(data),uid:user.uid,updatedAt:serverTimestamp()},{merge:true});
   if(notice){notice.textContent="❤️ আপনার Smart Biodata Firebase-এ নিরাপদভাবে সংরক্ষিত হয়েছে।";notice.style.display="block"}
-  alert("Smart Biodata সফলভাবে সংরক্ষিত হয়েছে।");
+  alert("Smart Biodata সফলভাবে সংরক্ষণ হয়েছে।");
  }catch(err){console.error("JORON Smart Biodata save failed",err);alert("তথ্য সংরক্ষণ করা যায়নি। Firebase/নেটওয়ার্ক সংযোগ পরীক্ষা করুন।")}
 },true);

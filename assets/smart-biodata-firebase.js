@@ -9,7 +9,7 @@ import { auth, db, onAuthStateChanged, persistenceReady } from "./firebase-clien
 const form = document.getElementById("form");
 const notice = document.getElementById("notice");
 const IDS = ["name","nickname","dob","age","gender","height","blood","marital","nationality","language","religion","practice","division","district","upazila","postOffice","postalCode","area","pdistrict","pdivision","pupazila","ppostOffice","ppostalCode","parea","addressPrivacy","eduSystem","education","eduHighest","eduDegree","eduInstitution","eduSubject","eduYear","eduResult","trainingName","trainingInstitution","trainingSubject","trainingDuration","trainingCertificate","profession","professionType","workplace","designation","workAddress","monthlyIncome","incomePrivacy","experience","currentlyEmployed","workDetails","fatherName","fatherProfession","motherName","motherProfession","siblingsBrothers","siblingsSisters","familyType","childCount","familyValues","familyDescription","smoking","personality","about","prefAge","prefDistrict","top3","photoUrl","visibility"];
-const PUBLIC_IDS = ["name","nickname","age","gender","height","marital","division","district","upazila","postOffice","postalCode","eduSystem","education","eduHighest","eduDegree","eduInstitution","eduSubject","eduYear","eduResult","trainingName","trainingInstitution","trainingSubject","trainingDuration","trainingCertificate","profession","professionType","workplace","designation","experience","currentlyEmployed","familyType","childCount","personality","about","prefAge","prefDistrict","top3","photoUrl","visibility"];
+const PUBLIC_IDS = ["name","nickname","age","gender","height","marital","division","district","upazila","postOffice","postalCode","religion","eduSystem","education","eduHighest","eduDegree","eduInstitution","eduSubject","eduYear","eduResult","profession","professionType","workplace","designation","experience","currentlyEmployed","familyType","childCount","personality","about","prefAge","prefDistrict","top3","photoUrl","visibility"];
 
 const collect = () => Object.fromEntries(IDS.map(id => [id, document.getElementById(id)?.value ?? ""]));
 const localData = () => { try { return JSON.parse(localStorage.getItem("joronSmartBiodata") || "{}"); } catch { return {}; } };
@@ -17,16 +17,20 @@ const show = (msg, ok=true) => { if (!notice) return; notice.textContent=msg; no
 const saveLocal = data => localStorage.setItem("joronSmartBiodata", JSON.stringify({...data,savedAt:new Date().toISOString()}));
 const fill = data => { IDS.forEach(id=>{const el=document.getElementById(id); if(el && data[id]!==undefined && data[id]!==null) el.value=data[id];}); document.getElementById("dob")?.dispatchEvent(new Event("change")); };
 
-// Keep the original fields while also publishing the names expected by Profile.
-const publicProjection = data => ({
-  ...Object.fromEntries(PUBLIC_IDS.filter(id=>data[id]!==undefined).map(id=>[id,data[id]])),
+// /biodata is restricted by Firestore rules to the approved publicBiodataKeys only.
+const publicProjection = data => Object.fromEntries(
+  PUBLIC_IDS.filter(id=>data[id]!==undefined).map(id=>[id,data[id]])
+);
+
+// /publicProfiles is the profile-facing public projection. Keep aliases used by profile.html.
+const profileProjection = data => ({
+  ...publicProjection(data),
   educationSystem: data.eduSystem || data.education || "",
   institution: data.eduInstitution || "",
-  subject: data.eduSubject || data.subject || "",
+  subject: data.eduSubject || "",
   passingYear: data.eduYear || "",
   result: data.eduResult || "",
   partner: data.top3 || "",
-  photoUrl: data.photoUrl || "",
   profileCompleted: true
 });
 
@@ -45,6 +49,7 @@ async function save(){
   const user=auth.currentUser;
   if(!user){ show("💾 Draft সংরক্ষিত হয়েছে। Smart Biodata-এর জন্য আগে Login করুন।"); return; }
   try {
+    // Full biodata remains owner-only.
     await setDoc(doc(db,"privateBiodata",user.uid),{
       ...data,
       uid:user.uid,
@@ -53,8 +58,16 @@ async function save(){
       updatedAt:serverTimestamp()
     },{merge:true});
 
+    // Keep the legacy public biodata projection compatible with firestore.rules.
     await setDoc(doc(db,"biodata",user.uid),{
       ...publicProjection(data),
+      uid:user.uid,
+      updatedAt:serverTimestamp()
+    },{merge:true});
+
+    // Profile page reads /publicProfiles, so publish the same privacy-safe projection there.
+    await setDoc(doc(db,"publicProfiles",user.uid),{
+      ...profileProjection(data),
       uid:user.uid,
       updatedAt:serverTimestamp()
     },{merge:true});

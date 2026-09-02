@@ -1,0 +1,39 @@
+name: Apply JORON Matrimony Branding
+
+on:
+  push:
+    paths:
+      - '.github/workflows/apply-joron-matrimony-brand.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  brand:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Apply user-facing brand
+        shell: bash
+        run: |
+          set -e
+          changed=0
+          while IFS= read -r -d '' file; do
+            before=$(sha256sum "$file" | cut -d' ' -f1)
+            perl -0pi -e 's#(<title>\s*)JORON(?=\s*[|—-])#$1JORON Matrimony#g; s#(<meta\s+name=["'"'"']description["'"'"']\s+content=["'"'"'][^"'"'"']*)JORON\s*—#$1JORON Matrimony —#gi; s#(>\s*)JORON(\s*<)#${1}JORON Matrimony$2#g; s#(>\s*)JORON\s*(?:—|\|)([^<]*<)#$1JORON Matrimony —$2#g; s#(alt=["'"'"'])JORON(\s+)#$1JORON Matrimony$2#g' "$file"
+            after=$(sha256sum "$file" | cut -d' ' -f1)
+            if [ "$before" != "$after" ]; then changed=1; fi
+          done < <(find . -type f -name '*.html' -not -path './node_modules/*' -print0)
+
+          if [ "$changed" -eq 1 ]; then
+            git config user.name 'JORON Matrimony Bot'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add -- '*.html'
+            git commit -m 'Apply JORON Matrimony branding across pages'
+            git push
+          else
+            echo 'No branding changes were necessary.'
+          fi

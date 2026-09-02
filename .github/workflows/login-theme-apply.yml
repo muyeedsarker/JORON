@@ -1,0 +1,41 @@
+name: Apply Login Theme
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  apply:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply theme
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('login.html')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace('background:#08070a!important;color:#fff!important','background:linear-gradient(180deg,#fffaf1 0%,#f6ead8 100%)!important;color:#35251f!important')
+          s=s.replace('background:#08070a}.login-shell','background:linear-gradient(180deg,#fffaf1 0%,#f6ead8 100%)}.login-shell')
+          s=s.replace('background:#08070a;overflow:hidden;position:relative;box-shadow:0 0 60px rgba(232,23,104,.18)','background:#fffaf1;overflow:hidden;position:relative;box-shadow:0 8px 35px rgba(99,63,32,.18)')
+          s=s.replace('background:#08070a}.welcome','background:linear-gradient(180deg,#fffaf1 0%,#fffdf8 100%);border-top:1px solid rgba(197,138,43,.18)}.welcome')
+          s=s.replace('color:#eee1e9;margin:0 0 15px','color:#5b4034;font-weight:800;margin:0 0 15px;line-height:1.55')
+          s=s.replace('color:#a99aa5;font-size:12px','color:#8b6b50;font-size:13px;font-weight:800')
+          s=s.replace('background:#3b3039;flex:1','background:#d9c5a7;flex:1')
+          s=s.replace('color:#aaa0a9;line-height:1.6','color:#705c51;line-height:1.6')
+          s=s.replace('color:#d8c8d3;text-decoration:none','color:#6f5547;text-decoration:none')
+          s=s.replace('background:#120d13;border:1px solid #3b2a34','background:#fff8ec;border:1px solid #e0c79d')
+          s=s.replace('color:#eadde6','color:#5b4034')
+          s=s.replace('background:#09070a!important;color:#fff!important','background:#fffdf9!important;color:#35251f!important')
+          s=s.replace('border:1px solid #513846!important','border:1px solid #d8bf99!important')
+          s=s.replace('2026-09-02-fix-6','2026-09-02-fix-7').replace('login-fix-6','login-fix-7')
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add login.html
+          git commit -m "style: bright ivory gold login theme" || exit 0
+          git push

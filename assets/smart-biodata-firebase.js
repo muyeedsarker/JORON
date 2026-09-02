@@ -1,5 +1,5 @@
+import "./address-fix-v21.js";
 import "./smart-biodata-save-guard.js";
-import "./smart-biodata-personal.js";
 import "./smart-biodata-education.js";
 import "./smart-biodata-profession.js";
 import "./smart-biodata-family.js";
@@ -11,94 +11,16 @@ const form = document.getElementById("form");
 const notice = document.getElementById("notice");
 const IDS = ["name","nickname","dob","age","gender","height","blood","marital","nationality","language","religion","practice","division","district","upazila","postOffice","postalCode","area","pdistrict","pdivision","pupazila","ppostOffice","ppostalCode","parea","addressPrivacy","eduSystem","education","eduHighest","eduDegree","eduInstitution","eduSubject","eduYear","eduResult","trainingName","trainingInstitution","trainingSubject","trainingDuration","trainingCertificate","profession","professionType","workplace","designation","workAddress","monthlyIncome","incomePrivacy","experience","currentlyEmployed","workDetails","fatherName","fatherProfession","motherName","motherProfession","siblingsBrothers","siblingsSisters","familyType","childCount","familyValues","familyDescription","smoking","personality","about","prefAge","prefDistrict","top3","photoUrl","visibility"];
 const PUBLIC_IDS = ["name","nickname","age","gender","height","marital","division","district","upazila","postOffice","postalCode","religion","eduSystem","education","eduHighest","eduDegree","eduInstitution","eduSubject","eduYear","eduResult","profession","professionType","workplace","designation","experience","currentlyEmployed","familyType","childCount","personality","about","prefAge","prefDistrict","top3","photoUrl","visibility"];
-
 const collect = () => Object.fromEntries(IDS.map(id => [id, document.getElementById(id)?.value ?? ""]));
 const localData = () => { try { return JSON.parse(localStorage.getItem("joronSmartBiodata") || "{}"); } catch { return {}; } };
 const show = (msg, ok=true) => { if (!notice) return; notice.textContent=msg; notice.style.display="block"; notice.style.background=ok?"#eaf9f3":"#fff1f1"; notice.style.color=ok?"#087b59":"#a80000"; setTimeout(()=>notice.style.display="none",4500); };
 const saveLocal = data => localStorage.setItem("joronSmartBiodata", JSON.stringify({...data,savedAt:new Date().toISOString()}));
 const fill = data => { IDS.forEach(id=>{const el=document.getElementById(id); if(el && data[id]!==undefined && data[id]!==null) el.value=data[id];}); document.getElementById("dob")?.dispatchEvent(new Event("change")); };
-
-// /biodata is restricted by Firestore rules to the approved publicBiodataKeys only.
-const publicProjection = data => Object.fromEntries(
-  PUBLIC_IDS.filter(id=>data[id]!==undefined).map(id=>[id,data[id]])
-);
-
-// /publicProfiles is the profile-facing public projection. Keep aliases used by profile.html.
-const profileProjection = data => ({
-  ...publicProjection(data),
-  educationSystem: data.eduSystem || data.education || "",
-  institution: data.eduInstitution || "",
-  subject: data.eduSubject || "",
-  passingYear: data.eduYear || "",
-  result: data.eduResult || "",
-  partner: data.top3 || "",
-  profileCompleted: true
-});
-
-async function restore(user){
-  const local=localData();
-  if(Object.keys(local).length) fill(local);
-  try {
-    const snap=await getDoc(doc(db,"privateBiodata",user.uid));
-    if(snap.exists()){const data=snap.data(); fill(data); saveLocal(data);}
-  } catch(e){ console.warn("Firebase restore failed; local draft retained",e); }
-}
-
-async function save(){
-  const data=collect();
-  saveLocal(data);
-  const user=auth.currentUser;
-  if(!user){ show("💾 Draft সংরক্ষিত হয়েছে। Smart Biodata-এর জন্য আগে Login করুন।"); return; }
-  try {
-    // Full biodata remains owner-only.
-    await setDoc(doc(db,"privateBiodata",user.uid),{
-      ...data,
-      uid:user.uid,
-      email:user.email||"",
-      profileCompleted:true,
-      updatedAt:serverTimestamp()
-    },{merge:true});
-
-    // Keep the legacy public biodata projection compatible with firestore.rules.
-    await setDoc(doc(db,"biodata",user.uid),{
-      ...publicProjection(data),
-      uid:user.uid,
-      updatedAt:serverTimestamp()
-    },{merge:true});
-
-    // Profile page reads /publicProfiles, so publish the same privacy-safe projection there.
-    await setDoc(doc(db,"publicProfiles",user.uid),{
-      ...profileProjection(data),
-      uid:user.uid,
-      updatedAt:serverTimestamp()
-    },{merge:true});
-
-    show("❤️ Smart Biodata সফলভাবে সংরক্ষিত হয়েছে। Profile তৈরি হচ্ছে…");
-    setTimeout(()=>{ location.href=`profile.html?id=${encodeURIComponent(user.uid)}`; },700);
-  } catch(e){
-    console.error("JORON Firebase save failed",e);
-    show("💾 তথ্য ফোনে সংরক্ষিত হয়েছে, কিন্তু Firebase-এ Save হয়নি। আবার চেষ্টা করুন।",false);
-  }
-}
-
+const publicProjection = data => Object.fromEntries(PUBLIC_IDS.filter(id=>data[id]!==undefined).map(id=>[id,data[id]]));
+const profileProjection = data => ({...publicProjection(data),educationSystem:data.eduSystem||data.education||"",institution:data.eduInstitution||"",subject:data.eduSubject||"",passingYear:data.eduYear||"",result:data.eduResult||"",partner:data.top3||"",profileCompleted:true});
+async function restore(user){const local=localData();if(Object.keys(local).length) fill(local);try{const snap=await getDoc(doc(db,"privateBiodata",user.uid));if(snap.exists()){const data=snap.data();fill(data);saveLocal(data);}}catch(e){console.warn("Firebase restore failed; local draft retained",e);}}
+async function save(){const data=collect();saveLocal(data);const user=auth.currentUser;if(!user){show("💾 Draft সংরক্ষিত হয়েছে। Smart Biodata-এর জন্য আগে Login করুন।");return;}try{await setDoc(doc(db,"privateBiodata",user.uid),{...data,uid:user.uid,email:user.email||"",profileCompleted:true,updatedAt:serverTimestamp()},{merge:true});await setDoc(doc(db,"biodata",user.uid),{...publicProjection(data),uid:user.uid,updatedAt:serverTimestamp()},{merge:true});await setDoc(doc(db,"publicProfiles",user.uid),{...profileProjection(data),uid:user.uid,updatedAt:serverTimestamp()},{merge:true});show("❤️ Smart Biodata সফলভাবে সংরক্ষিত হয়েছে। Profile তৈরি হচ্ছে…");setTimeout(()=>{location.href=`profile.html?id=${encodeURIComponent(user.uid)}`;},700);}catch(e){console.error("JORON Firebase save failed",e);show("💾 তথ্য ফোনে সংরক্ষিত হয়েছে, কিন্তু Firebase-এ Save হয়নি। আবার চেষ্টা করুন।",false);}}
 await persistenceReady;
-onAuthStateChanged(auth,user=>{ if(user) restore(user); });
-
-if(form && !window.__JORON_SAVE_BOUND){
-  window.__JORON_SAVE_BOUND=true;
-  form.addEventListener("submit",async e=>{
-    e.preventDefault();
-    e.stopImmediatePropagation();
-    if(!form.checkValidity()){form.reportValidity();return;}
-    await save();
-  },true);
-}
-
-const draft=document.getElementById("draftBtn");
-if(draft && !window.__JORON_DRAFT_BOUND){
-  window.__JORON_DRAFT_BOUND=true;
-  draft.addEventListener("click",()=>{
-    saveLocal(collect());
-    show("💾 Draft সংরক্ষিত হয়েছে।");
-  },true);
-}
+onAuthStateChanged(auth,user=>{if(user) restore(user);});
+if(form&&!window.__JORON_SAVE_BOUND){window.__JORON_SAVE_BOUND=true;form.addEventListener("submit",async e=>{e.preventDefault();e.stopImmediatePropagation();if(!form.checkValidity()){form.reportValidity();return;}await save();},true);}
+const draft=document.getElementById("draftBtn");if(draft&&!window.__JORON_DRAFT_BOUND){window.__JORON_DRAFT_BOUND=true;draft.addEventListener("click",()=>{saveLocal(collect());show("💾 Draft সংরক্ষিত হয়েছে।");},true);}

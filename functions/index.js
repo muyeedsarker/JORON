@@ -85,7 +85,8 @@ exports.adminReviewPayment = onRequest(async (req, res) => {
       const reviewedAt = FieldValue.serverTimestamp();
       if (action === "approve") {
         tx.update(paymentRef, { paymentStatus: "approved", membershipStatus: "active", reviewedAt, reviewedBy: admin.uid });
-        tx.set(userRef, { paymentStatus: "paid", membershipStatus: "active", updatedAt: reviewedAt }, { merge: true });
+        // The approved plan must come from the validated payment record, not client-controlled user data.
+        tx.set(userRef, { membershipPlan: payment.selectedPlan, paymentStatus: "paid", membershipStatus: "active", updatedAt: reviewedAt }, { merge: true });
       } else {
         tx.update(paymentRef, { paymentStatus: "rejected", reviewedAt, reviewedBy: admin.uid });
         tx.set(userRef, { paymentStatus: "rejected", membershipStatus: "pending", updatedAt: reviewedAt }, { merge: true });

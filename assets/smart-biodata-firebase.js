@@ -1,4 +1,5 @@
 import "./smart-biodata-save-guard.js";
+import "./smart-biodata-personal.js";
 import "./smart-biodata-education.js";
 import "./smart-biodata-profession.js";
 import "./smart-biodata-family.js";

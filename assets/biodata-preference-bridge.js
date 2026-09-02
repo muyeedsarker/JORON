@@ -13,7 +13,7 @@ function addPreferencePanel(){
  if(!form||document.getElementById("joronPartnerPreferencePanel"))return;
  const cards=[...form.querySelectorAll(":scope > .card")];const target=cards[cards.length-1];if(!target)return;
  const box=document.createElement("section");box.id="joronPartnerPreferencePanel";box.className="card";
- box.innerHTML=`<h2>💍 জীবনসঙ্গীর পছন্দ</h2><p class="hint">Onboarding-এর পছন্দ এখানে অটো-সিঙ্ক হবে। এখানে পরিবর্তন করলে Onboarding-এর তথ্যও আপডেট হবে।</p><div class="grid"><div class="field"><label>Partner Gender<select id="partnerGenderPref"><option value="">অটো নির্বাচন</option><option value="পুরুষ">পুরুষ</option><option value="নারী">নারী</option></select></label></div><div class="field"><label>বয়স — সর্বনিম্ন<input id="partnerAgeMinPref" type="number" min="18" max="100" placeholder="২৫"></label></div><div class="field"><label>বয়স — সর্বোচ্চ<input id="partnerAgeMaxPref" type="number" min="18" max="100" placeholder="৩৫"></label></div><div class="field"><label>ধর্ম<select id="partnerReligionPref"><option value="">যেকোনো ধর্ম</option><option>ইসলাম</option><option>হিন্দু</option><option>বৌদ্ধ</option><option>খ্রিস্টান</option><option>অন্যান্য</option></select></label></div><div class="field"><label>Community<select id="partnerCommunityPref"><option value="">যেকোনো Community</option></select></label></div><div class="field"><label>জেলা<input id="partnerDistrictPref" placeholder="যেকোনো জেলা"></label></div><div class="field"><label>শিক্ষা<select id="partnerEducationPref"><option value="">যেকোনো শিক্ষা</option><option>SSC+</option><option>এইচএসসি</option><option>স্নাতক</option><option>স্নাতকোত্তর</option><option>দাওরায়ে হাদিস</option><option>পিএইচডি</option><option>অন্যান্য</option></select></label></div></div>`;
+ box.innerHTML=`<h2>💍 জীবনসঙ্গীর পছন্দ</h2><p class="hint">Onboarding-এর পছন্দ এখানে অটো-সিঙ্ক হবে। এখানে পরিবর্তন করলে Onboarding-এর তথ্যও আপডেট হবে।</p><div class="grid"><div class="field"><label>Partner Gender<select id="partnerGenderPref"><option value="">অটো নির্বাচন</option><option value="পুরুষ">পুরুষ</option><option value="নারী">নারী</select></label></div><div class="field"><label>বয়স — সর্বনিম্ন<input id="partnerAgeMinPref" type="number" min="18" max="100" placeholder="২৫"></label></div><div class="field"><label>বয়স — সর্বোচ্চ<input id="partnerAgeMaxPref" type="number" min="18" max="100" placeholder="৩৫"></label></div><div class="field"><label>ধর্ম<select id="partnerReligionPref"><option value="">যেকোনো ধর্ম</option><option>ইসলাম</option><option>হিন্দু</option><option>বৌদ্ধ</option><option>খ্রিস্টান</option><option>অন্যান্য</option></select></label></div><div class="field"><label>Community<select id="partnerCommunityPref"><option value="">যেকোনো Community</option></select></label></div><div class="field"><label>জেলা<input id="partnerDistrictPref" placeholder="যেকোনো জেলা"></label></div><div class="field"><label>শিক্ষা<select id="partnerEducationPref"><option value="">যেকোনো শিক্ষা</option><option>SSC+</option><option>এইচএসসি</option><option>স্নাতক</option><option>স্নাতকোত্তর</option><option>দাওরায়ে হাদিস</option><option>পিএইচডি</option><option>অন্যান্য</option></select></label></div></div>`;
  target.appendChild(box);
  const o=readOnboarding();
  const g=get("gender");
@@ -54,9 +54,20 @@ async function loadSavedPreferences(){
  }catch(e){console.error("JORON preference bridge load",e)}
 }
 
+function savePublicMatchProjection(user){
+ const data={
+  name:get("name"),nickname:get("nickname"),age:get("age"),gender:get("gender"),height:get("height"),marital:get("marital"),
+  division:get("division"),district:get("district"),upazila:get("upazila"),education:get("education"),profession:get("profession"),
+  photoUrl:get("photoUrl"),visibility:get("visibility")||"public",religion:get("religion"),community:get("community"),
+  partnerGender:get("partnerGender"),partnerAgeMin:get("partnerAgeMin"),partnerAgeMax:get("partnerAgeMax"),
+  partnerReligion:get("partnerReligion"),partnerCommunity:get("partnerCommunity"),partnerDistrict:get("partnerDistrict"),partnerEducation:get("partnerEducation")
+ };
+ Object.keys(data).forEach(k=>{if(data[k]==="")delete data[k]});
+ return setDoc(doc(db,"publicProfiles",user.uid),{...data,updatedAt:serverTimestamp()},{merge:true});
+}
+
 addPreferencePanel();
 if(auth.currentUser)loadSavedPreferences();
-
 auth.onAuthStateChanged?.(user=>{if(user)loadSavedPreferences()});
 
 form?.addEventListener("submit",async()=>{
@@ -64,5 +75,9 @@ form?.addEventListener("submit",async()=>{
  const data={partnerGender:get("partnerGender"),partnerAgeMin:get("partnerAgeMin"),partnerAgeMax:get("partnerAgeMax"),partnerReligion:get("partnerReligion"),partnerCommunity:get("partnerCommunity"),partnerDistrict:get("partnerDistrict"),partnerEducation:get("partnerEducation"),country:get("country"),profileFor:get("profileFor"),motherTongue:get("motherTongue")};
  Object.keys(data).forEach(k=>{if(!data[k])delete data[k]});
  if(!Object.keys(data).length)return;
- try{await setDoc(doc(db,"privateBiodata",user.uid),{...data,updatedAt:serverTimestamp()},{merge:true});await setDoc(doc(db,"biodata",user.uid),{...data,updatedAt:serverTimestamp()},{merge:true})}catch(e){console.error("JORON preference bridge save",e)}
+ try{
+  await setDoc(doc(db,"privateBiodata",user.uid),{...data,updatedAt:serverTimestamp()},{merge:true});
+  await setDoc(doc(db,"biodata",user.uid),{...data,updatedAt:serverTimestamp()},{merge:true});
+  await savePublicMatchProjection(user);
+ }catch(e){console.error("JORON preference bridge save",e)}
 });

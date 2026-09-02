@@ -31,7 +31,15 @@ service cloud.firestore {
     match /users/{userId} {
       allow read: if own(userId);
       allow create: if own(userId) && (!request.resource.data.keys().hasAny(['membershipStatus','admin','isAdmin']) || request.resource.data.membershipStatus == 'pending');
-      allow update: if own(userId) && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['admin','isAdmin']) && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['membershipStatus','paymentStatus']) || (request.resource.data.membershipStatus == 'pending' && request.resource.data.paymentStatus == 'pending'));
+      // Membership/payment fields are server-controlled. A user may update their own profile,
+      // but cannot create or change membershipPlan, membershipStatus, or paymentStatus.
+      allow update: if own(userId)
+        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['admin','isAdmin','membershipPlan','membershipStatus','paymentStatus'])
+        || (own(userId)
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['membershipRequestedAt'])
+          && request.resource.data.membershipStatus == resource.data.membershipStatus
+          && request.resource.data.paymentStatus == resource.data.paymentStatus
+          && request.resource.data.membershipPlan == resource.data.membershipPlan);
       allow delete: if own(userId);
     }
 

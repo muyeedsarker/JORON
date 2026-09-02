@@ -26,6 +26,7 @@ function applyOnboarding(){
   if(o.partnerGender){ensureHidden("partnerGender",o.partnerGender);}
   if(g && !g.value && o.gender)g.value=o.gender;
   if(o.gender && !o.partnerGender){ensureHidden("partnerGender",o.gender==="পুরুষ"?"নারী":"পুরুষ")}
+
  }catch(e){console.warn("JORON onboarding bridge",e)}
 }
 applyOnboarding();
@@ -53,7 +54,8 @@ autoProfileLogic();
 // Visible LIMIT-style automatic profile choices.
 function initAutoProfilePanel(){
  const form=document.getElementById("form");if(!form)return;
- const sections=[...form.querySelectorAll(":scope > section.card")];if(!sections.length)return;
+ if(document.getElementById("joronAutoProfilePanel"))return;
+ const sections=[...form.querySelectorAll(":scope > .card")];if(!sections.length)return;
  const personal=sections[0];
  const panel=document.createElement("div");panel.id="joronAutoProfilePanel";panel.className="card";
  panel.innerHTML='<h2>✨ Smart Auto Selection</h2><p class="hint">একটি তথ্য নির্বাচন করলে JORON প্রয়োজনীয় পরের তথ্য নিজে সাজিয়ে দেবে।</p><div class="grid"><div class="field"><label>এই Profile কার জন্য?<select id="profileForSelect"><option value="">নির্বাচন করুন</option><option value="Myself">নিজের জন্য (Myself)</option><option value="Son">ছেলের জন্য (Son)</option><option value="Daughter">মেয়ের জন্য (Daughter)</option><option value="Brother">ভাইয়ের জন্য (Brother)</option><option value="Sister">বোনের জন্য (Sister)</option><option value="Friend">বন্ধুর জন্য (Friend)</option><option value="Relative">আত্মীয়ের জন্য (Relative)</option></select></label></div><div class="field"><label>জীবনসঙ্গী হিসেবে খুঁজছি<select id="partnerGenderSelect"><option value="">অটো নির্বাচন হবে</option><option value="পুরুষ">পুরুষ</option><option value="নারী">নারী</option></select></label></div><div class="field"><label>মাতৃভাষা<select id="motherTongueSelect"><option>বাংলা</option><option>হিন্দি</option><option>উর্দু</option><option>আরবি</option><option>ইংরেজি</option><option>অন্যান্য</option></select></label></div><div class="field"><label>দেশ<select id="countrySelect"><option value="BD">বাংলাদেশ</option><option value="IN">ভারত</option><option value="PK">পাকিস্তান</option><option value="SA">সৌদি আরব</option><option value="AE">সংযুক্ত আরব আমিরাত</option><option value="MY">মালয়েশিয়া</option><option value="GB">যুক্তরাজ্য</option><option value="US">যুক্তরাষ্ট্র</option><option value="CA">কানাডা</option><option value="AU">অস্ট্রেলিয়া</option><option value="OTHER">অন্যান্য</option></select></label></div></div>';
@@ -61,10 +63,15 @@ function initAutoProfilePanel(){
  const pf=document.getElementById("profileForSelect"),pg=document.getElementById("partnerGenderSelect"),mt=document.getElementById("motherTongueSelect"),cs=document.getElementById("countrySelect"),g=document.getElementById("gender"),lang=document.getElementById("language"),nat=document.getElementById("nationality");
  let o={};try{o=JSON.parse(localStorage.getItem("joronOnboarding")||"{}")||{}}catch{}
  if(o.profileFor)pf.value=o.profileFor;
+ ensureHidden("profileFor",pf.value);
  const setPartner=()=>{const v=g?.value;const pv=v==="পুরুষ"?"নারী":v==="নারী"?"পুরুষ":"";if(pv){pg.value=pv;ensureHidden("partnerGender",pv)}};
  if(o.partnerGender)pg.value=o.partnerGender;else setPartner();
- if(o.language){lang.value=o.language;mt.value=o.language==="বাংলা"?"বাংলা":mt.value}
+ ensureHidden("partnerGender",pg.value);
+ const languageNames={bn:"বাংলা",en:"ইংরেজি",hi:"হিন্দি",ur:"উর্দু",ar:"আরবি",ms:"মালয়",it:"ইতালীয়",de:"জার্মান",fr:"ফরাসি",ja:"জাপানি",ko:"কোরিয়ান"};
+ if(o.language){const ln=languageNames[o.language]||o.language;if(lang&&!lang.value)lang.value=ln;if(mt&&!mt.value)mt.value=ln}
+ if(o.motherTongue){const mtName=languageNames[o.motherTongue]||o.motherTongue;if(mt)mt.value=mtName;ensureHidden("motherTongue",mtName)}
  if(o.country)cs.value=o.country;
+ if(o.country)ensureHidden("country",o.country);
  const countryNames={BD:"বাংলাদেশি",IN:"ভারতীয়",PK:"পাকিস্তানি",SA:"সৌদি আরবের",AE:"সংযুক্ত আরব আমিরাতের",MY:"মালয়েশীয়",GB:"ব্রিটিশ",US:"আমেরিকান",CA:"কানাডিয়ান",AU:"অস্ট্রেলিয়ান",OTHER:""};
  const saveState=()=>{try{const x=JSON.parse(localStorage.getItem("joronOnboarding")||"{}")||{};x.profileFor=pf.value;x.partnerGender=pg.value;x.country=cs.value;x.motherTongue=mt.value;localStorage.setItem("joronOnboarding",JSON.stringify(x))}catch{}};
  pf.onchange=()=>{ensureHidden("profileFor",pf.value);saveState()};pg.onchange=()=>{ensureHidden("partnerGender",pg.value);saveState()};mt.onchange=()=>{ensureHidden("motherTongue",mt.value);saveState()};cs.onchange=()=>{ensureHidden("country",cs.value);if(nat&&!nat.value&&countryNames[cs.value])nat.value=countryNames[cs.value];saveState()};g?.addEventListener("change",()=>{setPartner();saveState()});
@@ -72,9 +79,19 @@ function initAutoProfilePanel(){
 }
 initAutoProfilePanel();
 
+function syncOnboardingAddress(){
+ try{
+  const o=JSON.parse(localStorage.getItem("joronOnboarding")||"{}")||{};
+  const d=document.getElementById("division"),dist=document.getElementById("district");
+  if(d && !d.value && o.division){d.value=o.division;d.dispatchEvent(new Event("change",{bubbles:true}))}
+  setTimeout(()=>{if(dist && !dist.value && o.district){dist.value=o.district;dist.dispatchEvent(new Event("change",{bubbles:true}))}},120);
+ }catch(e){console.warn("JORON address bridge",e)}
+}
+document.addEventListener("joron-address-ready",syncOnboardingAddress);
+
 function initGuidedSteps(){
  if(!form)return;
- const sections=[...form.querySelectorAll(":scope > section.card")];
+ const sections=[...form.querySelectorAll(":scope > .card")];
  if(sections.length<2)return;
  const labels=["👤 Personal","📍 Address","🎓 Education","👨‍👩‍👧 Family","🌿 Lifestyle","💍 Partner Preference","🔐 Privacy & Save"];
  const wrap=document.createElement("div");wrap.className="joron-stepper-wrap";
@@ -101,7 +118,7 @@ await import("./biodata-smart-fields.js");
 await persistenceReady;
 onAuthStateChanged(auth,async user=>{
  if(!user){location.replace("login.html?next=smart-biodata.html");return}
- try{const s=await getDoc(doc(db,"privateBiodata",user.uid));if(s.exists()){fill(s.data());ageFromDob();autoProfileLogic();initAutoProfilePanel()}}catch(e){console.error("JORON biodata load",e)}
+ try{const s=await getDoc(doc(db,"privateBiodata",user.uid));if(s.exists()){fill(s.data());ageFromDob();applyOnboarding();autoProfileLogic();initAutoProfilePanel()}else{applyOnboarding();}}catch(e){console.error("JORON biodata load",e)}
 });
 
 form?.addEventListener("submit",async e=>{

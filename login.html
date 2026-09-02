@@ -29,7 +29,9 @@ const $=id=>document.getElementById(id),msg=$('msg'),form=$('emailForm');
 const show=t=>msg.textContent=t;
 const googleProvider=new GoogleAuthProvider(),facebookProvider=new FacebookAuthProvider();
 googleProvider.setCustomParameters({prompt:'select_account'});
-const params=new URLSearchParams(location.search),next=params.get('next');
+const params=new URLSearchParams(location.search),rawNext=params.get('next');
+// Security: only allow local relative redirects; reject absolute URLs and protocol-relative URLs.
+const next=rawNext&&/^(?!\/\/)(?![a-z][a-z0-9+.-]*:)[^\\]*$/i.test(rawNext)&&rawNext.startsWith('/')?rawNext:null;
 const IDENTIFIER_AUTH_URL='https://us-central1-joron-d7742.cloudfunctions.net/loginWithIdentifier';
 const IDENTIFIER_RESET_URL='https://us-central1-joron-d7742.cloudfunctions.net/passwordResetByIdentifier';
 function friendly(e){const c=e?.code||e?.message||'';const map={'auth/invalid-credential':'Member ID/মোবাইল/ইমেইল অথবা পাসওয়ার্ড সঠিক নয়।','auth/popup-closed-by-user':'লগইন উইন্ডো বন্ধ করা হয়েছে।','auth/popup-blocked':'ব্রাউজার popup বন্ধ করেছে। Popup অনুমতি দিন।','AUTH_SERVICE_UNAVAILABLE':'নিরাপদ লগইন সেবা এখন সাময়িকভাবে পাওয়া যাচ্ছে না। একটু পরে আবার চেষ্টা করুন।'};return map[c]||'লগইন সম্পন্ন করা যায়নি। আবার চেষ্টা করুন।'}
@@ -38,5 +40,5 @@ async function oauth(provider,label){try{await persistenceReady;show('⏳ '+labe
 $('facebookBtn').onclick=()=>oauth(facebookProvider,'Facebook');$('googleBtn').onclick=()=>oauth(googleProvider,'Google');
 $('idLoginBtn').onclick=()=>{form.style.display=form.style.display==='block'?'none':'block';if(form.style.display==='block')$('email').focus()};
 form.addEventListener('submit',async e=>{e.preventDefault();const identifier=$('email').value.trim(),password=$('password').value;if(!identifier||!password)return show('Member ID, মোবাইল/ইমেইল এবং পাসওয়ার্ড দিন');try{show('⏳ নিরাপদে লগইন হচ্ছে...');await persistenceReady;const result=await postJson(IDENTIFIER_AUTH_URL,{identifier,password});if(!result.customToken)throw new Error('AUTH_SERVICE_UNAVAILABLE');await signInWithCustomToken(auth,result.customToken);show('✅ লগইন সফল হচ্ছে...');setTimeout(()=>location.href=next||'biodata.html',500)}catch(err){console.error('JORON identifier login error:',err);show('❌ '+friendly(err))}});
-$('forgot').onclick=async()=>{const identifier=$('email').value.trim();if(!identifier)return show('আগে Member ID / মোবাইল / ইমেইল লিখুন');try{show('⏳ রিসেট তথ্য যাচাই হচ্ছে...');await postJson(IDENTIFIER_RESET_URL,{identifier});show('✅ যদি তথ্যটি JORON অ্যাকাউন্টের সাথে যুক্ত থাকে, রিসেট লিংক ইমেইলে পাঠানো হবে।')}catch(err){console.error('JORON identifier reset error:',err);show('❌ '+friendly(err)}};
+$('forgot').onclick=async()=>{const identifier=$('email').value.trim();if(!identifier)return show('আগে Member ID / মোবাইল / ইমেইল লিখুন');try{show('⏳ রিসেট তথ্য যাচাই হচ্ছে...');await postJson(IDENTIFIER_RESET_URL,{identifier});show('✅ যদি তথ্যটি JORON অ্যাকাউন্টের সাথে যুক্ত থাকে, রিসেট লিংক ইমেইলে পাঠানো হবে।')}catch(err){console.error('JORON identifier reset error:',err);show('❌ '+friendly(err))}};
 </script></body></html>

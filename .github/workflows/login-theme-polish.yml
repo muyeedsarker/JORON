@@ -1,0 +1,41 @@
+name: Polish Login Theme
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  polish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply bright premium theme
+        shell: python
+        run: |
+          from pathlib import Path
+          p=Path('login.html')
+          s=p.read_text(encoding='utf-8')
+          old='''<style>\n:root{--pink:#e81768;--gold:#c79a45;--dark:#08070a}*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#08070a!important;color:#fff!important;font-family:"Hind Siliguri","Noto Sans Bengali",system-ui,sans-serif}body{overflow-x:hidden}.login-page{min-height:100vh;display:flex;justify-content:center;align-items:center;padding:0;background:#08070a}.login-shell{width:min(100%,470px);min-height:100vh;background:#08070a;overflow:hidden;position:relative;box-shadow:0 0 60px rgba(232,23,104,.18)}'''
+          new='''<style>\n:root{--pink:#d81b60;--gold:#c58a2b;--gold2:#f0bd57;--ivory:#fffaf1;--cream:#f8eddc;--ink:#35251f}*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:linear-gradient(180deg,#fffaf1 0%,#f7ead7 100%)!important;color:var(--ink)!important;font-family:"Hind Siliguri","Noto Sans Bengali",system-ui,sans-serif}body{overflow-x:hidden}.login-page{min-height:100vh;display:flex;justify-content:center;align-items:center;padding:0;background:linear-gradient(180deg,#fffaf1 0%,#f7ead7 100%)}.login-shell{width:min(100%,470px);min-height:100vh;background:var(--ivory);overflow:hidden;position:relative;box-shadow:0 8px 35px rgba(99,63,32,.18)}'''
+          if old not in s: raise SystemExit('base CSS not found')
+          s=s.replace(old,new)
+          s=s.replace('.login-panel{position:relative;z-index:4;padding:0 22px 28px;text-align:center;background:#08070a}', '.login-panel{position:relative;z-index:4;padding:0 22px 28px;text-align:center;background:linear-gradient(180deg,#fffaf1 0%,#fffdf8 100%);border-top:1px solid rgba(197,138,43,.18)}')
+          s=s.replace('.welcome{font-size:14px;color:#eee1e9;margin:0 0 15px}', '.welcome{font-size:15px;font-weight:800;color:#5b4034;margin:0 0 15px;line-height:1.55}')
+          s=s.replace('.divider:before,.divider:after{content:"";height:1px;background:#3b3039;flex:1}', '.divider:before,.divider:after{content:"";height:1px;background:#d9c5a7;flex:1}')
+          s=s.replace('.divider{display:flex;align-items:center;gap:10px;color:#a99aa5;font-size:12px;margin:12px 0}', '.divider{display:flex;align-items:center;gap:10px;color:#8b6b50;font-size:13px;font-weight:800;margin:12px 0}')
+          s=s.replace('.terms{font-size:11px;color:#aaa0a9;', '.terms{font-size:11px;color:#705c51;')
+          s=s.replace('.homeback a{color:#d8c8d3;', '.homeback a{color:#6f5547;')
+          s=s.replace('.email-form{display:none;text-align:left;margin-top:7px;background:#120d13;border:1px solid #3b2a34;', '.email-form{display:none;text-align:left;margin-top:7px;background:#fff8ec;border:1px solid #e0c79d;')
+          s=s.replace('.email-form input{width:100%!important;height:45px!important;border:1px solid #513846!important;border-radius:12px!important;background:#09070a!important;color:#fff!important;', '.email-form input{width:100%!important;height:45px!important;border:1px solid #d8bf99!important;border-radius:12px!important;background:#fffdf9!important;color:#35251f!important;')
+          s=s.replace('.email-form label{display:block;font-size:12px;font-weight:800;margin:8px 0 5px;color:#eadde6}', '.email-form label{display:block;font-size:12px;font-weight:800;margin:8px 0 5px;color:#5b4034}')
+          s=s.replace('<meta name="joron-login-version" content="2026-09-02-fix-6">','<meta name="joron-login-version" content="2026-09-02-fix-7">')
+          s=s.replace('v=login-fix-6','v=login-fix-7')
+          p.write_text(s,encoding='utf-8')
+      - name: Commit and remove workflow
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add login.html .github/workflows/login-theme-polish.yml
+          git commit -m "style: bright ivory gold login theme" || exit 0
+          git rm .github/workflows/login-theme-polish.yml
+          git commit -m "chore: remove one-time login theme workflow"
+          git push

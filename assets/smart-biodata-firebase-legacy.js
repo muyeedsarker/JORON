@@ -11,80 +11,83 @@ function ageFromDob(){const v=document.getElementById("dob")?.value;if(!v)return
 document.getElementById("dob")?.addEventListener("change",ageFromDob);
 function fill(d){ids.forEach(id=>{const e=document.getElementById(id);if(!e||d[id]===undefined||d[id]===null)return;if(e.type==="checkbox")e.checked=!!d[id];else e.value=d[id]});ageFromDob()}
 
+function ensureHidden(id,value){if(value===undefined||value===null||value==="")return;let e=document.getElementById(id);if(!e){e=document.createElement("input");e.type="hidden";e.id=id;e.name=id;form?.appendChild(e)}e.value=String(value)}
+
+// Guided onboarding → Smart Biodata bridge.
 function applyOnboarding(){
  try{
-  const raw=localStorage.getItem("joronOnboarding");if(!raw)return;const o=JSON.parse(raw)||{};
+  const raw=localStorage.getItem("joronOnboarding"); if(!raw)return;
+  const o=JSON.parse(raw)||{};
   const map={gender:o.gender,marital:o.marital,education:o.education,religion:o.religion,division:o.division,district:o.district,language:o.language};
   const countryNames={BD:"বাংলাদেশি",IN:"ভারতীয়",PK:"পাকিস্তানি",SA:"সৌদি আরবের",AE:"সংযুক্ত আরব আমিরাতের",MY:"মালয়েশীয়",SG:"সিঙ্গাপুরের",GB:"ব্রিটিশ",US:"আমেরিকান",CA:"কানাডিয়ান",AU:"অস্ট্রেলিয়ান",IT:"ইতালীয়",DE:"জার্মান",FR:"ফরাসি",JP:"জাপানি",KR:"দক্ষিণ কোরীয়",QA:"কাতারি",KW:"কুয়েতি",OM:"ওমানি",OTHER:""};
   if(o.country&&countryNames[o.country])map.nationality=countryNames[o.country];
   Object.entries(map).forEach(([id,val])=>{if(val!==undefined&&val!==null&&String(val)!===""){const e=document.getElementById(id);if(e&&!e.value)e.value=String(val)}});
-  const hiddenKeys={country:o.country,profileFor:o.profileFor,community:o.community};
-  Object.entries(hiddenKeys).forEach(([id,val])=>{if(!val)return;let e=document.getElementById(id);if(!e){e=document.createElement("input");e.type="hidden";e.id=id;e.name=id;form?.appendChild(e)}e.value=String(val)});
+  ensureHidden("country",o.country); ensureHidden("profileFor",o.profileFor); ensureHidden("community",o.community);
+  const g=document.getElementById("gender");
+  if(o.partnerGender){ensureHidden("partnerGender",o.partnerGender);}
+  if(g && !g.value && o.gender)g.value=o.gender;
+  if(o.gender && !o.partnerGender){ensureHidden("partnerGender",o.gender==="পুরুষ"?"নারী":"পুরুষ")}
  }catch(e){console.warn("JORON onboarding bridge",e)}
 }
 applyOnboarding();
 
-await import("./biodata-smart-fields.js");
-await persistenceReady;
+// Automatic partner-gender + religion/community helpers.
+function autoProfileLogic(){
+ const gender=document.getElementById("gender"), religion=document.getElementById("religion"), dob=document.getElementById("dob");
+ const partner=()=>{if(!gender)return;const v=gender.value;const p=v==="পুরুষ"?"নারী":v==="নারী"?"পুরুষ":"";if(p)ensureHidden("partnerGender",p)};
+ gender?.addEventListener("change",partner); partner();
+ dob?.addEventListener("change",ageFromDob); ageFromDob();
+ if(religion){const communityOptions={"ইসলাম":["সুন্নি","শিয়া","আহলে হাদিস","অন্যান্য"],"হিন্দু":["সনাতন হিন্দু","অন্যান্য"],"বৌদ্ধ":["থেরবাদ","অন্যান্য"],"খ্রিস্টান":["ক্যাথলিক","প্রোটেস্ট্যান্ট","অন্যান্য"],"অন্যান্য":["অন্যান্য"]};
+  let c=document.getElementById("community");
+  if(!c||c.type==="hidden"){
+   const wrap=document.createElement("div");wrap.className="field";wrap.id="communityField";
+   wrap.innerHTML='<label>সম্প্রদায় <select id="communitySelect"><option value="">নির্বাচন করুন</option></select></label>';
+   religion.closest(".grid")?.appendChild(wrap);c=wrap.querySelector("select");
+   const hidden=document.getElementById("community");
+   if(hidden)c.value=hidden.value;
+  }
+  const sync=()=>{const opts=communityOptions[religion.value]||["অন্যান্য"];const old=c.value;c.innerHTML='<option value="">নির্বাচন করুন</option>'+opts.map(x=>`<option>${x}</option>`).join("");if(opts.includes(old))c.value=old;ensureHidden("community",c.value)};
+  c.addEventListener("change",()=>ensureHidden("community",c.value)); religion.addEventListener("change",sync); sync();
+ }
+}
+autoProfileLogic();
 
-/* LIMIT-style guided Smart Biodata: one section at a time, saved progress, mobile-first. */
-function setupGuidedSteps(){
+// LIMIT-style guided steps. Existing field IDs and Firebase save logic stay unchanged.
+function initGuidedSteps(){
  if(!form)return;
- const cards=[...form.querySelectorAll(":scope > .card")];
- if(cards.length<7)return;
- const groups=[[0],[1,2],[3],[4],[5,6],[7],[8]];
- const labels=["ব্যক্তিগত","ঠিকানা","শিক্ষা ও পেশা","পরিবার","জীবনধারা","জীবনসঙ্গী","Privacy & Save"];
- let current=Math.max(0,Math.min(6,Number(localStorage.getItem("joronBiodataStep")||0)));
- const style=document.createElement("style");
- style.textContent=`
- .jb-stepper{background:linear-gradient(145deg,#fffdf8,#fff7fb);border:1px solid #eadfea;border-radius:20px;padding:14px;margin:0 0 18px;box-shadow:0 8px 22px rgba(70,25,90,.07)}
- .jb-step-title{font-weight:900;color:#64158f;font-size:14px;margin-bottom:10px}.jb-step-count{float:right;color:#8d682d;font-size:12px}
- .jb-dots{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.jb-dot{text-align:center;font-size:9px;color:#746e65;min-width:0}.jb-dot i{display:flex;width:28px;height:28px;margin:0 auto 4px;border-radius:50%;align-items:center;justify-content:center;background:#fff;border:2px solid #dfcda8;color:#8d682d;font-style:normal;font-weight:900}.jb-dot.active i,.jb-dot.done i{background:#c79a45;border-color:#c79a45;color:#fff}.jb-dot.active{color:#8d682d;font-weight:900}
- .jb-actions{display:flex;gap:10px;margin:18px 0 4px}.jb-actions button{flex:1;min-height:48px;border-radius:15px;font:900 15px inherit;cursor:pointer}.jb-back{background:#fff;border:1px solid #dfcda8;color:#746e65}.jb-next{border:0;background:linear-gradient(135deg,#c79a45,#a85d68);color:#fff;box-shadow:0 8px 18px rgba(168,93,104,.18)}
- .jb-note{padding:10px 12px;margin-bottom:14px;border-radius:13px;background:#f3e4e5;border:1px solid #ead9b5;color:#6b4c50;font-size:12px;font-weight:700}
- @media(max-width:650px){.jb-stepper{padding:12px}.jb-dot{font-size:8px}.jb-dot i{width:27px;height:27px}.jb-actions{position:sticky;bottom:8px;z-index:20;padding:8px;background:#fffdf8dd;backdrop-filter:blur(8px);border-radius:16px}.jb-actions button{min-height:50px}}
+ const sections=[...form.querySelectorAll(":scope > section.card")];
+ if(sections.length<2)return;
+ const labels=["👤 Personal","📍 Address","🎓 Education","👨‍👩‍👧 Family","🌿 Lifestyle","💍 Partner Preference","🔐 Privacy & Save"];
+ const wrap=document.createElement("div");wrap.className="joron-stepper-wrap";
+ wrap.innerHTML='<div class="joron-stepper" aria-label="Biodata progress">'+labels.map((x,i)=>`<div class="joron-step" data-step="${i}"><span>${i+1}</span><small>${x.replace(/^\S+\s/,"")}</small></div>`).join("")+'</div><div class="joron-step-progress"><i></i></div><div class="joron-step-title"></div>';
+ form.parentNode.insertBefore(wrap,form);
+ const style=document.createElement("style");style.textContent=`
+ .joron-stepper-wrap{width:min(920px,94%);margin:0 auto 18px}.joron-stepper{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;align-items:start}.joron-step{text-align:center;color:#746e65;font-size:10px;font-weight:800}.joron-step span{display:flex;width:34px;height:34px;margin:0 auto 5px;border-radius:50%;align-items:center;justify-content:center;border:2px solid #dfcda8;background:#fffdf8;color:#8d682d;font-size:12px}.joron-step.active span{background:#c79a45;color:#fff;border-color:#c79a45;box-shadow:0 5px 15px rgba(199,154,69,.25)}.joron-step.done span{background:#667a67;color:#fff;border-color:#667a67}.joron-step.active,.joron-step.done{color:#8d682d}.joron-step-progress{height:4px;background:#ead9b5;border-radius:99px;margin:-19px 22px 14px;overflow:hidden}.joron-step-progress i{display:block;height:100%;width:14.28%;background:linear-gradient(90deg,#c79a45,#a85d68);transition:width .25s}.joron-step-title{font-weight:900;color:#8d682d;text-align:center;font-size:14px}.guided-actions{display:flex;gap:10px;margin-top:18px}.guided-actions button{flex:1;border:0;border-radius:15px;padding:14px;font:inherit;font-weight:900;cursor:pointer}.guided-back{background:#fff;border:1px solid #dfcda8!important;color:#5d554b}.guided-next{background:linear-gradient(135deg,#c79a45,#8d682d);color:#fff}.guided-save{background:linear-gradient(135deg,#a85d68,#8d682d);color:#fff}.guided-actions button:disabled{opacity:.45;cursor:not-allowed}@media(max-width:650px){.joron-stepper-wrap{width:calc(100% - 24px)}.joron-stepper{grid-template-columns:repeat(7,minmax(44px,1fr));overflow-x:auto;padding:2px 0 4px}.joron-step{min-width:44px}.joron-step small{display:block;font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.joron-step-progress{display:none}.guided-actions{position:sticky;bottom:0;background:#fbf7ef;padding:10px 0;z-index:5}.guided-actions button{min-height:48px}}
  `;document.head.appendChild(style);
- const stepper=document.createElement("div");stepper.className="jb-stepper";
- stepper.innerHTML=`<div class="jb-step-title">📝 আপনার Biodata — ধাপে ধাপে <span class="jb-step-count"></span></div><div class="jb-dots">${labels.map((x,i)=>`<div class="jb-dot"><i>${i+1}</i><span>${x}</span></div>`).join("")}</div>`;
- const note=document.createElement("div");note.className="jb-note";note.textContent="একটি ধাপ পূরণ করে পরের ধাপে যান। আগের তথ্য স্বয়ংক্রিয়ভাবে সংরক্ষিত থাকবে।";
- const actions=document.createElement("div");actions.className="jb-actions";actions.innerHTML='<button type="button" class="jb-back">← পিছনে</button><button type="button" class="jb-next">পরের ধাপ →</button>';
- form.parentNode.insertBefore(stepper,form);form.insertBefore(note,form.firstElementChild);form.appendChild(actions);
- const originalActions=form.querySelector(".actions");
- if(originalActions)originalActions.style.display="none";
- const finalSubmit=form.querySelector('button[type="submit"]');
- function visibleCards(){return groups[current]||[]}
- function render(){
-  cards.forEach((card,i)=>card.style.display=visibleCards().includes(i)?"block":"none");
-  stepper.querySelectorAll(".jb-dot").forEach((d,i)=>{d.classList.toggle("active",i===current);d.classList.toggle("done",i<current)});
-  stepper.querySelector(".jb-step-count").textContent=`${current+1} / ${labels.length}`;
-  actions.querySelector(".jb-back").style.visibility=current===0?"hidden":"visible";
-  actions.querySelector(".jb-next").textContent=current===6?"💾 Save & Finish":"পরের ধাপ →";
-  if(current===6){note.textContent="শেষ ধাপে Privacy দেখে Save & Finish চাপুন।";if(finalSubmit)finalSubmit.style.display="block"}else{note.textContent="একটি ধাপ পূরণ করে পরের ধাপে যান। আগের তথ্য স্বয়ংক্রিয়ভাবে সংরক্ষিত থাকবে।";if(finalSubmit)finalSubmit.style.display="none"}
-  localStorage.setItem("joronBiodataStep",String(current));
-  window.scrollTo({top:0,behavior:"smooth"});
- }
- function validateCurrent(){
-  for(const i of visibleCards()){const required=[...cards[i].querySelectorAll("[required]")];for(const e of required){if(!e.checkValidity()){e.reportValidity();e.focus();return false}}}
-  return true;
- }
- actions.querySelector(".jb-back").onclick=()=>{if(current>0){current--;render()}};
- actions.querySelector(".jb-next").onclick=()=>{if(!validateCurrent())return;if(current<6){current++;render()}else if(finalSubmit){finalSubmit.click()}};
+ let current=Number(localStorage.getItem("joronBiodataStep")||0);if(!Number.isInteger(current)||current<0||current>=sections.length)current=0;
+ sections.forEach((sec,i)=>{sec.dataset.guidedStep=i;sec.hidden=i!==current;sec.querySelectorAll("input,select,textarea,button").forEach(el=>{el.dataset.guidedDisabled=String(i!==current);if(i!==current)el.disabled=true})});
+ const actions=document.createElement("div");actions.className="guided-actions";actions.innerHTML='<button type="button" class="guided-back">← Back</button><button type="button" class="guided-next">Next →</button>';
+ form.appendChild(actions);
+ const title=wrap.querySelector(".joron-step-title"),bar=wrap.querySelector(".joron-step-progress i");
+ function render(){sections.forEach((sec,i)=>{const active=i===current;sec.hidden=!active;sec.querySelectorAll("input,select,textarea,button").forEach(el=>el.disabled=!active);});wrap.querySelectorAll(".joron-step").forEach((s,i)=>{s.classList.toggle("active",i===current);s.classList.toggle("done",i<current)});title.textContent=labels[current];bar.style.width=((current+1)/sections.length*100)+"%";actions.querySelector(".guided-back").disabled=current===0;actions.querySelector(".guided-next").textContent=current===sections.length-1?"💾 Save & Finish":"Next →";actions.querySelector(".guided-next").classList.toggle("guided-save",current===sections.length-1);window.scrollTo({top:0,behavior:"smooth"});localStorage.setItem("joronBiodataStep",String(current));}
+ function validStep(){const fields=[...sections[current].querySelectorAll("input:not([type=hidden]),select,textarea")].filter(e=>!e.disabled);for(const el of fields){if(!el.checkValidity()){el.reportValidity();return false}}return true}
+ actions.querySelector(".guided-back").onclick=()=>{if(current>0){current--;render()}};
+ actions.querySelector(".guided-next").onclick=()=>{if(!validStep())return;if(current<sections.length-1){current++;render()}else form.requestSubmit()};
  render();
 }
+initGuidedSteps();
 
+await import("./biodata-smart-fields.js");
+await persistenceReady;
 onAuthStateChanged(auth,async user=>{
  if(!user){location.replace("login.html?next=smart-biodata.html");return}
- try{const s=await getDoc(doc(db,"privateBiodata",user.uid));if(s.exists()){fill(s.data());applyOnboarding()}}catch(e){console.error("JORON biodata load",e)}
- setupGuidedSteps();
+ try{const s=await getDoc(doc(db,"privateBiodata",user.uid));if(s.exists()){fill(s.data());ageFromDob();autoProfileLogic()}}catch(e){console.error("JORON biodata load",e)}
 });
 
 form?.addEventListener("submit",async e=>{
  e.preventDefault();
- if(!form.checkValidity()){form.reportValidity();return}
- const user=auth.currentUser;
- if(!user){location.replace("login.html?next=smart-biodata.html");return}
- const data=collect();
- ["country","profileFor","community"].forEach(id=>{const v=valueOf(id);if(v)data[id]=v});
+ const user=auth.currentUser;if(!user){location.replace("login.html?next=smart-biodata.html");return}
+ const data=collect();["country","profileFor","community","partnerGender"].forEach(id=>{const v=valueOf(id);if(v)data[id]=v});
  data.uid=user.uid;data.email=user.email||"";data.updatedAt=serverTimestamp();
  try{
   await setDoc(doc(db,"privateBiodata",user.uid),data,{merge:true});

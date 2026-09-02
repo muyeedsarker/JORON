@@ -14,7 +14,7 @@ import {
   setPersistence,
   browserLocalPersistence
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc, updateDoc, serverTimestamp, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 import { getStorage } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-storage.js";
 import { firebaseConfig } from "./firebase-config.js";
 
@@ -28,6 +28,7 @@ const facebookProvider = new FacebookAuthProvider();
 googleProvider.setCustomParameters({ prompt: "select_account" });
 
 const persistenceReady = setPersistence(auth, browserLocalPersistence);
+const IDENTIFIER_API = "https://us-central1-joron-d7742.cloudfunctions.net";
 
 function createMemberId(uid) {
   return `JRN-${String(uid).replace(/[^a-zA-Z0-9]/g, "").slice(0, 10).toUpperCase()}`;
@@ -46,7 +47,6 @@ async function ensureUserProfile(user, provider = null, extra = {}) {
     }
     return existing;
   }
-
   const data = {
     uid: user.uid,
     memberId: createMemberId(user.uid),
@@ -62,22 +62,32 @@ async function ensureUserProfile(user, provider = null, extra = {}) {
   return data;
 }
 
+async function identifierRequest(path, body) {
+  const response = await fetch(`${IDENTIFIER_API}/${path}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body)
+  });
+  if (!response.ok) throw new Error("IDENTIFIER_SERVICE_ERROR");
+  return response.json();
+}
+
+async function signInWithIdentifier(identifier, password) {
+  const result = await identifierRequest("loginWithIdentifier", { identifier, password });
+  if (!result?.customToken) throw new Error("INVALID_CREDENTIALS");
+  await persistenceReady;
+  return signInWithCustomToken(auth, result.customToken);
+}
+
+async function resetPasswordWithIdentifier(identifier) {
+  return identifierRequest("passwordResetByIdentifier", { identifier });
+}
+
 async function findLoginEmail(identifier) {
   const value = String(identifier || "").trim();
   if (!value) throw new Error("LOGIN_IDENTIFIER_REQUIRED");
   if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return value.toLowerCase();
-  const users = collection(db, "users");
-  const memberSnap = await getDocs(query(users, where("memberId", "==", value.toUpperCase())));
-  if (!memberSnap.empty) {
-    const email = memberSnap.docs[0].data()?.email;
-    if (email) return email.toLowerCase();
-  }
-  const phoneSnap = await getDocs(query(users, where("phone", "==", value)));
-  if (!phoneSnap.empty) {
-    const email = phoneSnap.docs[0].data()?.email;
-    if (email) return email.toLowerCase();
-  }
-  throw new Error("LOGIN_IDENTIFIER_NOT_FOUND");
+  throw new Error("LOGIN_IDENTIFIER_LOOKUP_MOVED_TO_BACKEND");
 }
 
 function friendlyAuthError(error) {
@@ -93,7 +103,9 @@ function friendlyAuthError(error) {
     "auth/operation-not-allowed": "Firebase Console-এ এই Login Provider চালু করা হয়নি।",
     "auth/unauthorized-domain": "এই ওয়েবসাইটের domain Firebase Authentication-এ অনুমোদিত নয়।",
     "LOGIN_IDENTIFIER_REQUIRED": "Member ID, মোবাইল অথবা ইমেইল দিন।",
-    "LOGIN_IDENTIFIER_NOT_FOUND": "এই Member ID/মোবাইল দিয়ে কোনো অ্যাকাউন্ট পাওয়া যায়নি।"
+    "LOGIN_IDENTIFIER_LOOKUP_MOVED_TO_BACKEND": "Member ID/মোবাইল লগইনের জন্য নিরাপদ সার্ভিস ব্যবহার করুন।",
+    "INVALID_CREDENTIALS": "Member ID/মোবাইল/ইমেইল অথবা পাসওয়ার্ড সঠিক নয়।",
+    "IDENTIFIER_SERVICE_ERROR": "লগইন সার্ভিসে সাময়িক সমস্যা হয়েছে। আবার চেষ্টা করুন।"
   };
   return map[code] || "লগইন সম্পন্ন করা যায়নি। আবার চেষ্টা করুন।";
 }
@@ -122,8 +134,6 @@ function wireLoginPage() {
   const forgotBtn = document.getElementById("forgot");
   if (!googleBtn && !facebookBtn && !form) return;
   document.title = "JORON — Login";
-  const sub = document.querySelector(".brand .sub");
-  if (sub) sub.textContent = "সম্পর্ক জুড়ে দেয় জোড়ন";
   if (identifierInput) {
     identifierInput.type = "text";
     identifierInput.inputMode = "text";
@@ -149,9 +159,7 @@ function wireLoginPage() {
       if (!identifier || !password) return msg.textContent = "Member ID, মোবাইল/ইমেইল এবং পাসওয়ার্ড দিন।";
       try {
         msg.textContent = "⏳ লগইন হচ্ছে...";
-        await persistenceReady;
-        const email = await findLoginEmail(identifier);
-        await signInWithEmailAndPassword(auth, email, password);
+        await signInWithIdentifier(identifier, password);
         msg.textContent = "✅ লগইন সফল হচ্ছে...";
         setTimeout(() => location.href = "biodata.html", 700);
       } catch (error) {
@@ -166,20 +174,13 @@ function wireLoginPage() {
       const identifier = identifierInput?.value.trim() || "";
       if (!identifier) return msg.textContent = "আগে Member ID, মোবাইল অথবা ইমেইল লিখুন।";
       try {
-        msg.textContent = "⏳ তথ্য যাচাই হচ্ছে...";
-        const email = await findLoginEmail(identifier);
-        await sendPasswordResetEmail(auth, email);
-        msg.textContent = "✅ পাসওয়ার্ড রিসেট লিংক ইমেইলে পাঠানো হয়েছে।";
+        msg.textContent = "⏳ রিসেট লিংক পাঠানো হচ্ছে...";
+        await resetPasswordWithIdentifier(identifier);
+        msg.textContent = "✅ যদি অ্যাকাউন্টটি থাকে, রিসেট লিংক ইমেইলে পাঠানো হয়েছে।";
       } catch (error) {
         msg.textContent = `❌ ${friendlyAuthError(error)}`;
       }
     };
-  }
-  if (!document.getElementById("joron-auth-login-skin")) {
-    const style = document.createElement("style");
-    style.id = "joron-auth-login-skin";
-    style.textContent = `.login-shell{border:1px solid rgba(199,154,69,.38)!important}.brand span{color:#d90b62!important}.brand .sub{color:#c79a45!important;letter-spacing:1.2px!important;font-size:12px!important}.idbtn{background:linear-gradient(135deg,#c79a45,#d90b62)!important}.email-form{border-color:rgba(199,154,69,.42)!important}.email-form input:focus{border-color:#c79a45!important;box-shadow:0 0 0 3px rgba(199,154,69,.12)!important}.terms a,.msg{color:#d90b62!important}`;
-    document.head.appendChild(style);
   }
 }
 
@@ -188,4 +189,4 @@ if (typeof document !== "undefined") {
   else wireLoginPage();
 }
 
-export { app, auth, db, storage, onAuthStateChanged, signOut, signInWithEmailAndPassword, signInWithCustomToken, createUserWithEmailAndPassword, sendPasswordResetEmail, GoogleAuthProvider, FacebookAuthProvider, googleProvider, facebookProvider, signInWithPopup, updateProfile, ensureUserProfile, findLoginEmail, persistenceReady, friendlyAuthError };
+export { app, auth, db, storage, onAuthStateChanged, signOut, signInWithEmailAndPassword, signInWithCustomToken, createUserWithEmailAndPassword, sendPasswordResetEmail, GoogleAuthProvider, FacebookAuthProvider, googleProvider, facebookProvider, signInWithPopup, updateProfile, ensureUserProfile, findLoginEmail, signInWithIdentifier, resetPasswordWithIdentifier, persistenceReady, friendlyAuthError };

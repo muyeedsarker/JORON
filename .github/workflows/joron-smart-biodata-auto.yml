@@ -32,7 +32,6 @@ function initAutoProfilePanel(){
  <div class="field"><label>মাতৃভাষা<select id="motherTongueSelect"><option>বাংলা</option><option>হিন্দি</option><option>উর্দু</option><option>আরবি</option><option>ইংরেজি</option><option>অন্যান্য</option></select></label></div>
  <div class="field"><label>দেশ <select id="countrySelect"><option value="BD">বাংলাদেশ</option><option value="IN">ভারত</option><option value="PK">পাকিস্তান</option><option value="SA">সৌদি আরব</option><option value="AE">সংযুক্ত আরব আমিরাত</option><option value="MY">মালয়েশিয়া</option><option value="GB">যুক্তরাজ্য</option><option value="US">যুক্তরাষ্ট্র</option><option value="CA">কানাডা</option><option value="AU">অস্ট্রেলিয়া</option><option value="OTHER">অন্যান্য</option></select></label></div></div>`;
  personal.insertBefore(panel,personal.firstElementChild);
- const hidden=(id)=>document.getElementById(id);
  const pf=document.getElementById('profileForSelect'),pg=document.getElementById('partnerGenderSelect'),mt=document.getElementById('motherTongueSelect'),cs=document.getElementById('countrySelect'),g=document.getElementById('gender'),lang=document.getElementById('language'),nat=document.getElementById('nationality');
  let o={};try{o=JSON.parse(localStorage.getItem('joronOnboarding')||'{}')||{}}catch{}
  if(o.profileFor)pf.value=o.profileFor;
@@ -66,3 +65,5 @@ initAutoProfilePanel();
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git commit -m 'chore: remove one-time Smart Biodata workflow' || true
           git push || true
+
+# one-time trigger refresh

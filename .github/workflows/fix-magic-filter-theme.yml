@@ -1,0 +1,63 @@
+name: Fix JORON Magic Filter Theme
+
+on:
+  push:
+    paths:
+      - '.github/workflows/fix-magic-filter-theme.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: main
+      - name: Apply JORON theme to Magic Filter
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('magic-filter.html')
+          s = p.read_text(encoding='utf-8')
+          css = '''<style id="joron-magic-theme-fix">
+          body{background:var(--ivory)!important;color:var(--ink)!important}
+          .wrap{width:min(1180px,92%)!important}
+          .hero{padding:38px 0 24px!important;background:var(--ivory)!important}
+          .hero h1{color:var(--gold-deep)!important;font-family:"Noto Serif Bengali","Playfair Display",Georgia,serif!important}
+          .hero p{color:var(--muted)!important}
+          .panel{background:var(--paper)!important;border:1px solid var(--gold-line)!important;border-radius:22px!important;box-shadow:var(--shadow)!important}
+          .field label{color:var(--gold-deep)!important}
+          .field input,.field select{border:1px solid var(--gold-line)!important;background:#fffdf9!important;color:var(--ink)!important}
+          .field input:focus,.field select:focus{border-color:var(--gold)!important;box-shadow:0 0 0 3px rgba(199,154,69,.1)!important}
+          .count{color:var(--gold-deep)!important}
+          .mode{background:#f7efdf!important;color:var(--gold-deep)!important;border:1px solid var(--gold-line)!important}
+          .card{background:var(--paper)!important;border:1px solid var(--gold-line)!important;border-radius:20px!important;box-shadow:var(--shadow)!important}
+          .card h2{color:var(--gold-deep)!important}
+          .meta{color:var(--muted)!important}
+          .btn,.auth-msg a{background:var(--gold)!important;color:#fff!important;border:2px solid var(--gold-deep)!important;border-radius:999px!important;box-shadow:none!important;text-decoration:none!important}
+          .auth-msg{background:var(--paper)!important;border:1px solid var(--gold-line)!important;color:var(--ink)!important}
+          .empty{color:var(--muted)!important}
+          .joron-global-page-nav{padding:18px 0 26px!important}
+          .joron-global-page-nav a,.joron-global-page-nav button{background:var(--paper)!important;color:var(--gold-deep)!important;border:2px solid var(--gold)!important;border-radius:999px!important;box-shadow:none!important}
+          .joron-global-page-nav button{background:var(--gold)!important;color:#fff!important;border-color:var(--gold-deep)!important}
+          .joron-global-page-nav a:hover,.joron-global-page-nav button:hover{transform:translateY(-2px)!important;background:#f7efdf!important;color:var(--gold-deep)!important}
+          .joron-global-page-nav button:hover{background:var(--gold-deep)!important;color:#fff!important}
+          @media(max-width:800px){.filters{grid-template-columns:1fr 1fr!important}}
+          @media(max-width:500px){.filters{grid-template-columns:1fr!important}}
+          </style>'''
+          if 'joron-magic-theme-fix' not in s:
+              s=s.replace('</head>',css+'</head>')
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Commit and remove one-time workflow
+        run: |
+          git config user.name "JORON UI Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add magic-filter.html
+          git rm .github/workflows/fix-magic-filter-theme.yml
+          git commit -m "Fix JORON Magic Filter button theme"
+          git push origin HEAD:main

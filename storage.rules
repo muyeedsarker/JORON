@@ -3,7 +3,10 @@ rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
     match /profilePhotos/{userId}/{fileName} {
-      allow read: if request.auth != null;
+      // Profile photos follow the public profile visibility setting.
+      allow read: if request.auth != null
+        && (request.auth.uid == userId
+          || firestore.get(/databases/(default)/documents/publicProfiles/$(userId)).data.visibility == 'public');
       allow create, update: if request.auth != null
         && request.auth.uid == userId
         && request.resource.size < 5 * 1024 * 1024

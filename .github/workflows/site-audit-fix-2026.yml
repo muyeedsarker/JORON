@@ -1,14 +1,12 @@
 name: JORON 2026 Site Audit & Fix
 on:
-  push:
-    branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
   audit-fix:
-    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -26,13 +24,11 @@ jobs:
             if not p.exists():
               print('MISSING PAGE:',name); continue
             s=p.read_text(encoding='utf-8')
-            # Keep Firebase/JS and form IDs untouched; only normalize stylesheet links.
             s=legacy.sub('',s)
             link=f'<link rel="stylesheet" href="{theme}">'
             s=re.sub(r'<link[^>]+href=["\']assets/joron-theme-2026\.css[^"\']*["\'][^>]*>\s*','',s,flags=re.I)
             s=s.replace('</head>',link+'\n</head>',1) if '</head>' in s and link not in s else s
             p.write_text(s,encoding='utf-8')
-          # Strong visual guardrail for legacy inline styles: no functional selectors are changed.
           t=root/theme
           css=t.read_text(encoding='utf-8')
           marker='/* JORON 2026 SITE-AUDIT GUARDRAILS */'

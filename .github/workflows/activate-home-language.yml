@@ -13,7 +13,7 @@ jobs:
         run: |
           python3 - <<'PY'
           from pathlib import Path
-          files = ['index.html', 'profiles.html', 'login.html', 'signup.html', 'biodata.html', 'onboarding-v4.html', 'dashboard.html', 'matching.html', 'interests.html', 'following.html', 'free-chat.html', 'relationship.html']
+          files = ['index.html', 'profiles.html', 'login.html', 'signup.html', 'biodata.html', 'onboarding-v4.html', 'dashboard.html', 'matching.html', 'interests.html', 'following.html', 'free-chat.html', 'relationship.html', 'profile.html', 'help.html']
           tag = '<script src="assets/joron-language.js"></script>'
           for name in files:
               p = Path(name)
@@ -35,6 +35,6 @@ jobs:
         run: |
           git config user.name 'JORON Bot'
           git config user.email 'actions@users.noreply.github.com'
-          git add index.html profiles.html login.html signup.html biodata.html onboarding-v4.html dashboard.html matching.html interests.html following.html free-chat.html relationship.html
-          git diff --cached --quiet || git commit -m 'feat: activate three-language system across engagement pages'
+          git add index.html profiles.html login.html signup.html biodata.html onboarding-v4.html dashboard.html matching.html interests.html following.html free-chat.html relationship.html profile.html help.html
+          git diff --cached --quiet || git commit -m 'feat: activate three-language system across core pages'
           git push

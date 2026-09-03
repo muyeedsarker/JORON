@@ -13,7 +13,7 @@ jobs:
         run: |
           python3 - <<'PY'
           from pathlib import Path
-          files = ['index.html', 'profiles.html', 'login.html', 'signup.html', 'biodata.html', 'onboarding-v4.html']
+          files = ['index.html', 'profiles.html', 'login.html', 'signup.html', 'biodata.html', 'onboarding-v4.html', 'dashboard.html', 'matching.html']
           tag = '<script src="assets/joron-language.js"></script>'
           for name in files:
               p = Path(name)
@@ -30,48 +30,11 @@ jobs:
               if home_tag not in s:
                   s = s.replace('</head>', home_tag + '</head>', 1)
                   p.write_text(s, encoding='utf-8')
-          p = Path('onboarding-v4.html')
-          if p.exists():
-              s = p.read_text(encoding='utf-8')
-              marker = '<script id="joron-onboarding-i18n">'
-              if marker not in s:
-                  block = r'''<script id="joron-onboarding-i18n">
-(function(){
-  const T={
-    'কার জন্য':'For whom','দেশ':'Country','ভাষা':'Language','আপনি':'You','ধর্ম':'Religion','ঠিকানা':'Address','পছন্দ':'Preferences','শেষ':'Finish',
-    '👤 কার জন্য Profile তৈরি করছেন?':'👤 Who are you creating the Profile for?','একটি নির্বাচন করুন। Next চাপলে পরের প্রশ্ন আসবে।':'Select one. Press Next to continue.','✓ এই তথ্য Smart Biodata-তে দ্বিতীয়বার লিখতে হবে না।':'✓ You will not need to enter this information again in Smart Biodata.',
-    '🌍 কোন দেশে?':'🌍 Which country?','ফোনের ভাষা ও সময় অঞ্চল দেখে দেশ অটো-সিলেক্ট করা হবে।':'The country will be auto-selected from your phone language and time zone.','⚡ Smart Auto Detect':'⚡ Smart Auto Detect',
-    '🗣️ ভাষা ও Mother Tongue':'🗣️ Language & Mother Tongue','✓ দেশ বদলালে ভাষা ও Mother Tongue-এর প্রাথমিক মান অটো বদলাবে।':'✓ Changing country will automatically update the initial language and Mother Tongue.',
-    '👫 আপনার Gender':'👫 Your Gender','👨 পুরুষ':'👨 Male','👩 নারী':'👩 Female','⚙️ Partner Gender অটো হবে':'⚙️ Partner Gender will be automatic',
-    '🕌 ধর্ম ও Community':'🕌 Religion & Community','ধর্ম নির্বাচন করুন':'Select religion','Community / মত':'Community / School of thought','আগে ধর্ম নির্বাচন করুন':'Select religion first','✓ ধর্ম বদলালে Community তালিকা অটো বদলাবে।':'✓ The Community list will update automatically when religion changes.',
-    '📍 আপনার ঠিকানা':'📍 Your Address','বিভাগ নির্বাচন করুন':'Select division','জেলা নির্বাচন করুন':'Select district','আগে বিভাগ নির্বাচন করুন':'Select division first',
-    '❤️ জীবনসঙ্গীর পছন্দ':'❤️ Life Partner Preferences','এগুলো Smart Biodata-এর একই preference field-এ যাবে। পরে এখানে বা Smart Biodata-তে পরিবর্তন করলে একই তথ্য রাখা হবে।':'These will be saved in the same Smart Biodata preference fields. Changes here or in Smart Biodata will stay synchronized.','অটো নির্বাচন':'Auto select','বয়স — সর্বনিম্ন':'Minimum age','বয়স — সর্বোচ্চ':'Maximum age','যেকোনো ধর্ম':'Any religion','যেকোনো Community':'Any Community','যেকোনো জেলা':'Any district','যেকোনো শিক্ষা':'Any education','এইচএসসি':'HSC','স্নাতক':'Bachelor’s','স্নাতকোত্তর':'Master’s','দাওরায়ে হাদিস':'Dawra-e-Hadith','অন্যান্য':'Other',
-    '🎉 JORON Matrimony প্রস্তুত!':'🎉 JORON Matrimony is ready!','আপনার Onboarding তথ্য সংরক্ষিত। এখন Smart Biodata-তে বাকি তথ্য এক ধাপ করে পূরণ করুন।':'Your onboarding information is saved. Now complete the remaining information step by step in Smart Biodata.','📝 Smart Biodata শুরু করুন':'📝 Start Smart Biodata','❤️ Matching দেখুন':'❤️ View Matching','← পিছনে':'← Back','পরের ধাপ →':'Next step →','শেষ করুন →':'Finish →','Profile কার জন্য তৈরি করছেন নির্বাচন করুন।':'Please select who the Profile is for.','Gender নির্বাচন করুন।':'Please select Gender.','ধর্ম নির্বাচন করুন।':'Please select religion.','বিভাগ ও জেলা নির্বাচন করুন।':'Please select division and district.'
-  };
-  const HI={
-    'কার জন্য':'किसके लिए','দেশ':'देश','ভাষা':'भाषा','আপনি':'आप','ধর্ম':'धर्म','ঠিকানা':'पता','পছন্দ':'पसंद','শেষ':'समाप्त',
-    '👤 কার জন্য Profile তৈরি করছেন?':'👤 आप किसके लिए Profile बना रहे हैं?','একটি নির্বাচন করুন। Next চাপলে পরের প্রশ্ন আসবে।':'एक विकल्प चुनें। Next दबाकर आगे बढ़ें।','✓ এই তথ্য Smart Biodata-তে দ্বিতীয়বার লিখতে হবে না।':'✓ यह जानकारी Smart Biodata में दोबारा नहीं भरनी होगी.',
-    '🌍 কোন দেশে?':'🌍 किस देश में?','ফোনের ভাষা ও সময় অঞ্চল দেখে দেশ অটো-সিলেক্ট করা হবে।':'आपके फोन की भाषा और समय क्षेत्र के आधार पर देश अपने-आप चुना जाएगा।','⚡ Smart Auto Detect':'⚡ Smart Auto Detect',
-    '🗣️ ভাষা ও Mother Tongue':'🗣️ भाषा और Mother Tongue','✓ দেশ বদলালে ভাষা ও Mother Tongue-এর প্রাথমিক মান অটো বদলাবে।':'✓ देश बदलने पर भाषा और Mother Tongue की प्रारंभिक जानकारी अपने-आप बदल जाएगी।',
-    '👫 আপনার Gender':'👫 आपका Gender','👨 পুরুষ':'👨 पुरुष','👩 নারী':'👩 महिला','⚙️ Partner Gender অটো হবে':'⚙️ Partner Gender अपने-आप चुना जाएगा',
-    '🕌 ধর্ম ও Community':'🕌 धर्म और Community','ধর্ম নির্বাচন করুন':'धर्म चुनें','Community / মত':'Community / मत','আগে ধর্ম নির্বাচন করুন':'पहले धर्म चुनें','✓ ধর্ম বদলালে Community তালিকা অটো বদলাবে।':'✓ धर्म बदलने पर Community सूची अपने-आप बदल जाएगी।',
-    '📍 আপনার ঠিকানা':'📍 आपका पता','বিভাগ নির্বাচন করুন':'विभाग चुनें','জেলা নির্বাচন করুন':'जिला चुनें','আগে বিভাগ নির্বাচন করুন':'पहले विभाग चुनें',
-    '❤️ জীবনসঙ্গীর পছন্দ':'❤️ जीवनसाथी की पसंद','এগুলো Smart Biodata-এর একই preference field-এ যাবে। পরে এখানে বা Smart Biodata-তে পরিবর্তন করলে একই তথ্য রাখা হবে।':'ये Smart Biodata के उन्हीं preference fields में सेव होंगे। यहां या Smart Biodata में बदलाव करने पर जानकारी समान रहेगी।','অটো নির্বাচন':'ऑटो चयन','বয়স — সর্বনিম্ন':'न्यूनतम उम्र','বয়স — সর্বোচ্চ':'अधिकतम उम्र','যেকোনো ধর্ম':'कोई भी धर्म','যেকোনো Community':'कोई भी Community','যেকোনো জেলা':'कोई भी जिला','যেকোনো শিক্ষা':'कोई भी शिक्षा','এইচএসসি':'HSC','স্নাতক':'स्नातक','স্নাতকোত্তর':'स्नातकोत्तर','দাওরায়ে হাদিস':'दাওरায়ে हदीस','অন্যান্য':'अन्य',
-    '🎉 JORON Matrimony প্রস্তুত!':'🎉 JORON Matrimony तैयार है!','আপনার Onboarding তথ্য সংরক্ষিত। এখন Smart Biodata-তে বাকি তথ্য এক ধাপ করে পূরণ করুন।':'आपकी Onboarding जानकारी सेव हो गई है। अब Smart Biodata में बाकी जानकारी चरण-दर-चरण भरें।','📝 Smart Biodata শুরু করুন':'📝 Smart Biodata शुरू करें','❤️ Matching দেখুন':'❤️ Matching देखें','← পিছনে':'← पीछे','পরের ধাপ →':'अगला चरण →','শেষ করুন →':'समाप्त करें →','Profile কার জন্য তৈরি করছেন নির্বাচন করুন।':'कृपया चुनें कि Profile किसके लिए है।','Gender নির্বাচন করুন।':'कृपया Gender चुनें।','ধর্ম নির্বাচন করুন।':'कृपया धर्म चुनें।','বিভাগ ও জেলা নির্বাচন করুন।':'कृपया विभाग और जिला चुनें।'
-  };
-  const BN={}; Object.keys(T).forEach(k=>{BN[k]=T[k]});
-  function lang(){return window.JORONLanguage?.getLanguage?.()||localStorage.getItem('joronLanguage')||'bn'}
-  function apply(){const l=lang(),map=l==='hi'?HI:l==='en'?T:BN;document.querySelectorAll('body *').forEach(el=>{if(el.children.length===0){const v=(el.textContent||'').trim();if(map[v])el.textContent=map[v];}});document.querySelectorAll('option').forEach(o=>{const v=(o.textContent||'').trim();if(map[v])o.textContent=map[v]});document.querySelectorAll('input[placeholder]').forEach(i=>{const v=i.getAttribute('placeholder');if(map[v])i.setAttribute('placeholder',map[v])});}
-  document.addEventListener('joron-language-change',apply); new MutationObserver(apply).observe(document.body,{childList:true,subtree:true}); setTimeout(apply,0);
-})();
-</script>'''
-                  s = s.replace('</body>', block + '</body>', 1)
-                  p.write_text(s, encoding='utf-8')
           PY
       - name: Commit language activation
         run: |
           git config user.name 'JORON Bot'
           git config user.email 'actions@users.noreply.github.com'
-          git add index.html profiles.html login.html signup.html biodata.html onboarding-v4.html
+          git add index.html profiles.html login.html signup.html biodata.html onboarding-v4.html dashboard.html matching.html
           git diff --cached --quiet || git commit -m 'feat: activate three-language system across core pages'
           git push

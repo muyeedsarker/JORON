@@ -15,7 +15,7 @@ const bn=x=>String(x?.bn_name??x?.nameBn??x?.bnName??x?.name??x?.title??x??'').t
 const en=x=>String(x?.name??x?.en_name??x?.enName??x?.title??x??'').trim();
 const L=pre=>pre?'Permanent':'Present';
 const msg=(t,bad=false)=>{const e=$('locationStatus');if(e){e.textContent=t;e.style.display='block';e.style.color=bad?'#a80000':'#087b59';}};
-function fill(s,rows,ph){if(!s)return;s.replaceChildren(new Option(ph,''));const seen=new Set();for(const r of rows||[]){const text=bn(r)||en(r);const val=String(r?.id??r?.value??r?.code??en(r)||text);const k=norm(text)+'|'+norm(val);if(text&&!seen.has(k)){seen.add(k);s.add(new Option(text,val));}}s.disabled=!seen.size;}
+function fill(s,rows,ph){if(!s)return;s.replaceChildren(new Option(ph,''));const seen=new Set();for(const r of rows||[]){const text=bn(r)||en(r);const val=String(r?.id ?? r?.value ?? r?.code ?? en(r) ?? text);const k=norm(text)+'|'+norm(val);if(text&&!seen.has(k)){seen.add(k);s.add(new Option(text,val));}}s.disabled=!seen.size;}
 function reset(s,ph){if(s){s.replaceChildren(new Option(ph,''));s.value='';s.disabled=true;}}
 function div(v){return TREE.find(x=>same(v,en(x))||same(v,bn(x)));}
 function dist(d,v){return (div(d)?.districts||[]).find(x=>same(v,en(x))||same(v,bn(x)));}

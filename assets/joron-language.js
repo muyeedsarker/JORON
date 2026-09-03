@@ -1,42 +1,43 @@
 /* JORON Global Language System
  * Default: Bengali. Persists selection in localStorage.
+ * Supports Bengali, English and Hindi.
  * Pages can opt into translation with data-i18n="key" and data-i18n-placeholder="key".
  * The same module is safe to load more than once.
  */
 (function () {
   const STORAGE_KEY = "joronLanguage";
   const DEFAULT_LANGUAGE = "bn";
-  const SUPPORTED = ["bn", "en"];
+  const SUPPORTED = ["bn", "en", "hi"];
 
   const translations = {
-    "হোম": { en: "Home" },
-    "প্রোফাইল": { en: "Profile" },
-    "ম্যাচিং": { en: "Matching" },
-    "সহায়তা": { en: "Help" },
-    "লগইন": { en: "Login" },
-    "রেজিস্টার": { en: "Register" },
-    "লাভ": { en: "Benefits" },
-    "মৌলিক তথ্য": { en: "Basic Details" },
-    "আপনার নাম লিখুন": { en: "Enter your name" },
-    "ইমেইল": { en: "Email" },
-    "পাসওয়ার্ড তৈরি করুন": { en: "Create password" },
-    "পাসওয়ার্ড ৮–২০ অক্ষরের হতে হবে": { en: "Your password must be 8–20 characters" },
-    "আপনার মোবাইল নম্বর লিখুন": { en: "Enter your mobile number" },
-    "এই নম্বরে OTP পাঠানো হবে": { en: "OTP will be sent to this number" },
-    "OTP নিন": { en: "Get OTP" },
-    "সাহায্য প্রয়োজন? কল করুন": { en: "Need help? Call" },
-    "নিরাপদ": { en: "Safe" },
-    "সম্মানজনক": { en: "Respectful" },
-    "Smart Search": { en: "Smart Search" },
-    "বায়োডাটা": { en: "Biodata" },
-    "ম্যাচিং প্রোফাইল": { en: "Matching Profiles" },
-    "পছন্দ": { en: "Interest" },
-    "চ্যাট": { en: "Chat" },
-    "সদস্যপদ": { en: "Membership" },
-    "পেমেন্ট": { en: "Payment" },
-    "সেটিংস": { en: "Settings" },
-    "গোপনীয়তা নীতি": { en: "Privacy Policy" },
-    "শর্তাবলি": { en: "Terms & Conditions" }
+    "হোম": { en: "Home", hi: "होम" },
+    "প্রোফাইল": { en: "Profile", hi: "प्रोफ़ाइल" },
+    "ম্যাচিং": { en: "Matching", hi: "मैचिंग" },
+    "সহায়তা": { en: "Help", hi: "सहायता" },
+    "লগইন": { en: "Login", hi: "लॉगिन" },
+    "রেজিস্টার": { en: "Register", hi: "रजिस्टर" },
+    "লাভ": { en: "Benefits", hi: "लाभ" },
+    "মৌলিক তথ্য": { en: "Basic Details", hi: "मूल जानकारी" },
+    "আপনার নাম লিখুন": { en: "Enter your name", hi: "अपना नाम लिखें" },
+    "ইমেইল": { en: "Email", hi: "ईमेल" },
+    "পাসওয়ার্ড তৈরি করুন": { en: "Create password", hi: "पासवर्ड बनाएं" },
+    "পাসওয়ার্ড ৮–২০ অক্ষরের হতে হবে": { en: "Your password must be 8–20 characters", hi: "आपका पासवर्ड 8–20 अक्षरों का होना चाहिए" },
+    "আপনার মোবাইল নম্বর লিখুন": { en: "Enter your mobile number", hi: "अपना मोबाइल नंबर दर्ज करें" },
+    "এই নম্বরে OTP পাঠানো হবে": { en: "OTP will be sent to this number", hi: "इस नंबर पर OTP भेजा जाएगा" },
+    "OTP নিন": { en: "Get OTP", hi: "OTP प्राप्त करें" },
+    "সাহায্য প্রয়োজন? কল করুন": { en: "Need help? Call", hi: "मदद चाहिए? कॉल करें" },
+    "নিরাপদ": { en: "Safe", hi: "सुरक्षित" },
+    "সম্মানজনক": { en: "Respectful", hi: "सम्मानजनक" },
+    "Smart Search": { en: "Smart Search", hi: "स्मार्ट खोज" },
+    "বায়োডাটা": { en: "Biodata", hi: "बायोडाटा" },
+    "ম্যাচিং প্রোফাইল": { en: "Matching Profiles", hi: "मिलान प्रोफ़ाइल" },
+    "পছন্দ": { en: "Interest", hi: "रुचि" },
+    "চ্যাট": { en: "Chat", hi: "चैट" },
+    "সদস্যপদ": { en: "Membership", hi: "सदस्यता" },
+    "পেমেন্ট": { en: "Payment", hi: "भुगतान" },
+    "সেটিংস": { en: "Settings", hi: "सेटिंग्स" },
+    "গোপনীয়তা নীতি": { en: "Privacy Policy", hi: "गोपनीयता नीति" },
+    "শর্তাবলি": { en: "Terms & Conditions", hi: "नियम और शर्तें" }
   };
 
   function getLanguage() {
@@ -58,7 +59,7 @@
     const entry = translations[key];
     if (!entry) return key;
     if (language === "bn") return key;
-    return entry.en || key;
+    return entry[language] || key;
   }
 
   function applyTranslations(language) {
@@ -91,7 +92,7 @@
     const toggle = document.createElement("div");
     toggle.setAttribute("data-joron-language-toggle", "1");
     toggle.setAttribute("aria-label", "Language");
-    toggle.innerHTML = '<button type="button" data-lang="bn" aria-label="বাংলা">🇧🇩 বাংলা</button><span aria-hidden="true">|</span><button type="button" data-lang="en" aria-label="English">English 🇬🇧</button>';
+    toggle.innerHTML = '<button type="button" data-lang="bn" aria-label="বাংলা">🇧🇩 বাংলা</button><span aria-hidden="true">|</span><button type="button" data-lang="en" aria-label="English">English 🇬🇧</button><span aria-hidden="true">|</span><button type="button" data-lang="hi" aria-label="हिन्दी">हिन्दी 🇮🇳</button>';
     Object.assign(toggle.style, {
       display: "inline-flex",
       alignItems: "center",
@@ -121,7 +122,7 @@
     updateToggle(language);
   }
 
-  window.JORONLanguage = { getLanguage, setLanguage, applyTranslations, translateText, translations, STORAGE_KEY };
+  window.JORONLanguage = { getLanguage, setLanguage, applyTranslations, translateText, translations, STORAGE_KEY, SUPPORTED };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, { once: true });
   else init();
 })();

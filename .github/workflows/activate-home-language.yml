@@ -15,12 +15,15 @@ jobs:
           from pathlib import Path
           tag = '<script src="assets/joron-language.js"></script>'
           onboarding_tag = '<script src="assets/joron-onboarding-language.js"></script>'
+          payment_tag = '<script src="assets/joron-payment-language.js"></script>'
           for p in sorted(Path('.').glob('*.html')):
               s = p.read_text(encoding='utf-8')
               if 'assets/joron-language.js' not in s and '</head>' in s:
                   s = s.replace('</head>', tag + '</head>', 1)
               if p.name == 'onboarding-v4.html' and 'assets/joron-onboarding-language.js' not in s and '</head>' in s:
                   s = s.replace('</head>', onboarding_tag + '</head>', 1)
+              if p.name == 'payment.html' and 'assets/joron-payment-language.js' not in s and '</head>' in s:
+                  s = s.replace('</head>', payment_tag + '</head>', 1)
               p.write_text(s, encoding='utf-8')
           p = Path('index.html')
           if p.exists():
@@ -34,6 +37,6 @@ jobs:
         run: |
           git config user.name 'JORON Bot'
           git config user.email 'actions@users.noreply.github.com'
-          git add -- '*.html' 'assets/joron-onboarding-language.js'
-          git diff --cached --quiet || git commit -m 'feat: activate onboarding three-language translations'
+          git add -- '*.html' 'assets/joron-onboarding-language.js' 'assets/joron-payment-language.js'
+          git diff --cached --quiet || git commit -m 'feat: activate payment three-language translations'
           git push

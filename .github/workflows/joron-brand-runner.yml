@@ -1,9 +1,6 @@
 name: JORON Matrimony Brand Runner
 
 on:
-  push:
-    paths:
-      - '*.html'
   workflow_dispatch:
 
 permissions:

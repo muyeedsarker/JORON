@@ -1,128 +1,52 @@
-/* JORON Global Language System
+/* JORON Global 3-Language System — Bengali / English / Hindi
  * Default: Bengali. Persists selection in localStorage.
- * Supports Bengali, English and Hindi.
- * Pages can opt into translation with data-i18n="key" and data-i18n-placeholder="key".
- * The same module is safe to load more than once.
+ * Pages may use data-i18n / data-i18n-placeholder / data-i18n-title.
+ * Also translates common visible Bengali UI text automatically when an exact dictionary entry exists.
  */
-(function () {
-  const STORAGE_KEY = "joronLanguage";
-  const DEFAULT_LANGUAGE = "bn";
-  const SUPPORTED = ["bn", "en", "hi"];
-
-  const translations = {
-    "হোম": { en: "Home", hi: "होम" },
-    "প্রোফাইল": { en: "Profile", hi: "प्रोफ़ाइल" },
-    "ম্যাচিং": { en: "Matching", hi: "मैचिंग" },
-    "সহায়তা": { en: "Help", hi: "सहायता" },
-    "লগইন": { en: "Login", hi: "लॉगिन" },
-    "রেজিস্টার": { en: "Register", hi: "रजिस्टर" },
-    "লাভ": { en: "Benefits", hi: "लाभ" },
-    "মৌলিক তথ্য": { en: "Basic Details", hi: "मूल जानकारी" },
-    "আপনার নাম লিখুন": { en: "Enter your name", hi: "अपना नाम लिखें" },
-    "ইমেইল": { en: "Email", hi: "ईमेल" },
-    "পাসওয়ার্ড তৈরি করুন": { en: "Create password", hi: "पासवर्ड बनाएं" },
-    "পাসওয়ার্ড ৮–২০ অক্ষরের হতে হবে": { en: "Your password must be 8–20 characters", hi: "आपका पासवर्ड 8–20 अक्षरों का होना चाहिए" },
-    "আপনার মোবাইল নম্বর লিখুন": { en: "Enter your mobile number", hi: "अपना मोबाइल नंबर दर्ज करें" },
-    "এই নম্বরে OTP পাঠানো হবে": { en: "OTP will be sent to this number", hi: "इस नंबर पर OTP भेजा जाएगा" },
-    "OTP নিন": { en: "Get OTP", hi: "OTP प्राप्त करें" },
-    "সাহায্য প্রয়োজন? কল করুন": { en: "Need help? Call", hi: "मदद चाहिए? कॉल करें" },
-    "নিরাপদ": { en: "Safe", hi: "सुरक्षित" },
-    "সম্মানজনক": { en: "Respectful", hi: "सम्मानजनक" },
-    "Smart Search": { en: "Smart Search", hi: "स्मार्ट खोज" },
-    "বায়োডাটা": { en: "Biodata", hi: "बायोडाटा" },
-    "ম্যাচিং প্রোফাইল": { en: "Matching Profiles", hi: "मिलान प्रोफ़ाइल" },
-    "পছন্দ": { en: "Interest", hi: "रुचि" },
-    "চ্যাট": { en: "Chat", hi: "चैट" },
-    "সদস্যপদ": { en: "Membership", hi: "सदस्यता" },
-    "পেমেন্ট": { en: "Payment", hi: "भुगतान" },
-    "সেটিংস": { en: "Settings", hi: "सेटिंग्स" },
-    "গোপনীয়তা নীতি": { en: "Privacy Policy", hi: "गोपनीयता नीति" },
-    "শর্তাবলি": { en: "Terms & Conditions", hi: "नियम और शर्तें" }
+(function(){
+  const STORAGE_KEY='joronLanguage', DEFAULT_LANGUAGE='bn', SUPPORTED=['bn','en','hi'];
+  const T={
+    'হোম':{en:'Home',hi:'होम'},'প্রোফাইল':{en:'Profile',hi:'प्रोफ़ाइल'},'ম্যাচিং':{en:'Matching',hi:'मैचिंग'},'সহায়তা':{en:'Help',hi:'सहायता'},'লগইন':{en:'Login',hi:'लॉगिन'},'রেজিস্টার':{en:'Register',hi:'रजिस्टर'},
+    'নতুন অ্যাকাউন্ট তৈরি করুন':{en:'Create New Account',hi:'नया अकाउंट बनाएं'},'অ্যাকাউন্ট তৈরি করুন':{en:'Create Account',hi:'अकाउंट बनाएं'},'লগইন করুন':{en:'Log In',hi:'लॉगिन करें'},'নতুন সদস্য? অ্যাকাউন্ট তৈরি করুন':{en:'New member? Create an account',hi:'नए सदस्य? अकाउंट बनाएं'},'হোমে ফিরুন':{en:'Back to Home',hi:'होम पर जाएं'},
+    'আপনার তথ্য':{en:'Your Information',hi:'आपकी जानकारी'},'পূর্ণ নাম':{en:'Full Name',hi:'पूरा नाम'},'আপনার পূর্ণ নাম':{en:'Your full name',hi:'अपना पूरा नाम'},'ইমেইল':{en:'Email',hi:'ईमेल'},'আপনার ইমেইল':{en:'Your email',hi:'आपका ईमेल'},'মোবাইল নম্বর':{en:'Mobile Number',hi:'मोबाइल नंबर'},'লিঙ্গ':{en:'Gender',hi:'लिंग'},'নির্বাচন করুন':{en:'Select',hi:'चुनें'},'পুরুষ':{en:'Male',hi:'पुरुष'},'নারী':{en:'Female',hi:'महिला'},
+    'নিরাপত্তা':{en:'Security',hi:'सुरक्षा'},'পাসওয়ার্ড':{en:'Password',hi:'पासवर्ड'},'পাসওয়ার্ড':{en:'Password',hi:'पासवर्ड'},'পাসওয়ার্ড নিশ্চিত করুন':{en:'Confirm Password',hi:'पासवर्ड की पुष्टि करें'},'আবার পাসওয়ার্ড লিখুন':{en:'Enter password again',hi:'पासवर्ड फिर से दर्ज करें'},
+    'অথবা':{en:'OR',hi:'या'},'নিরাপদে লগইন করুন':{en:'Log in securely',hi:'सुरक्षित लॉगिन करें'},'পাসওয়ার্ড ভুলে গেছেন?':{en:'Forgot password?',hi:'पासवर्ड भूल गए?'},'আপনার পাসওয়ার্ড লিখুন':{en:'Enter your password',hi:'अपना पासवर्ड दर्ज करें'},
+    'অ্যাকাউন্ট তৈরি হচ্ছে...':{en:'Creating account...',hi:'अकाउंट बनाया जा रहा है...'},'অ্যাকাউন্ট তৈরি হয়েছে':{en:'Account created',hi:'अकाउंट बन गया'},'ভালোবাসার সম্পর্ককে বিয়ের বন্ধনে জুড়ে দেয় JORON':{en:'JORON connects meaningful relationships for marriage',hi:'JORON सार्थक रिश्तों को विवाह से जोड़ता है'},
+    'সম্পর্ক জুড়ে দেয় জোড়ন ❤️':{en:'JORON connects relationships ❤️',hi:'JORON रिश्ते जोड़ता है ❤️'},'✨ নতুন অ্যাকাউন্ট তৈরি করুন':{en:'✨ Create a New Account',hi:'✨ नया अकाउंट बनाएं'},'আপনার তথ্য দিন • Membership নির্বাচন করুন':{en:'Enter your information • Choose Membership',hi:'अपनी जानकारी दें • Membership चुनें'},'J♥R♥N-এ শুরু করুন ❤️':{en:'Start with J♥R♥N ❤️',hi:'J♥R♥N से शुरू करें ❤️'},
+    'Terms of service':{en:'Terms of service',hi:'सेवा की शर्तें'},'Privacy policy':{en:'Privacy policy',hi:'गोपनीयता नीति'},'আমি':{en:'I',hi:'मैं'},'মেনে নিচ্ছি।':{en:'I agree.',hi:'मैं सहमत हूँ।'},
+    'আপনার তথ্য নিরাপদ রাখার জন্য Firebase Authentication ব্যবহার করা হয়।':{en:'Firebase Authentication is used to help keep your information secure.',hi:'आपकी जानकारी को सुरक्षित रखने के लिए Firebase Authentication का उपयोग किया जाता है।'},
+    'ভয়েস':{en:'Voice',hi:'वॉइस'},'নতুন':{en:'New',hi:'नया'},'অনলাইন':{en:'Online',hi:'ऑनलाइन'},'আপনার জন্য':{en:'For You',hi:'आपके लिए'},'কাছাকাছি':{en:'Nearby',hi:'पास के सदस्य'},'র‍্যান্ডম':{en:'Random',hi:'रैंडम'},'প্রিমিয়াম':{en:'Premium',hi:'प्रीमियम'},
+    'শিক্ষা':{en:'Education',hi:'शिक्षा'},'পেশা':{en:'Profession',hi:'पेशा'},'ধর্ম':{en:'Religion',hi:'धर्म'},'জন্মদিন':{en:'Birthday',hi:'जन्मदिन'},'ছবি ছাড়া':{en:'Photoless',hi:'बिना फोटो'},'প্রবাসী':{en:'Expat',hi:'प्रवासी'},'ঘরজামাই':{en:'Ghar Jamai',hi:'घर जमाई'},'গল্প':{en:'Story',hi:'स्टोरी'},'পরিচয়':{en:'Meeting',hi:'मुलाकात'},
+    'সদস্যপদ':{en:'Membership',hi:'सदस्यता'},'পেমেন্ট':{en:'Payment',hi:'भुगतान'},'সেটিংস':{en:'Settings',hi:'सेटिंग्स'},'চ্যাট':{en:'Chat',hi:'चैट'},'পছন্দ':{en:'Interest',hi:'रुचि'},'বায়োডাটা':{en:'Biodata',hi:'बायोडाटा'},'ম্যাচিং প্রোফাইল':{en:'Matching Profiles',hi:'मिलान प्रोफ़ाइल'},'গোপনীয়তা নীতি':{en:'Privacy Policy',hi:'गोपनीयता नीति'},'শর্তাবলি':{en:'Terms & Conditions',hi:'नियम और शर्तें'},
+    'ভালোবাসা':{en:'Love',hi:'प्यार'},'সহায়তা প্রয়োজন? কল করুন':{en:'Need help? Call',hi:'मदद चाहिए? कॉल करें'},'নিরাপদ':{en:'Safe',hi:'सुरक्षित'},'সম্মানজনক':{en:'Respectful',hi:'सम्मानजनक'},
+    '✨ JORON Magic Feature Center • মোট ৩২টি Smart Discovery/Utility Button':{en:'✨ JORON Magic Feature Center • 32 Smart Discovery/Utility Buttons',hi:'✨ JORON Magic Feature Center • 32 स्मार्ट Discovery/Utility बटन'},
+    'JORON Magic Features':{en:'JORON Magic Features',hi:'JORON Magic Features'},'Existing Magic':{en:'Existing Magic',hi:'मौजूदा Magic'},'New Important Features':{en:'New Important Features',hi:'नई महत्वपूर्ण सुविधाएँ'},'মূল Features Center':{en:'Main Features Center',hi:'मुख्य Features Center'}
   };
-
-  function getLanguage() {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    return SUPPORTED.includes(saved) ? saved : DEFAULT_LANGUAGE;
+  function getLanguage(){const s=localStorage.getItem(STORAGE_KEY);return SUPPORTED.includes(s)?s:DEFAULT_LANGUAGE;}
+  function tr(key,lang){const e=T[key];return !e||lang==='bn'?key:(e[lang]||key);}
+  function setAttrs(el,lang){
+    if(el.hasAttribute('data-i18n-placeholder'))el.setAttribute('placeholder',tr(el.getAttribute('data-i18n-placeholder'),lang));
+    if(el.hasAttribute('data-i18n-title'))el.setAttribute('title',tr(el.getAttribute('data-i18n-title'),lang));
+    if(el.hasAttribute('data-i18n-aria'))el.setAttribute('aria-label',tr(el.getAttribute('data-i18n-aria'),lang));
   }
-
-  function setLanguage(language) {
-    const next = SUPPORTED.includes(language) ? language : DEFAULT_LANGUAGE;
-    localStorage.setItem(STORAGE_KEY, next);
-    document.documentElement.lang = next;
-    document.documentElement.dataset.joronLanguage = next;
-    applyTranslations(next);
-    updateToggle(next);
-    window.dispatchEvent(new CustomEvent("joron-language-change", { detail: { language: next } }));
+  const original=new WeakMap();
+  function translateTextNodes(lang){
+    const root=document.body;if(!root)return;
+    const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode(n){const p=n.parentElement;if(!p||['SCRIPT','STYLE','NOSCRIPT','TEXTAREA'].includes(p.tagName))return NodeFilter.FILTER_REJECT;return n.nodeValue.trim()?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT;}});
+    const nodes=[];let n;while(n=walker.nextNode())nodes.push(n);
+    nodes.forEach(node=>{if(!original.has(node))original.set(node,node.nodeValue);const base=original.get(node),trim=base.trim(),out=tr(trim,lang);if(out!==trim){const lead=base.slice(0,base.indexOf(trim)),trail=base.slice(base.indexOf(trim)+trim.length);node.nodeValue=lead+out+trail}else if(lang==='bn'&&base!==node.nodeValue)node.nodeValue=base;});
   }
-
-  function translateText(key, language) {
-    const entry = translations[key];
-    if (!entry) return key;
-    if (language === "bn") return key;
-    return entry[language] || key;
+  function applyTranslations(lang){
+    document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=tr(el.getAttribute('data-i18n'),lang)});
+    document.querySelectorAll('[data-i18n-placeholder],[data-i18n-title],[data-i18n-aria]').forEach(el=>setAttrs(el,lang));
+    translateTextNodes(lang);
+    const title=document.querySelector('title');if(title&&title.hasAttribute('data-i18n'))title.textContent=tr(title.getAttribute('data-i18n'),lang);
   }
-
-  function applyTranslations(language) {
-    document.querySelectorAll("[data-i18n]").forEach((el) => {
-      const key = el.getAttribute("data-i18n");
-      el.textContent = translateText(key, language);
-    });
-    document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
-      const key = el.getAttribute("data-i18n-placeholder");
-      el.setAttribute("placeholder", translateText(key, language));
-    });
-    document.querySelectorAll("[data-i18n-title]").forEach((el) => {
-      const key = el.getAttribute("data-i18n-title");
-      el.setAttribute("title", translateText(key, language));
-    });
-  }
-
-  function updateToggle(language) {
-    document.querySelectorAll("[data-joron-language-toggle]").forEach((toggle) => {
-      toggle.querySelectorAll("[data-lang]").forEach((button) => {
-        const active = button.getAttribute("data-lang") === language;
-        button.setAttribute("aria-pressed", String(active));
-        button.classList.toggle("active", active);
-      });
-    });
-  }
-
-  function ensureToggle() {
-    if (document.querySelector("[data-joron-language-toggle]")) return;
-    const toggle = document.createElement("div");
-    toggle.setAttribute("data-joron-language-toggle", "1");
-    toggle.setAttribute("aria-label", "Language");
-    toggle.innerHTML = '<button type="button" data-lang="bn" aria-label="বাংলা">🇧🇩 বাংলা</button><span aria-hidden="true">|</span><button type="button" data-lang="en" aria-label="English">English 🇬🇧</button><span aria-hidden="true">|</span><button type="button" data-lang="hi" aria-label="हिन्दी">हिन्दी 🇮🇳</button>';
-    Object.assign(toggle.style, {
-      display: "inline-flex",
-      alignItems: "center",
-      gap: "6px",
-      padding: "6px 10px",
-      border: "1px solid currentColor",
-      borderRadius: "999px",
-      fontSize: "13px",
-      lineHeight: "1.2",
-      background: "transparent",
-      zIndex: "9999"
-    });
-    toggle.querySelectorAll("button").forEach((button) => {
-      Object.assign(button.style, { border: "0", background: "transparent", cursor: "pointer", padding: "3px 5px", font: "inherit", color: "inherit" });
-      button.addEventListener("click", () => setLanguage(button.getAttribute("data-lang")));
-    });
-    const host = document.querySelector("header") || document.body;
-    if (host) host.appendChild(toggle);
-  }
-
-  function init() {
-    const language = getLanguage();
-    document.documentElement.lang = language;
-    document.documentElement.dataset.joronLanguage = language;
-    ensureToggle();
-    applyTranslations(language);
-    updateToggle(language);
-  }
-
-  window.JORONLanguage = { getLanguage, setLanguage, applyTranslations, translateText, translations, STORAGE_KEY, SUPPORTED };
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, { once: true });
-  else init();
+  function updateToggle(lang){document.querySelectorAll('[data-joron-language-toggle]').forEach(t=>t.querySelectorAll('[data-lang]').forEach(b=>{const a=b.dataset.lang===lang;b.classList.toggle('active',a);b.setAttribute('aria-pressed',String(a));}));}
+  function ensureStyle(){if(document.getElementById('joron-language-style'))return;const s=document.createElement('style');s.id='joron-language-style';s.textContent='[data-joron-language-toggle]{position:fixed!important;top:10px;right:10px;display:inline-flex;align-items:center;gap:2px;padding:4px;border:1px solid rgba(199,154,69,.55);border-radius:999px;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);box-shadow:0 8px 24px rgba(40,20,50,.14);z-index:2147483000;font-family:system-ui,sans-serif}[data-joron-language-toggle] button{border:0!important;background:transparent!important;color:#4a3650!important;cursor:pointer;padding:6px 8px!important;border-radius:999px;font:700 12px/1 system-ui,sans-serif!important}[data-joron-language-toggle] button.active{background:linear-gradient(135deg,#c79a45,#8b5e1f)!important;color:#fff!important;box-shadow:0 3px 10px rgba(139,94,31,.25)}@media(max-width:430px){[data-joron-language-toggle]{top:7px;right:7px}[data-joron-language-toggle] button{font-size:10px!important;padding:5px 6px!important}}';document.head.appendChild(s);}
+  function ensureToggle(){if(document.querySelector('[data-joron-language-toggle]'))return;const t=document.createElement('div');t.dataset.joronLanguageToggle='1';t.setAttribute('role','group');t.setAttribute('aria-label','Language');t.innerHTML='<button type="button" data-lang="bn">🇧🇩 বাংলা</button><button type="button" data-lang="en">🇬🇧 English</button><button type="button" data-lang="hi">🇮🇳 हिन्दी</button>';t.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>setLanguage(b.dataset.lang)));document.body.appendChild(t);}
+  function setLanguage(lang){const next=SUPPORTED.includes(lang)?lang:DEFAULT_LANGUAGE;localStorage.setItem(STORAGE_KEY,next);document.documentElement.lang=next;document.documentElement.dir='ltr';document.documentElement.dataset.joronLanguage=next;applyTranslations(next);updateToggle(next);window.dispatchEvent(new CustomEvent('joron-language-change',{detail:{language:next}}));}
+  function init(){const lang=getLanguage();document.documentElement.lang=lang;document.documentElement.dataset.joronLanguage=lang;ensureStyle();ensureToggle();applyTranslations(lang);updateToggle(lang);}
+  window.JORONLanguage={getLanguage,setLanguage,applyTranslations,translateText:tr,translations:T,STORAGE_KEY,SUPPORTED};
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();

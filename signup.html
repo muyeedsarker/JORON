@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#c79a45">
-<title>J♥R♥N — Sign Up</title>
+<title>JORON Matrimony — Sign Up</title>
 <link rel="stylesheet" href="assets/joron-theme-2026.css">
 <style>
 .signup-box{width:min(600px,100%);margin:30px auto;padding:28px 22px;background:var(--paper);border:1px solid var(--gold-line);border-radius:22px;box-shadow:var(--shadow)}
@@ -43,53 +43,11 @@
 <div class="back"><a href="index.html">🏠 হোমে ফিরুন</a></div>
 <p class="note">আপনার তথ্য নিরাপদ রাখার জন্য Firebase Authentication ব্যবহার করা হয়।</p>
 </div>
+<script src="assets/joron-language.js"></script>
 <script type="module">
 import {auth,createUserWithEmailAndPassword,updateProfile,ensureUserProfile,persistenceReady,friendlyAuthError} from './assets/firebase-client.js';
-
-const form=document.getElementById('signupForm');
-const errorBox=document.getElementById('signupError');
-const signupBtn=document.getElementById('signupBtn');
-const successBox=document.getElementById('memberSuccess');
-const memberIdBox=document.getElementById('memberId');
-const showError=text=>{errorBox.textContent=text;errorBox.classList.toggle('show',!!text)};
-
-form.addEventListener('submit',async event=>{
-  event.preventDefault();
-  showError('');
-  if(!form.checkValidity()){
-    form.reportValidity();
-    return;
-  }
-  const name=document.getElementById('name').value.trim();
-  const email=document.getElementById('email').value.trim().toLowerCase();
-  const phone=document.getElementById('phone').value.trim();
-  const gender=document.getElementById('gender').value;
-  const password=document.getElementById('password').value;
-  const confirmPassword=document.getElementById('confirmPassword').value;
-
-  if(!/^01[0-9]{9}$/.test(phone)) return showError('সঠিক ১১ সংখ্যার বাংলাদেশি মোবাইল নম্বর দিন।');
-  if(password.length<6) return showError('পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।');
-  if(password!==confirmPassword) return showError('দুটি পাসওয়ার্ড এক নয়।');
-
-  signupBtn.disabled=true;
-  signupBtn.textContent='⏳ অ্যাকাউন্ট তৈরি হচ্ছে...';
-  try{
-    await persistenceReady;
-    const credential=await createUserWithEmailAndPassword(auth,email,password);
-    await updateProfile(credential.user,{displayName:name});
-    const profile=await ensureUserProfile(credential.user,'password',{name,email,phone,gender});
-    signupBtn.textContent='✅ অ্যাকাউন্ট তৈরি হয়েছে';
-    memberIdBox.textContent=profile.memberId;
-    successBox.classList.add('show');
-    form.style.display='none';
-    window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
-  }catch(error){
-    console.error('JORON signup error:',error);
-    showError(friendlyAuthError(error));
-    signupBtn.disabled=false;
-    signupBtn.textContent='অ্যাকাউন্ট তৈরি করুন';
-  }
-});
+const form=document.getElementById('signupForm');const errorBox=document.getElementById('signupError');const signupBtn=document.getElementById('signupBtn');const successBox=document.getElementById('memberSuccess');const memberIdBox=document.getElementById('memberId');const showError=text=>{errorBox.textContent=text;errorBox.classList.toggle('show',!!text)};
+form.addEventListener('submit',async event=>{event.preventDefault();showError('');if(!form.checkValidity()){form.reportValidity();return}const name=document.getElementById('name').value.trim();const email=document.getElementById('email').value.trim().toLowerCase();const phone=document.getElementById('phone').value.trim();const gender=document.getElementById('gender').value;const password=document.getElementById('password').value;const confirmPassword=document.getElementById('confirmPassword').value;if(!/^01[0-9]{9}$/.test(phone))return showError('সঠিক ১১ সংখ্যার বাংলাদেশি মোবাইল নম্বর দিন।');if(password.length<6)return showError('পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।');if(password!==confirmPassword)return showError('দুটি পাসওয়ার্ড এক নয়।');signupBtn.disabled=true;signupBtn.textContent='⏳ অ্যাকাউন্ট তৈরি হচ্ছে...';try{await persistenceReady;const credential=await createUserWithEmailAndPassword(auth,email,password);await updateProfile(credential.user,{displayName:name});const profile=await ensureUserProfile(credential.user,'password',{name,email,phone,gender});signupBtn.textContent='✅ অ্যাকাউন্ট তৈরি হয়েছে';memberIdBox.textContent=profile.memberId;successBox.classList.add('show');form.style.display='none';window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});}catch(error){console.error('JORON signup error:',error);showError(friendlyAuthError(error));signupBtn.disabled=false;signupBtn.textContent='অ্যাকাউন্ট তৈরি করুন';}});
 </script>
 </body>
 </html>

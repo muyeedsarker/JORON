@@ -2,7 +2,7 @@
   "name": "joron-passkey-functions",
   "private": true,
   "description": "JORON Passkey/WebAuthn authentication backend",
-  "main": "index.js",
+  "main": "bootstrap.js",
   "engines": {
     "node": "22"
   },

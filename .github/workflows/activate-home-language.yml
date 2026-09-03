@@ -1,0 +1,31 @@
+name: Activate JORON Home Language
+on:
+  push:
+    branches: [work/joron-step1-language]
+permissions:
+  contents: write
+jobs:
+  activate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Load language scripts in Home
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          tag='<script src="assets/joron-language.js"></script><script src="assets/joron-home-language.js"></script>'
+          if 'assets/joron-language.js' not in s:
+              s=s.replace('</head>', tag+'</head>', 1)
+          elif 'assets/joron-home-language.js' not in s:
+              s=s.replace('</head>', '<script src="assets/joron-home-language.js"></script></head>', 1)
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Commit Home activation
+        run: |
+          git config user.name 'JORON Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add index.html
+          git diff --cached --quiet || git commit -m 'feat: activate three-language toggle on Home'
+          git push

@@ -8,58 +8,41 @@ service cloud.firestore {
     function publicProfileKeys() { return ['uid','name','nickname','age','gender','height','marital','division','district','upazila','postOffice','postalCode','religion','eduSystem','education','eduHighest','eduDegree','eduInstitution','eduSubject','eduYear','eduResult','profession','professionType','workplace','designation','experience','currentlyEmployed','familyType','childCount','personality','about','prefAge','prefDistrict','top3','photoUrl','visibility','educationSystem','institution','subject','passingYear','result','partner','profileCompleted','updatedAt']; }
     function validPublicProfile() { return request.resource.data.uid == request.auth.uid && request.resource.data.keys().hasOnly(publicBiodataKeys()); }
     function validPublicProfileView() { return request.resource.data.uid == request.auth.uid && request.resource.data.keys().hasOnly(publicProfileKeys()); }
-
-    // Public biodata is searchable only by signed-in users and only when explicitly public.
-    // Sensitive/private fields must stay in /privateBiodata and cannot be written to /biodata.
     match /biodata/{userId} {
       allow read: if signedIn() && resource.data.visibility == 'public';
       allow create, update: if own(userId) && validPublicProfile();
       allow delete: if own(userId);
     }
-
     match /privateBiodata/{userId} { allow read, create, update, delete: if own(userId); }
-    // Public profile projection is limited to an explicit allowlist; email, phone, guardian and other private fields cannot be published here.
     match /publicProfiles/{userId} { allow read: if signedIn() && resource.data.visibility == 'public'; allow create, update: if own(userId) && validPublicProfileView(); allow delete: if own(userId); }
-
     match /interests/{interestId} {
       allow create: if signedIn() && request.resource.data.fromUserId == request.auth.uid && request.resource.data.profileId != request.auth.uid && request.resource.data.status == 'pending';
       allow read: if signedIn() && (resource.data.fromUserId == request.auth.uid || resource.data.profileId == request.auth.uid);
       allow update: if signedIn() && resource.data.profileId == request.auth.uid && request.resource.data.fromUserId == resource.data.fromUserId && request.resource.data.profileId == resource.data.profileId && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status','updatedAt']) && request.resource.data.status in ['pending','accepted','rejected'];
       allow delete: if signedIn() && resource.data.fromUserId == request.auth.uid;
     }
-
     match /users/{userId} {
       allow read: if own(userId);
       allow create: if own(userId) && (!request.resource.data.keys().hasAny(['membershipStatus','admin','isAdmin']) || request.resource.data.membershipStatus == 'pending');
-      // Membership/payment fields are server-controlled. A user may update their own profile,
-      // but cannot create or change membershipPlan, membershipStatus, or paymentStatus.
-      allow update: if own(userId)
-        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['admin','isAdmin','membershipPlan','membershipStatus','paymentStatus'])
-        || (own(userId)
-          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['membershipRequestedAt'])
-          && request.resource.data.membershipStatus == resource.data.membershipStatus
-          && request.resource.data.paymentStatus == resource.data.paymentStatus
-          && request.resource.data.membershipPlan == resource.data.membershipPlan);
+      allow update: if own(userId) && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['admin','isAdmin','membershipPlan','membershipStatus','paymentStatus']) || (own(userId) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['membershipRequestedAt']) && request.resource.data.membershipStatus == resource.data.membershipStatus && request.resource.data.paymentStatus == resource.data.paymentStatus && request.resource.data.membershipPlan == resource.data.membershipPlan);
       allow delete: if own(userId);
     }
-
     match /payments/{userId} {
       allow read: if own(userId);
       allow create: if own(userId) && request.resource.data.uid == request.auth.uid && request.resource.data.paymentStatus == 'pending' && request.resource.data.membershipStatus == 'pending';
       allow update: if own(userId) && request.resource.data.uid == resource.data.uid && request.resource.data.paymentStatus == 'pending' && request.resource.data.membershipStatus == 'pending' && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['senderNumber','transactionId','updatedAt']);
       allow delete: if own(userId);
     }
-
+    match /loginOtps/{docId} { allow read, write: if false; }
     match /chats/{chatId} {
       allow create: if signedIn() && request.resource.data.participants is list && request.resource.data.participants.size() == 2 && request.auth.uid in request.resource.data.participants && mutual(request.resource.data.participants[0],request.resource.data.participants[1]);
       allow read, update: if signedIn() && resource.data.participants is list && request.auth.uid in resource.data.participants && mutual(resource.data.participants[0],resource.data.participants[1]);
       match /messages/{messageId} {
         allow read: if signedIn() && get(/databases/$(database)/documents/chats/$(chatId)).data.participants is list && request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.participants && mutual(get(/databases/$(database)/documents/chats/$(chatId)).data.participants[0],get(/databases/$(database)/documents/chats/$(chatId)).data.participants[1]);
         allow create: if signedIn() && request.resource.data.senderId == request.auth.uid && request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.participants && mutual(get(/databases/$(database)/documents/chats/$(chatId)).data.participants[0],get(/databases/$(database)/documents/chats/$(chatId)).data.participants[1]);
-        allow update, delete: if signedIn() && resource.data.senderId == request.auth.uid && request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.participants && mutual(get(/databases/$(database)/documents/chats/$(chatId)).data.participants[0],get(/databases/$(database)/documents/chats/$(chatId)).data.participants[1]);
+        allow update, delete: if signedIn() && resource.data.senderId == request.auth.uid && request.auth.uid in resource.data.participants && mutual(resource.data.participants[0],resource.data.participants[1]);
       }
     }
-
     match /blocks/{blockId} { allow create: if signedIn() && request.resource.data.blockerId == request.auth.uid && request.resource.data.blockedId != request.auth.uid; allow read, delete: if signedIn() && resource.data.blockerId == request.auth.uid; }
     match /reports/{reportId} { allow create: if signedIn() && request.resource.data.reporterId == request.auth.uid && request.resource.data.reportedId != request.auth.uid && request.resource.data.status == 'pending'; allow read: if signedIn() && resource.data.reporterId == request.auth.uid; }
     match /verificationRequests/{userId} { allow read, create, update, delete: if own(userId); }

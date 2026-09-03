@@ -16,9 +16,9 @@ const db = getFirestore();
 const auth = getAuth();
 const ADMIN_UID = "PcDehBv4dYezeIPA6h0Peo9lpih2";
 const PLAN_PRICES = { Basic: 99, Standard: 199, Premium: 399, "Premium Plus": 599 };
-const RP_NAME = "JORON — জোড়ন";
-const RP_ID = "muyeedsarker.github.io";
-const ORIGIN = "https://muyeedsarker.github.io";
+const RP_NAME = "JORON Matrimony — জোড়ন";
+const RP_ID = "joron-d7742.web.app";
+const ORIGIN = "https://joron-d7742.web.app";
 const CHALLENGE_TTL_MS = 5 * 60 * 1000;
 const PASSKEYS = "passkeys";
 const CHALLENGES = "passkeyChallenges";
@@ -43,7 +43,7 @@ async function storeChallenge(id, type, challenge, extra = {}) { await db.collec
 exports.passkeyRegisterOptions = onRequest(async (req, res) => {
   cors(req, res); if (req.method === "OPTIONS") return res.status(204).send(""); if (req.method !== "GET") return jsonError(res, 405, "GET required");
   const user = await requireAdmin(req, res); if (!user) return;
-  try { const existing = await db.collection(PASSKEYS).where("uid", "==", ADMIN_UID).get(); const options = await generateRegistrationOptions({ rpName: RP_NAME, rpID: RP_ID, userName: `admin-${ADMIN_UID}`, userDisplayName: "JORON Admin", userID: isoUint8Array.fromUTF8String(`joron-admin-${ADMIN_UID}`), attestationType: "none", excludeCredentials: existing.docs.map((doc) => ({ id: doc.data().id, transports: doc.data().transports || [] })), authenticatorSelection: { residentKey: "required", userVerification: "required", authenticatorAttachment: "platform" } }); const id = challengeId(); await storeChallenge(id, "registration", options.challenge, { uid: ADMIN_UID }); return res.json({ ok: true, challengeId: id, options }); }
+  try { const existing = await db.collection(PASSKEYS).where("uid", "==", ADMIN_UID).get(); const options = await generateRegistrationOptions({ rpName: RP_NAME, rpID: RP_ID, userName: `admin-${ADMIN_UID}`, userDisplayName: "JORON Matrimony Admin", userID: isoUint8Array.fromUTF8String(`joron-admin-${ADMIN_UID}`), attestationType: "none", excludeCredentials: existing.docs.map((doc) => ({ id: doc.data().id, transports: doc.data().transports || [] })), authenticatorSelection: { residentKey: "required", userVerification: "required", authenticatorAttachment: "platform" } }); const id = challengeId(); await storeChallenge(id, "registration", options.challenge, { uid: ADMIN_UID }); return res.json({ ok: true, challengeId: id, options }); }
   catch (error) { console.error("Passkey registration options failed", error); return jsonError(res, 500, "Could not create Passkey registration options"); }
 });
 exports.passkeyRegisterVerify = onRequest(async (req, res) => {
@@ -55,10 +55,10 @@ exports.passkeyRegisterVerify = onRequest(async (req, res) => {
 exports.passkeyAuthOptions = onRequest(async (req, res) => { cors(req, res); if (req.method === "OPTIONS") return res.status(204).send(""); if (req.method !== "GET") return jsonError(res, 405, "GET required"); try { const options = await generateAuthenticationOptions({ rpID: RP_ID, userVerification: "required" }); const id = challengeId(); await storeChallenge(id, "authentication", options.challenge); return res.json({ ok: true, challengeId: id, options }); } catch (error) { console.error("Passkey authentication options failed", error); return jsonError(res, 500, "Could not create Passkey login options"); } });
 exports.passkeyAuthVerify = onRequest(async (req, res) => {
   cors(req, res); if (req.method === "OPTIONS") return res.status(204).send(""); if (req.method !== "POST") return jsonError(res, 405, "POST required"); const { challengeId: id, response } = req.body || {}; if (!id || !response || !response.id) return jsonError(res, 400, "Missing Passkey response"); const challengeRef = db.collection(CHALLENGES).doc(id); const challengeSnap = await challengeRef.get(); const challengeData = challengeSnap.data(); if (!challengeSnap.exists || !isFreshChallenge(challengeData) || challengeData.type !== "authentication") return jsonError(res, 400, "Authentication challenge expired or invalid");
-  try { const passkeySnap = await db.collection(PASSKEYS).doc(response.id).get(); if (!passkeySnap.exists || passkeySnap.data().uid !== ADMIN_UID) return jsonError(res, 403, "This Passkey is not authorized for JORON Admin"); const passkey = passkeySnap.data(); const verification = await verifyAuthenticationResponse({ response, expectedChallenge: challengeData.challenge, expectedOrigin: ORIGIN, expectedRPID: RP_ID, requireUserVerification: true, credential: { id: passkey.id, publicKey: new Uint8Array(passkey.publicKey), counter: passkey.counter || 0, transports: passkey.transports || [] } }); if (!verification.verified) return jsonError(res, 401, "Passkey verification failed"); await passkeySnap.ref.update({ counter: verification.authenticationInfo.newCounter, lastUsedAt: FieldValue.serverTimestamp() }); await challengeRef.update({ used: true }); const customToken = await auth.createCustomToken(ADMIN_UID, { passkey: true, adminAccess: true }); return res.json({ ok: true, verified: true, customToken }); }
+  try { const passkeySnap = await db.collection(PASSKEYS).doc(response.id).get(); if (!passkeySnap.exists || passkeySnap.data().uid !== ADMIN_UID) return jsonError(res, 403, "This Passkey is not authorized for JORON Matrimony Admin"); const passkey = passkeySnap.data(); const verification = await verifyAuthenticationResponse({ response, expectedChallenge: challengeData.challenge, expectedOrigin: ORIGIN, expectedRPID: RP_ID, requireUserVerification: true, credential: { id: passkey.id, publicKey: new Uint8Array(passkey.publicKey), counter: passkey.counter || 0, transports: passkey.transports || [] } }); if (!verification.verified) return jsonError(res, 401, "Passkey verification failed"); await passkeySnap.ref.update({ counter: verification.authenticationInfo.newCounter, lastUsedAt: FieldValue.serverTimestamp() }); await challengeRef.update({ used: true }); const customToken = await auth.createCustomToken(ADMIN_UID, { passkey: true, adminAccess: true }); return res.json({ ok: true, verified: true, customToken }); }
   catch (error) { console.error("Passkey authentication verification failed", error); return jsonError(res, 401, "Passkey authentication failed"); }
 });
-exports.passkeyHealth = onRequest((req, res) => { cors(req, res); return res.json({ ok: true, service: "JORON Passkey", rpId: RP_ID }); });
+exports.passkeyHealth = onRequest((req, res) => { cors(req, res); return res.json({ ok: true, service: "JORON Matrimony Passkey", rpId: RP_ID }); });
 
 Object.assign(module.exports, require("./identifier-auth"));
 
@@ -85,7 +85,6 @@ exports.adminReviewPayment = onRequest(async (req, res) => {
       const reviewedAt = FieldValue.serverTimestamp();
       if (action === "approve") {
         tx.update(paymentRef, { paymentStatus: "approved", membershipStatus: "active", reviewedAt, reviewedBy: admin.uid });
-        // The approved plan must come from the validated payment record, not client-controlled user data.
         tx.set(userRef, { membershipPlan: payment.selectedPlan, paymentStatus: "paid", membershipStatus: "active", updatedAt: reviewedAt }, { merge: true });
       } else {
         tx.update(paymentRef, { paymentStatus: "rejected", reviewedAt, reviewedBy: admin.uid });

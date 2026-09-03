@@ -91,22 +91,22 @@
     if (document.querySelector("[data-joron-language-toggle]")) return;
     const toggle = document.createElement("div");
     toggle.setAttribute("data-joron-language-toggle", "1");
+    toggle.setAttribute("role", "group");
     toggle.setAttribute("aria-label", "Language");
-    toggle.innerHTML = '<button type="button" data-lang="bn" aria-label="বাংলা">🇧🇩 বাংলা</button><span aria-hidden="true">|</span><button type="button" data-lang="en" aria-label="English">English 🇬🇧</button><span aria-hidden="true">|</span><button type="button" data-lang="hi" aria-label="हिन्दी">हिन्दी 🇮🇳</button>';
-    Object.assign(toggle.style, {
-      display: "inline-flex",
-      alignItems: "center",
-      gap: "6px",
-      padding: "6px 10px",
-      border: "1px solid currentColor",
-      borderRadius: "999px",
-      fontSize: "13px",
-      lineHeight: "1.2",
-      background: "transparent",
-      zIndex: "9999"
-    });
+    toggle.innerHTML = '<button type="button" data-lang="bn" aria-label="বাংলা">বাংলা</button><span aria-hidden="true">|</span><button type="button" data-lang="en" aria-label="English">English</button><span aria-hidden="true">|</span><button type="button" data-lang="hi" aria-label="हिन्दी">हिन्दी</button>';
+
+    const style = document.createElement("style");
+    style.textContent = `
+      [data-joron-language-toggle]{display:flex;align-items:center;justify-content:center;gap:2px;width:max-content;max-width:calc(100% - 16px);margin:8px auto 12px;padding:4px;border:1px solid rgba(197,154,69,.55);border-radius:999px;background:rgba(255,253,248,.96);box-shadow:0 5px 14px rgba(123,87,31,.10);font:700 12px/1.2 system-ui,sans-serif;color:#7b571f;position:relative;z-index:20}
+      [data-joron-language-toggle] button{appearance:none;border:0;background:transparent;color:inherit;cursor:pointer;padding:6px 9px;border-radius:999px;font:inherit;white-space:nowrap;transition:.18s ease}
+      [data-joron-language-toggle] button:hover{transform:translateY(-1px);background:rgba(197,154,69,.12)}
+      [data-joron-language-toggle] button.active{background:#c59a45;color:#fff;box-shadow:0 3px 8px rgba(123,87,31,.18)}
+      [data-joron-language-toggle] span{opacity:.45;font-weight:900}
+      @media(max-width:390px){[data-joron-language-toggle]{font-size:11px;gap:0;padding:3px}[data-joron-language-toggle] button{padding:5px 7px}}
+    `;
+    document.head.appendChild(style);
+
     toggle.querySelectorAll("button").forEach((button) => {
-      Object.assign(button.style, { border: "0", background: "transparent", cursor: "pointer", padding: "3px 5px", font: "inherit", color: "inherit" });
       button.addEventListener("click", () => setLanguage(button.getAttribute("data-lang")));
     });
     const host = document.querySelector("header") || document.body;

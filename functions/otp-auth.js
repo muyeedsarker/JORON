@@ -1,6 +1,7 @@
 const { getApps, initializeApp } = require('firebase-admin/app');
 const { getFirestore, FieldValue } = require('firebase-admin/firestore');
 const { getAuth } = require('firebase-admin/auth');
+const { getAppCheck } = require('firebase-admin/app-check');
 const { onRequest } = require('firebase-functions/https');
 const crypto = require('crypto');
 const { sendSms, normalizeBangladeshMobile } = require('./sms-provider');
@@ -8,6 +9,7 @@ const { sendSms, normalizeBangladeshMobile } = require('./sms-provider');
 if (!getApps().length) initializeApp();
 const db = getFirestore();
 const adminAuth = getAuth();
+const appCheck = getAppCheck();
 
 const OTP_COLLECTION = 'loginOtps';
 const OTP_TTL_MS = 5 * 60 * 1000;
@@ -25,12 +27,28 @@ function cors(req, res) {
     res.set('Access-Control-Allow-Origin', origin);
     res.set('Vary', 'Origin');
   }
-  res.set('Access-Control-Allow-Headers', 'Content-Type');
+  res.set('Access-Control-Allow-Headers', 'Content-Type, X-Firebase-AppCheck');
   res.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
 }
 
 function error(res, status, code) {
   return res.status(status).json({ ok: false, error: code });
+}
+
+async function requireAppCheck(req, res) {
+  const token = req.get('X-Firebase-AppCheck');
+  if (!token) {
+    error(res, 401, 'APP_CHECK_REQUIRED');
+    return false;
+  }
+  try {
+    await appCheck.verifyToken(token);
+    return true;
+  } catch (e) {
+    console.warn('App Check verification failed:', e.message);
+    error(res, 401, 'APP_CHECK_INVALID');
+    return false;
+  }
 }
 
 function otpHash(phone, otp) {
@@ -49,6 +67,7 @@ exports.sendLoginOtp = onRequest(async (req, res) => {
   cors(req, res);
   if (req.method === 'OPTIONS') return res.status(204).send('');
   if (req.method !== 'POST') return error(res, 405, 'POST_REQUIRED');
+  if (!(await requireAppCheck(req, res))) return;
 
   const phone = normalizeBangladeshMobile(req.body?.phone);
   if (!phone) return error(res, 400, 'INVALID_BANGLADESH_MOBILE');
@@ -89,6 +108,7 @@ exports.verifyLoginOtp = onRequest(async (req, res) => {
   cors(req, res);
   if (req.method === 'OPTIONS') return res.status(204).send('');
   if (req.method !== 'POST') return error(res, 405, 'POST_REQUIRED');
+  if (!(await requireAppCheck(req, res))) return;
 
   const phone = normalizeBangladeshMobile(req.body?.phone);
   const otp = String(req.body?.otp || '').trim();

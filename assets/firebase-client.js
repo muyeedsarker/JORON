@@ -1,4 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+import { initializeAppCheck, ReCaptchaEnterpriseProvider } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app-check.js";
 import {
   getAuth,
   onAuthStateChanged,
@@ -19,6 +20,15 @@ import { getStorage } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-
 import { firebaseConfig } from "./firebase-config.js";
 
 const app = initializeApp(firebaseConfig);
+
+// Firebase App Check (Web) — registered JORON Web reCAPTCHA Enterprise key.
+// Enforcement remains OFF in Firebase Console until live testing/monitoring is complete.
+const RECAPTCHA_ENTERPRISE_KEY = "6LfNZagtAAAAAJRvhigb-zsV9peE-JGZi1f-4GaD";
+const appCheck = initializeAppCheck(app, {
+  provider: new ReCaptchaEnterpriseProvider(RECAPTCHA_ENTERPRISE_KEY),
+  isTokenAutoRefreshEnabled: true
+});
+
 const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
@@ -189,4 +199,4 @@ if (typeof document !== "undefined") {
   else wireLoginPage();
 }
 
-export { app, auth, db, storage, onAuthStateChanged, signOut, signInWithEmailAndPassword, signInWithCustomToken, createUserWithEmailAndPassword, sendPasswordResetEmail, GoogleAuthProvider, FacebookAuthProvider, googleProvider, facebookProvider, signInWithPopup, updateProfile, ensureUserProfile, findLoginEmail, signInWithIdentifier, resetPasswordWithIdentifier, persistenceReady, friendlyAuthError };
+export { app, appCheck, auth, db, storage, onAuthStateChanged, signOut, signInWithEmailAndPassword, signInWithCustomToken, createUserWithEmailAndPassword, sendPasswordResetEmail, GoogleAuthProvider, FacebookAuthProvider, googleProvider, facebookProvider, signInWithPopup, updateProfile, ensureUserProfile, findLoginEmail, signInWithIdentifier, resetPasswordWithIdentifier, persistenceReady, friendlyAuthError };

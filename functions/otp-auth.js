@@ -3,6 +3,12 @@ const { getFirestore, FieldValue } = require('firebase-admin/firestore');
 const { getAuth } = require('firebase-admin/auth');
 const { getAppCheck } = require('firebase-admin/app-check');
 const { onRequest } = require('firebase-functions/https');
+const { defineSecret } = require('firebase-functions/params');
+
+const TWILIO_ACCOUNT_SID = defineSecret('TWILIO_ACCOUNT_SID');
+const TWILIO_AUTH_TOKEN = defineSecret('TWILIO_AUTH_TOKEN');
+const TWILIO_MESSAGING_SERVICE_SID = defineSecret('TWILIO_MESSAGING_SERVICE_SID');
+const TWILIO_FROM_NUMBER = defineSecret('TWILIO_FROM_NUMBER');
 const crypto = require('crypto');
 const { sendSms, normalizeBangladeshMobile } = require('./sms-provider');
 
@@ -63,7 +69,9 @@ async function findUserByPhone(phone) {
   return intl.empty ? null : intl.docs[0];
 }
 
-exports.sendLoginOtp = onRequest(async (req, res) => {
+exports.sendLoginOtp = onRequest({
+  secrets: [TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_MESSAGING_SERVICE_SID, TWILIO_FROM_NUMBER]
+}, async (req, res) => {
   cors(req, res);
   if (req.method === 'OPTIONS') return res.status(204).send('');
   if (req.method !== 'POST') return error(res, 405, 'POST_REQUIRED');

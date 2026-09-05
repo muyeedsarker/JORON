@@ -10,12 +10,41 @@ newer:{bn:'🚀 New Important Features',en:'🚀 New Important Features',hi:'�
 back:{bn:'✨ মূল Features Center',en:'✨ Main Features Center',hi:'✨ मुख्य Features Center'},
 noteTitle:{bn:'🔐 নিরাপত্তা:',en:'🔐 Security:',hi:'🔐 सुरक्षा:'},
 note:{bn:'Verified/Privacy/Family ধরনের feature-এর বাস্তব ফলাফল নির্ভর করবে biodata-তে সংশ্লিষ্ট verification/privacy/family fields এবং future backend support-এর উপর। কোনো badge বা verification শুধু UI দেখে সত্য ধরে নেওয়া হবে না।',en:'The actual result of Verified/Privacy/Family features depends on the related verification, privacy and family fields in the biodata and future backend support. No badge or verification should be treated as genuine based on the UI alone.',hi:'Verified/Privacy/Family जैसी सुविधाओं का वास्तविक परिणाम biodata में संबंधित verification/privacy/family fields और भविष्य के backend support पर निर्भर करेगा। केवल UI देखकर किसी badge या verification को वास्तविक न मानें।'},
-buttons:[
-['Voice','Voice intro দেওয়া সদস্য','Voice intro member','Voice intro वाले सदस्य'],['New','নতুন Profile','New Profile','नई Profile'],['Online','Online সদস্য','Online members','Online सदस्य'],['For You','আপনার জন্য Match','Matches for you','आपके लिए Match'],['Nearby','কাছাকাছি Profile','Nearby Profiles','पास की Profiles'],['Random','Random Match','Random Match','Random Match'],['Premium','Premium সদস্য','Premium members','Premium सदस्य'],['Education','শিক্ষা অনুযায়ী','By education','शिक्षा के अनुसार'],['Profession','পেশা অনুযায়ী','By profession','पेशा के अनुसार'],['Status','নতুন Status','New Status','नया Status'],['Free','Free সদস্য','Free members','Free सदस्य'],['Religion','ধর্ম অনুযায়ী','By religion','धर्म के अनुसार'],['Astrology','রাশি/জন্মতথ্য','Zodiac/Birth details','राशि/जन्म विवरण'],['Birthday','জন্মদিনের Profile','Birthday Profiles','जन्मदिन की Profiles'],['Photoless','ছবি ছাড়া Profile','Profiles without photos','बिना फोटो की Profiles'],['Relocation','স্থান পরিবর্তনে আগ্রহী','Interested in relocation','स्थान परिवर्तन में रुचि'],['প্রবাসী','বিদেশে বসবাসকারী','Living abroad','विदेश में रहने वाले'],['ঘরজামাই','বিশেষ পছন্দ','Special preference','विशेष पसंद'],['Story','সদস্যদের Story','Members’ Stories','सदस्यों की Stories'],['Meeting','পরিচয়ের জন্য আগ্রহী','Interested in meeting','मुलाकात में रुचि'],['Smart Match','Preference অনুযায়ী intelligent match','Intelligent match by preference','Preference के अनुसार intelligent match'],['Verified','যাচাইকৃত Profile','Verified Profile','सत्यापित Profile'],['Shortlist','নিজের পছন্দের তালিকা','Your preferred list','अपनी पसंद की सूची'],['My Matches','আপনার Match-যোগ্য Profile','Profiles matching you','आपसे Match होने वाली Profiles'],['Recently Active','সাম্প্রতিক active সদস্য','Recently active members','हाल ही में active सदस्य'],['Complete Profile','পূর্ণাঙ্গ Profile','Complete Profile','पूर्ण Profile'],['Privacy Mode','Privacy-controlled Profile','Privacy-controlled Profile','Privacy-controlled Profile'],['Family Choice','Family-friendly Profile','Family-friendly Profile','Family-friendly Profile'],['Profile Viewed','আপনি আগে দেখেছেন এমন Profile','Profiles you viewed before','आपके द्वारा पहले देखी गई Profiles'],['Saved Search','Saved criteria অনুযায়ী','By saved criteria','Saved criteria के अनुसार'],['Serious Members','Marriage-intent Profile','Marriage-intent Profiles','Marriage-intent Profiles'],['আজকের ১০ Match','প্রতিদিনের curated suggestions','Daily curated suggestions','हर दिन की curated suggestions']
-]
+buttons:{
+voice:{bn:['ভয়েস','Voice intro দেওয়া সদস্য'],en:['Voice','Voice intro member'],hi:['वॉइस','Voice intro वाले सदस्य']},
+new:{bn:['নতুন','নতুন Profile'],en:['New','New Profile'],hi:['नया','नई Profile']},
+online:{bn:['অনলাইন','Online সদস্য'],en:['Online','Online members'],hi:['ऑनलाइन','Online सदस्य']},
+foryou:{bn:['আপনার জন্য','আপনার জন্য Match'],en:['For You','Matches for you'],hi:['आपके लिए','आपके लिए Match']},
+nearby:{bn:['কাছাকাছি','কাছাকাছি Profile'],en:['Nearby','Nearby Profiles'],hi:['पास के','पास की Profiles']},
+random:{bn:['র‍্যান্ডম','Random Match'],en:['Random','Random Match'],hi:['रैंडम','Random Match']},
+premium:{bn:['প্রিমিয়াম','Premium সদস্য'],en:['Premium','Premium members'],hi:['प्रीमियम','Premium सदस्य']},
+education:{bn:['শিক্ষা','শিক্ষা অনুযায়ী'],en:['Education','By education'],hi:['शिक्षा','शिक्षा के अनुसार']},
+profession:{bn:['পেশা','পেশা অনুযায়ী'],en:['Profession','By profession'],hi:['पेशा','पेशा के अनुसार']},
+status:{bn:['স্ট্যাটাস','নতুন Status'],en:['Status','New Status'],hi:['स्टेटस','नया Status']},
+free:{bn:['ফ্রি','Free সদস্য'],en:['Free','Free members'],hi:['फ्री','Free सदस्य']},
+religion:{bn:['ধর্ম','ধর্ম অনুযায়ী'],en:['Religion','By religion'],hi:['धर्म','धर्म के अनुसार']},
+astrology:{bn:['জ্যোতিষ','রাশি/জন্মতথ্য'],en:['Astrology','Zodiac/Birth details'],hi:['ज्योतिष','राशि/जन्म विवरण']},
+birthday:{bn:['জন্মদিন','জন্মদিনের Profile'],en:['Birthday','Birthday Profiles'],hi:['जन्मदिन','जन्मदिन की Profiles']},
+photoless:{bn:['ছবি ছাড়া','ছবি ছাড়া Profile'],en:['Photoless','Profiles without photos'],hi:['बिना फोटो','बिना फोटो की Profiles']},
+relocation:{bn:['স্থান পরিবর্তন','স্থান পরিবর্তনে আগ্রহী'],en:['Relocation','Interested in relocation'],hi:['स्थान परिवर्तन','स्थान परिवर्तन में रुचि']},
+expat:{bn:['প্রবাসী','বিদেশে বসবাসকারী'],en:['Expat','Living abroad'],hi:['प्रवासी','विदेश में रहने वाले']},
+ghorjamai:{bn:['ঘরজামাই','বিশেষ পছন্দ'],en:['Ghar Jamai','Special preference'],hi:['घर जमाई','विशेष पसंद']},
+story:{bn:['গল্প','সদস্যদের Story'],en:['Story','Members’ Stories'],hi:['कहानी','सदस्यों की Stories']},
+meeting:{bn:['পরিচয়','পরিচয়ের জন্য আগ্রহী'],en:['Meeting','Interested in meeting'],hi:['परिचय','मुलाकात में रुचि']},
+smartmatch:{bn:['স্মার্ট ম্যাচ','Preference অনুযায়ী intelligent match'],en:['Smart Match','Intelligent match by preference'],hi:['स्मार्ट मैच','Preference के अनुसार intelligent match']},
+verified:{bn:['যাচাইকৃত','যাচাইকৃত Profile'],en:['Verified','Verified Profile'],hi:['सत्यापित','सत्यापित Profile']},
+shortlist:{bn:['পছন্দের তালিকা','নিজের পছন্দের তালিকা'],en:['Shortlist','Your preferred list'],hi:['पसंद की सूची','अपनी पसंद की सूची']},
+mymatches:{bn:['আমার ম্যাচ','আপনার Match-যোগ্য Profile'],en:['My Matches','Profiles matching you'],hi:['मेरे मैच','आपसे Match होने वाली Profiles']},
+active:{bn:['সাম্প্রতিক সক্রিয়','সাম্প্রতিক active সদস্য'],en:['Recently Active','Recently active members'],hi:['हाल ही में सक्रिय','हाल ही में active सदस्य']},
+complete:{bn:['সম্পূর্ণ প্রোফাইল','পূর্ণাঙ্গ Profile'],en:['Complete Profile','Complete Profile'],hi:['पूर्ण प्रोफ़ाइल','पूर्ण Profile']},
+privacy:{bn:['গোপনীয়তা মোড','Privacy-controlled Profile'],en:['Privacy Mode','Privacy-controlled Profile'],hi:['गोपनीयता मोड','Privacy-controlled Profile']},
+family:{bn:['পরিবারের পছন্দ','Family-friendly Profile'],en:['Family Choice','Family-friendly Profile'],hi:['परिवार की पसंद','Family-friendly Profile']},
+viewed:{bn:['দেখা প্রোফাইল','আপনি আগে দেখেছেন এমন Profile'],en:['Profile Viewed','Profiles you viewed before'],hi:['देखी गई प्रोफ़ाइल','आपके द्वारा पहले देखी गई Profiles']},
+savedsearch:{bn:['সংরক্ষিত অনুসন্ধান','Saved criteria অনুযায়ী'],en:['Saved Search','By saved criteria'],hi:['सहेजी गई खोज','Saved criteria के अनुसार']},
+serious:{bn:['গম্ভীর সদস্য','Marriage-intent Profile'],en:['Serious Members','Marriage-intent Profiles'],hi:['गंभीर सदस्य','Marriage-intent Profiles']},
+daily:{bn:['আজকের ১০ Match','প্রতিদিনের curated suggestions'],en:['Today’s 10 Matches','Daily curated suggestions'],hi:['आज के 10 Match','हर दिन की curated suggestions']}
+}
 };
-const map={};
-M.buttons.forEach(x=>{const item={bn:x[0],en:x[2],hi:x[3],desc:{bn:x[1],en:x[2],hi:x[3]}};map[x[0]]=item;map[x[2]]=item;map[x[3]]=item;});
 function lang(){const v=localStorage.getItem(KEY);return v==='en'||v==='hi'?v:'bn';}
 function apply(){
 const l=lang();
@@ -23,7 +52,7 @@ const top=document.querySelector('.top');if(top)top.textContent=M.top[l];
 const h=document.querySelector('.hero h1');if(h)h.textContent=M.title[l];
 const p=document.querySelector('.hero p');if(p)p.textContent=M.intro[l];
 const sections=document.querySelectorAll('.section');if(sections[0])sections[0].textContent=M.existing[l];if(sections[1])sections[1].textContent=M.newer[l];
-document.querySelectorAll('.magic').forEach(a=>{const s=a.querySelector('strong'),d=a.querySelector('span');if(!s||!d)return;const item=map[s.textContent.trim()];if(item){s.textContent=item[l];d.textContent=item.desc[l];}});
+document.querySelectorAll('.magic').forEach(a=>{const s=a.querySelector('strong'),d=a.querySelector('span');if(!s||!d)return;const href=a.getAttribute('href')||'';const m=href.match(/[?&]mode=([^&#]+)/);const item=m&&M.buttons[decodeURIComponent(m[1])];if(item){s.textContent=item[l][0];d.textContent=item[l][1];}});
 const note=document.querySelector('.note');if(note){const st=note.querySelector('strong');if(st)st.textContent=M.noteTitle[l];Array.from(note.childNodes).forEach(n=>{if(n.nodeType===3&&n.textContent.trim())n.textContent=' '+M.note[l];});}
 const back=document.querySelector('.back a');if(back)back.textContent=M.back[l];
 document.documentElement.lang=l==='bn'?'bn':(l==='hi'?'hi':'en');
